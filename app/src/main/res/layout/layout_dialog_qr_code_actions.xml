@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.alphawallet.app.widget.BottomSheetHandleView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/send_to_this_address_action"
+        style="@style/Aw.Component.ActionItem"
+        android:text="@string/action_send_to_this_address" />
+
+    <TextView
+        android:id="@+id/add_custom_token_action"
+        style="@style/Aw.Component.ActionItem"
+        android:text="@string/title_add_token" />
+
+    <TextView
+        android:id="@+id/watch_account_action"
+        style="@style/Aw.Component.ActionItem"
+        android:text="@string/action_watch_account" />
+
+    <TextView
+        android:id="@+id/open_in_etherscan_action"
+        style="@style/Aw.Component.ActionItem"
+        android:text="@string/action_open_etherscan" />
+
+    <TextView
+        android:id="@+id/close_action"
+        style="@style/Aw.Component.ActionItem"
+        android:text="@string/action_cancel" />
+
+</LinearLayout>
+
+
