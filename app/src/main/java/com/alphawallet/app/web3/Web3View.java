@@ -116,6 +116,18 @@ public class Web3View extends WebView {
         }
 
         @Override
+        public void onEthGetEncryptionPublickey(long callbackId)
+        {
+            onWalletActionListener.onEthGetEncryptionPublickey(callbackId);
+        }
+
+        @Override
+        public void onEthDecrypt(long callbackId,String encryptedMessage)
+        {
+            onWalletActionListener.onEthDecrypt(callbackId,encryptedMessage);
+        }
+
+        @Override
         public void onWalletSwitchEthereumChain(long callbackId, WalletAddEthereumChainObject chainObj)
         {
             onWalletActionListener.onWalletSwitchEthereumChain(callbackId, chainObj);

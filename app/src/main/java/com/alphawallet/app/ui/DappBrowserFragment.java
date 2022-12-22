@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -51,6 +52,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -59,6 +61,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.alphawallet.app.C;
 import com.alphawallet.app.R;
 import com.alphawallet.app.analytics.Analytics;
+import com.alphawallet.app.di.RepositoriesModule;
 import com.alphawallet.app.entity.AnalyticsProperties;
 import com.alphawallet.app.entity.CryptoFunctions;
 import com.alphawallet.app.entity.CustomViewSettings;
@@ -79,6 +82,7 @@ import com.alphawallet.app.repository.EthereumNetworkRepository;
 import com.alphawallet.app.repository.TokenRepository;
 import com.alphawallet.app.repository.TokensRealmSource;
 import com.alphawallet.app.repository.entity.RealmToken;
+import com.alphawallet.app.service.AnalyticsServiceType;
 import com.alphawallet.app.service.WalletConnectService;
 import com.alphawallet.app.ui.QRScanning.QRScannerActivity;
 import com.alphawallet.app.ui.widget.OnDappHomeNavClickListener;
@@ -118,6 +122,7 @@ import com.alphawallet.token.entity.SignMessageType;
 import com.alphawallet.token.entity.Signable;
 import com.alphawallet.token.tools.Numeric;
 import com.alphawallet.token.tools.ParseMagicLink;
+import com.alphawallet.app.service.KeyService;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -133,6 +138,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import io.reactivex.Single;
@@ -146,8 +152,7 @@ import timber.log.Timber;
 public class DappBrowserFragment extends BaseFragment implements OnSignTransactionListener, OnSignPersonalMessageListener,
         OnSignTypedMessageListener, OnSignMessageListener, OnEthCallListener, OnWalletAddEthereumChainObjectListener,
         OnWalletActionListener, URLLoadInterface, ItemClickListener, OnDappHomeNavClickListener, DappBrowserSwipeInterface,
-        SignAuthenticationCallback, ActionSheetCallback, TestNetDialog.TestNetDialogCallback
-{
+        SignAuthenticationCallback, ActionSheetCallback, TestNetDialog.TestNetDialogCallback {
     public static final String SEARCH = "SEARCH";
     public static final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
     public static final String CURRENT_FRAGMENT = "currentFragment";
@@ -172,11 +177,9 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ValueCallback<Uri[]> uploadMessage;
     ActivityResultLauncher<String> getContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
-            new ActivityResultCallback<Uri>()
-            {
+            new ActivityResultCallback<Uri>() {
                 @Override
-                public void onActivityResult(Uri uri)
-                {
+                public void onActivityResult(Uri uri) {
                     if (uri != null) uploadMessage.onReceiveValue(new Uri[]{uri});
                 }
             });
@@ -204,14 +207,15 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     private TextView symbol;
     private AddressBar addressBar;
 
+
+
     // Handle resizing the browser view when the soft keyboard pops up and goes.
     // The issue this fixes is where you need to enter data at the bottom of the webpage,
     // and the keyboard hides the input field
     // Need to handle the inverse event where the keyboard is hidden, and we size the page back
     // (Remembering to allow for the navigation bar).
     private final View.OnApplyWindowInsetsListener resizeListener = (v, insets) -> {
-        if (v == null || getActivity() == null)
-        {
+        if (v == null || getActivity() == null) {
             return insets;
         }
 
@@ -225,14 +229,11 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
         // check if we need to resize the webview. If we don't do this, the keyboard covers the bottom of the site
         // and might be obscuring elements the user needs to see while typing
-        if (heightDifference > 0 && webFrame != null && layoutParams.bottomMargin != heightDifference)
-        {
+        if (heightDifference > 0 && webFrame != null && layoutParams.bottomMargin != heightDifference) {
             //go into 'shrink' mode so no web site data is hidden
             layoutParams.bottomMargin = heightDifference;
             webFrame.setLayoutParams(layoutParams);
-        }
-        else if (heightDifference == 0 && layoutParams.bottomMargin != navBarHeight)
-        {
+        } else if (heightDifference == 0 && layoutParams.bottomMargin != navBarHeight) {
             //go back into full screen mode, and expand URL bar out
             layoutParams.bottomMargin = 0;
             webFrame.setLayoutParams(layoutParams);
@@ -269,8 +270,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     private String loadUrlAfterReload;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         LocaleUtils.setActiveLocale(getContext());
         super.onCreate(savedInstanceState);
 
@@ -279,20 +279,16 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                     DApp dapp = bundle.getParcelable(DAPP_CLICK);
                     DApp removedDapp = bundle.getParcelable(DAPP_REMOVE_HISTORY);
                     addToBackStack(DAPP_BROWSER);
-                    if (dapp != null)
-                    {
+                    if (dapp != null) {
                         loadUrl(dapp.getUrl());
-                    }
-                    else if (removedDapp != null)
-                    {
+                    } else if (removedDapp != null) {
                         addressBar.removeSuggestion(removedDapp);
                     }
                 });
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         homePressed = false;
         if (currentFragment == null) currentFragment = DAPP_BROWSER;
@@ -301,9 +297,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         {
             //reboot
             requireActivity().recreate();
-        }
-        else
-        {
+        } else {
             viewModel.track(Analytics.Navigation.BROWSER);
             web3.setWebLoadCallback(this);
         }
@@ -313,8 +307,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LocaleUtils.setActiveLocale(getContext());
         loadOnInit = null;
         int webViewID = CustomViewSettings.minimiseBrowserURLBar() ? R.layout.fragment_webview_compact : R.layout.fragment_webview;
@@ -322,11 +315,9 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         initViewModel();
         initView(view);
 
-        addressBar.setup(viewModel.getDappsMasterList(getContext()), new AddressBarListener()
-        {
+        addressBar.setup(viewModel.getDappsMasterList(getContext()), new AddressBarListener() {
             @Override
-            public boolean onLoad(String urlText)
-            {
+            public boolean onLoad(String urlText) {
                 addToBackStack(DAPP_BROWSER);
                 boolean handled = loadUrl(urlText);
                 detachFragments();
@@ -335,28 +326,24 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             }
 
             @Override
-            public void onClear()
-            {
+            public void onClear() {
                 cancelSearchSession();
             }
 
             @Override
-            public WebBackForwardList loadNext()
-            {
+            public WebBackForwardList loadNext() {
                 goToNextPage();
                 return web3.copyBackForwardList();
             }
 
             @Override
-            public WebBackForwardList loadPrevious()
-            {
+            public WebBackForwardList loadPrevious() {
                 backPressed();
                 return web3.copyBackForwardList();
             }
 
             @Override
-            public WebBackForwardList onHomePagePressed()
-            {
+            public WebBackForwardList onHomePagePressed() {
                 homePressed();
                 return web3.copyBackForwardList();
             }
@@ -365,21 +352,17 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         attachFragment(DAPP_BROWSER);
 
         // Load url from a link within the app
-        if (getArguments() != null && getArguments().getString("url") != null)
-        {
+        if (getArguments() != null && getArguments().getString("url") != null) {
             loadOnInit = getArguments().getString("url");
         }
 
         return view;
     }
 
-    private void attachFragment(String tag)
-    {
-        if (tag != null && getHost() != null && getChildFragmentManager().findFragmentByTag(tag) == null)
-        {
+    private void attachFragment(String tag) {
+        if (tag != null && getHost() != null && getChildFragmentManager().findFragmentByTag(tag) == null) {
             Fragment f = null;
-            switch (tag)
-            {
+            switch (tag) {
                 case DISCOVER_DAPPS:
                     f = new DiscoverDappsFragment();
                     break;
@@ -398,8 +381,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         }
     }
 
-    private void showFragment(Fragment fragment, String tag)
-    {
+    private void showFragment(Fragment fragment, String tag) {
         addToBackStack(tag);
         getChildFragmentManager().beginTransaction()
                 .add(R.id.frame, fragment, tag)
@@ -408,44 +390,38 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         addressBar.updateNavigationButtons(web3.copyBackForwardList());
     }
 
-    private void detachFragments()
-    {
+    private void detachFragments() {
         detachFragment(MY_DAPPS);
         detachFragment(DISCOVER_DAPPS);
         detachFragment(HISTORY);
         detachFragment(SEARCH);
     }
 
-    private void homePressed()
-    {
+    private void homePressed() {
         homePressed = true;
         detachFragments();
         currentFragment = DAPP_BROWSER;
         addressBar.clear();
-        if (web3 != null)
-        {
+        if (web3 != null) {
             resetDappBrowser();
         }
     }
 
     @Override
-    public void onDappHomeNavClick(int position)
-    {
+    public void onDappHomeNavClick(int position) {
         detachFragments();
         addToBackStack(DAPP_BROWSER);
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         viewModel.onDestroy();
         stopBalanceListener();
         addressBar.destroy();
     }
 
-    private void setupMenu(@NotNull View baseView)
-    {
+    private void setupMenu(@NotNull View baseView) {
         refresh = baseView.findViewById(R.id.refresh);
         final MenuItem reload = toolbar.getMenu().findItem(R.id.action_reload);
         final MenuItem share = toolbar.getMenu().findItem(R.id.action_share);
@@ -462,12 +438,9 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             return true;
         });
         if (share != null) share.setOnMenuItemClickListener(menuItem -> {
-            if (web3.getUrl() != null && currentFragment != null && currentFragment.equals(DAPP_BROWSER))
-            {
+            if (web3.getUrl() != null && currentFragment != null && currentFragment.equals(DAPP_BROWSER)) {
                 if (getContext() != null) viewModel.share(getContext(), web3.getUrl());
-            }
-            else
-            {
+            } else {
                 displayNothingToShare();
             }
             return true;
@@ -493,8 +466,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             return true;
         });
 
-        if (network != null)
-        {
+        if (network != null) {
             network.setOnMenuItemClickListener(menuItem -> {
                 openNetworkSelection();
                 return true;
@@ -503,8 +475,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             updateNetworkMenuItem();
         }
 
-        if (setAsHomePage != null)
-        {
+        if (setAsHomePage != null) {
             setAsHomePage.setOnMenuItemClickListener(menuItem -> {
                 viewModel.setHomePage(getContext(), addressBar.getUrl());
                 return true;
@@ -512,27 +483,21 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         }
     }
 
-    private void updateNetworkMenuItem()
-    {
-        if (activeNetwork != null)
-        {
+    private void updateNetworkMenuItem() {
+        if (activeNetwork != null) {
             toolbar.getMenu().findItem(R.id.action_network).setTitle(getString(R.string.network_menu_item, activeNetwork.getShortName()));
             symbol.setText(activeNetwork.getShortName());
         }
     }
 
-    private void initView(@NotNull View view)
-    {
+    private void initView(@NotNull View view) {
         web3 = view.findViewById(R.id.web3view);
         Bundle savedState = readBundleFromLocal();
-        if (savedState != null)
-        {
+        if (savedState != null) {
             web3.restoreState(savedState);
             String lastUrl = savedState.getString(CURRENT_URL);
             loadOnInit = TextUtils.isEmpty(lastUrl) ? getDefaultDappUrl() : lastUrl;
-        }
-        else
-        {
+        } else {
             loadOnInit = getDefaultDappUrl();
         }
 
@@ -547,12 +512,9 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         //If you are wondering about the strange way the menus are inflated - this is required to ensure
         //that the menu text gets created with the correct localisation under every circumstance
         MenuInflater inflater = new MenuInflater(LocaleUtils.getActiveLocaleContext(getContext()));
-        if (CustomViewSettings.minimiseBrowserURLBar())
-        {
+        if (CustomViewSettings.minimiseBrowserURLBar()) {
             inflater.inflate(R.menu.menu_scan, toolbar.getMenu());
-        }
-        else if (getDefaultDappUrl() != null)
-        {
+        } else if (getDefaultDappUrl() != null) {
             inflater.inflate(R.menu.menu_bookmarks, toolbar.getMenu());
         }
         refresh = view.findViewById(R.id.refresh);
@@ -560,8 +522,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         RelativeLayout layout = view.findViewById(R.id.address_bar_layout);
         layout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
 
-        if (refresh != null)
-        {
+        if (refresh != null) {
             refresh.setOnClickListener(v -> reloadPage());
         }
 
@@ -574,8 +535,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         setupMenu(view);
     }
 
-    private void displayNothingToShare()
-    {
+    private void displayNothingToShare() {
         if (getActivity() == null) return;
         resultDialog = new AWalletAlertDialog(getActivity());
         resultDialog.setTitle(getString(R.string.nothing_to_share));
@@ -588,8 +548,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         resultDialog.show();
     }
 
-    private void openNetworkSelection()
-    {
+    private void openNetworkSelection() {
         Intent intent = new Intent(getContext(), SelectNetworkActivity.class);
         intent.putExtra(C.EXTRA_SINGLE_ITEM, true);
         if (activeNetwork != null) intent.putExtra(C.EXTRA_CHAIN_ID, activeNetwork.chainId);
@@ -597,16 +556,11 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void comeIntoFocus()
-    {
-        if (viewModel != null)
-        {
-            if (viewModel.getActiveNetwork() == null || activeNetwork == null || activeNetwork.chainId != viewModel.getActiveNetwork().chainId)
-            {
+    public void comeIntoFocus() {
+        if (viewModel != null) {
+            if (viewModel.getActiveNetwork() == null || activeNetwork == null || activeNetwork.chainId != viewModel.getActiveNetwork().chainId) {
                 viewModel.checkForNetworkChanges();
-            }
-            else
-            {
+            } else {
                 viewModel.startBalanceUpdate();
                 startBalanceListener();
                 viewModel.updateGasPrice(activeNetwork.chainId);
@@ -616,8 +570,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void leaveFocus()
-    {
+    public void leaveFocus() {
         if (web3 != null) web3.requestFocus();
         addressBar.leaveFocus();
         if (viewModel != null) viewModel.stopBalanceUpdate();
@@ -628,32 +581,26 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
      * Used to expand or collapse the view
      */
 
-    private void addToBackStack(String nextFragment)
-    {
-        if (currentFragment != null && !currentFragment.equals(DAPP_BROWSER))
-        {
+    private void addToBackStack(String nextFragment) {
+        if (currentFragment != null && !currentFragment.equals(DAPP_BROWSER)) {
             detachFragment(currentFragment);
         }
         currentFragment = nextFragment;
     }
 
-    private void addToForwardStack(String prevFragment)
-    {
+    private void addToForwardStack(String prevFragment) {
         currentFragment = prevFragment;
     }
 
-    private void cancelSearchSession()
-    {
+    private void cancelSearchSession() {
         detachFragment(SEARCH);
         addressBar.updateNavigationButtons(web3.copyBackForwardList());
     }
 
-    private void detachFragment(String tag)
-    {
+    private void detachFragment(String tag) {
         if (!isAdded()) return; //the dappBrowserFragment itself may not yet be attached.
         Fragment fragment = getChildFragmentManager().findFragmentByTag(tag);
-        if (fragment != null && fragment.isVisible() && !fragment.isDetached())
-        {
+        if (fragment != null && fragment.isVisible() && !fragment.isDetached()) {
             fragment.onDetach();
             getChildFragmentManager().beginTransaction()
                     .remove(fragment)
@@ -664,8 +611,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         currentFragment = DAPP_BROWSER;
     }
 
-    private void initViewModel()
-    {
+    private void initViewModel() {
         viewModel = new ViewModelProvider(this)
                 .get(DappBrowserViewModel.class);
         viewModel.activeNetwork().observe(getViewLifecycleOwner(), this::onNetworkChanged);
@@ -674,8 +620,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         viewModel.findWallet();
     }
 
-    private void startBalanceListener()
-    {
+    private void startBalanceListener() {
         if (wallet == null || activeNetwork == null) return;
         if (realm == null || realm.isClosed()) realm = viewModel.getRealmInstance(wallet);
 
@@ -694,10 +639,8 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         });
     }
 
-    private void stopBalanceListener()
-    {
-        if (realmUpdate != null)
-        {
+    private void stopBalanceListener() {
+        if (realmUpdate != null) {
             realmUpdate.removeAllChangeListeners();
             realmUpdate = null;
         }
@@ -705,11 +648,9 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         if (realm != null && !realm.isClosed()) realm.close();
     }
 
-    private void onDefaultWallet(Wallet wallet)
-    {
+    private void onDefaultWallet(Wallet wallet) {
         this.wallet = wallet;
-        if (activeNetwork != null)
-        {
+        if (activeNetwork != null) {
             boolean needsReload = loadOnInit == null;
             setupWeb3();
             if (needsReload) reloadPage();
@@ -717,13 +658,11 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void switchNetworkAndLoadUrl(long chainId, String url)
-    {
+    public void switchNetworkAndLoadUrl(long chainId, String url) {
         forceChainChange = chainId; //avoid prompt to change chain for 1inch
         loadUrlAfterReload = url;   //after reload with new chain inject, page is clean to load the correct site
 
-        if (viewModel == null)
-        {
+        if (viewModel == null) {
             initViewModel();
             return;
         }
@@ -737,14 +676,11 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         web3.reload();
     }
 
-    private void onNetworkChanged(NetworkInfo networkInfo)
-    {
+    private void onNetworkChanged(NetworkInfo networkInfo) {
         boolean networkChanged = networkInfo != null && (activeNetwork == null || activeNetwork.chainId != networkInfo.chainId);
         this.activeNetwork = networkInfo;
-        if (networkInfo != null)
-        {
-            if (networkChanged)
-            {
+        if (networkInfo != null) {
+            if (networkChanged) {
                 viewModel.findWallet();
                 updateNetworkMenuItem();
             }
@@ -753,18 +689,14 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                 resetDappBrowser(); //trigger a reset if on homepage
 
             updateFilters(networkInfo);
-        }
-        else
-        {
+        } else {
             openNetworkSelection();
             resetDappBrowser();
         }
     }
 
-    private void updateFilters(NetworkInfo networkInfo)
-    {
-        if (networkInfo.hasRealValue() && !viewModel.isMainNetsSelected())
-        {
+    private void updateFilters(NetworkInfo networkInfo) {
+        if (networkInfo.hasRealValue() && !viewModel.isMainNetsSelected()) {
             //switch to main net, no need to ask user
             viewModel.setMainNetsSelected(true);
         }
@@ -773,16 +705,14 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         getParentFragmentManager().setFragmentResult(RESET_TOKEN_SERVICE, new Bundle()); //reset tokens service and wallet page with updated filters
     }
 
-    private void launchNetworkPicker()
-    {
+    private void launchNetworkPicker() {
         Intent intent = new Intent(getContext(), SelectNetworkActivity.class);
         intent.putExtra(C.EXTRA_SINGLE_ITEM, true);
         if (activeNetwork != null) intent.putExtra(C.EXTRA_CHAIN_ID, activeNetwork.chainId);
         getNewNetwork.launch(intent);
     }
 
-    private void launchWalletConnectSessionCancel()
-    {
+    private void launchWalletConnectSessionCancel() {
         String sessionId = walletConnectSession != null ? viewModel.getSessionId(walletConnectSession) : "";
         Intent bIntent = new Intent(getContext(), WalletConnectService.class);
         bIntent.setAction(String.valueOf(WalletConnectActions.CLOSE.ordinal()));
@@ -791,8 +721,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         reloadPage();
     }
 
-    private void displayCloseWC()
-    {
+    private void displayCloseWC() {
         handler.post(() -> {
             if (resultDialog != null && resultDialog.isShowing()) resultDialog.dismiss();
             resultDialog = new AWalletAlertDialog(requireContext());
@@ -809,28 +738,21 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         });
     }
 
-    private void setupWeb3()
-    {
+    private void setupWeb3() {
         web3.setChainId(activeNetwork.chainId);
         web3.setRpcUrl(viewModel.getNetworkNodeRPC(activeNetwork.chainId));
         web3.setWalletAddress(new Address(wallet.address));
 
-        web3.setWebChromeClient(new WebChromeClient()
-        {
+        web3.setWebChromeClient(new WebChromeClient() {
             @Override
-            public void onProgressChanged(WebView webview, int newProgress)
-            {
-                if (newProgress == 100)
-                {
+            public void onProgressChanged(WebView webview, int newProgress) {
+                if (newProgress == 100) {
                     progressBar.setVisibility(View.GONE);
                     swipeRefreshLayout.setRefreshing(false);
-                    if (refresh != null)
-                    {
+                    if (refresh != null) {
                         refresh.setEnabled(true);
                     }
-                }
-                else
-                {
+                } else {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgress(newProgress);
                     swipeRefreshLayout.setRefreshing(true);
@@ -838,14 +760,11 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             }
 
             @Override
-            public boolean onConsoleMessage(ConsoleMessage msg)
-            {
+            public boolean onConsoleMessage(ConsoleMessage msg) {
                 boolean ret = super.onConsoleMessage(msg);
 
-                if (msg.messageLevel() == ConsoleMessage.MessageLevel.ERROR)
-                {
-                    if (msg.message().contains(WALLETCONNECT_CHAINID_ERROR))
-                    {
+                if (msg.messageLevel() == ConsoleMessage.MessageLevel.ERROR) {
+                    if (msg.message().contains(WALLETCONNECT_CHAINID_ERROR)) {
                         displayCloseWC();
                     }
                 }
@@ -854,30 +773,26 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             }
 
             @Override
-            public void onReceivedTitle(WebView view, String title)
-            {
+            public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
                 currentWebpageTitle = title;
             }
 
             @Override
-            public void onPermissionRequest(final PermissionRequest request)
-            {
+            public void onPermissionRequest(final PermissionRequest request) {
                 requestCameraPermission(request);
             }
 
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin,
-                                                           GeolocationPermissions.Callback callback)
-            {
+                                                           GeolocationPermissions.Callback callback) {
                 super.onGeolocationPermissionsShowPrompt(origin, callback);
                 requestGeoPermission(origin, callback);
             }
 
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
-                                             FileChooserParams fCParams)
-            {
+                                             FileChooserParams fCParams) {
                 if (filePathCallback == null) return true;
                 uploadMessage = filePathCallback;
                 fileChooserParams = fCParams;
@@ -886,17 +801,13 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             }
         });
 
-        web3.setWebViewClient(new WebViewClient()
-        {
+        web3.setWebViewClient(new WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url)
-            {
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 String[] prefixCheck = url.split(":");
-                if (prefixCheck.length > 1)
-                {
+                if (prefixCheck.length > 1) {
                     Intent intent;
-                    switch (prefixCheck[0])
-                    {
+                    switch (prefixCheck[0]) {
                         case C.DAPP_PREFIX_TELEPHONE:
                             intent = new Intent(Intent.ACTION_DIAL);
                             intent.setData(Uri.parse(url));
@@ -908,20 +819,16 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                             startActivity(Intent.createChooser(intent, "Email: " + prefixCheck[1]));
                             return true;
                         case C.DAPP_PREFIX_ALPHAWALLET:
-                            if (prefixCheck[1].equals(C.DAPP_SUFFIX_RECEIVE))
-                            {
+                            if (prefixCheck[1].equals(C.DAPP_SUFFIX_RECEIVE)) {
                                 viewModel.showMyAddress(getContext());
                                 return true;
                             }
                             break;
                         case C.DAPP_PREFIX_WALLETCONNECT:
                             //start walletconnect
-                            if (wallet.type == WalletType.WATCH)
-                            {
+                            if (wallet.type == WalletType.WATCH) {
                                 showWalletWatch();
-                            }
-                            else
-                            {
+                            } else {
                                 walletConnectSession = url;
                                 if (getContext() != null)
                                     viewModel.handleWalletConnect(getContext(), url, activeNetwork);
@@ -945,8 +852,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         web3.setOnWalletAddEthereumChainObjectListener(this);
         web3.setOnWalletActionListener(this);
 
-        if (loadOnInit != null)
-        {
+        if (loadOnInit != null) {
             web3.clearCache(false); //on restart with stored app, we usually need this
             addToBackStack(DAPP_BROWSER);
             web3.resetView();
@@ -956,16 +862,13 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         }
     }
 
-    private void setUrlText(String newUrl)
-    {
+    private void setUrlText(String newUrl) {
         addressBar.setUrl(newUrl);
         addressBar.updateNavigationButtons(web3.copyBackForwardList());
     }
 
-    private void loadNewNetwork(long newNetworkId)
-    {
-        if (activeNetwork == null || activeNetwork.chainId != newNetworkId)
-        {
+    private void loadNewNetwork(long newNetworkId) {
+        if (activeNetwork == null || activeNetwork.chainId != newNetworkId) {
             balance.setVisibility(View.GONE);
             symbol.setVisibility(View.GONE);
             viewModel.setNetwork(newNetworkId);
@@ -977,14 +880,10 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         reloadPage();
     }
 
-    protected boolean requestUpload()
-    {
-        try
-        {
+    protected boolean requestUpload() {
+        try {
             getContent.launch(determineMimeType(fileChooserParams));
-        }
-        catch (ActivityNotFoundException e)
-        {
+        } catch (ActivityNotFoundException e) {
             uploadMessage = null;
             Toast.makeText(requireActivity().getApplicationContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
             return false;
@@ -994,41 +893,34 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void onSignMessage(final EthereumMessage message)
-    {
+    public void onSignMessage(final EthereumMessage message) {
         handleSignMessage(message);
     }
 
     @Override
-    public void onSignPersonalMessage(final EthereumMessage message)
-    {
+    public void onSignPersonalMessage(final EthereumMessage message) {
         handleSignMessage(message);
     }
 
     @Override
-    public void onSignTypedMessage(@NotNull EthereumTypedMessage message)
-    {
-        if (message.getPrehash() == null || message.getMessageType() == SignMessageType.SIGN_ERROR)
-        {
+    public void onSignTypedMessage(@NotNull EthereumTypedMessage message) {
+        if (message.getPrehash() == null || message.getMessageType() == SignMessageType.SIGN_ERROR) {
             web3.onSignCancel(message.getCallbackId());
-        }
-        else
-        {
+        } else {
             handleSignMessage(message);
         }
     }
 
     @Override
-    public void onEthCall(Web3Call call)
-    {
+    public void onEthCall(Web3Call call) {
         Single.fromCallable(() -> {
-                    //let's make the call
-                    Web3j web3j = TokenRepository.getWeb3jService(activeNetwork.chainId);
-                    //construct call
-                    org.web3j.protocol.core.methods.request.Transaction transaction
-                            = createFunctionCallTransaction(wallet.address, null, null, call.gasLimit, call.to.toString(), call.value, call.payload);
-                    return web3j.ethCall(transaction, call.blockParam).send();
-                }).map(EthCall::getValue)
+            //let's make the call
+            Web3j web3j = TokenRepository.getWeb3jService(activeNetwork.chainId);
+            //construct call
+            org.web3j.protocol.core.methods.request.Transaction transaction
+                    = createFunctionCallTransaction(wallet.address, null, null, call.gasLimit, call.to.toString(), call.value, call.payload);
+            return web3j.ethCall(transaction, call.blockParam).send();
+        }).map(EthCall::getValue)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> web3.onCallFunctionSuccessful(call.leafPosition, result),
@@ -1037,45 +929,35 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void onWalletAddEthereumChainObject(long callbackId, WalletAddEthereumChainObject chainObj)
-    {
+    public void onWalletAddEthereumChainObject(long callbackId, WalletAddEthereumChainObject chainObj) {
         // read chain value
         long chainId = chainObj.getChainId();
         final NetworkInfo info = viewModel.getNetworkInfo(chainId);
 
-        if (forceChainChange != 0 || getContext() == null)
-        {
+        if (forceChainChange != 0 || getContext() == null) {
             return; //No action if chain change is forced
         }
 
         // handle unknown network
-        if (info == null)
-        {
+        if (info == null) {
             // show add custom chain dialog
             addCustomChainDialog = new AddEthereumChainPrompt(getContext(), chainObj, chainObject -> {
-                if (viewModel.addCustomChain(chainObject))
-                {
+                if (viewModel.addCustomChain(chainObject)) {
                     loadNewNetwork(chainObj.getChainId());
-                }
-                else
-                {
+                } else {
                     displayError(R.string.error_invalid_url, 0);
                 }
                 addCustomChainDialog.dismiss();
             });
             addCustomChainDialog.show();
-        }
-        else
-        {
+        } else {
             changeChainRequest(callbackId, info);
         }
     }
 
-    private void changeChainRequest(long callbackId, NetworkInfo info)
-    {
+    private void changeChainRequest(long callbackId, NetworkInfo info) {
         //Don't show dialog if network doesn't need to be changed or if already showing
-        if ((activeNetwork != null && activeNetwork.chainId == info.chainId) || (chainSwapDialog != null && chainSwapDialog.isShowing()))
-        {
+        if ((activeNetwork != null && activeNetwork.chainId == info.chainId) || (chainSwapDialog != null && chainSwapDialog.isShowing())) {
             web3.onWalletActionSuccessful(callbackId, null);
             return;
         }
@@ -1085,21 +967,17 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         // - if user is switching form testnet to mainnet, simply add the title below
 
         // at this stage, we know if it's testnet or not
-        if (!info.hasRealValue() && (activeNetwork != null && activeNetwork.hasRealValue()))
-        {
+        if (!info.hasRealValue() && (activeNetwork != null && activeNetwork.hasRealValue())) {
             TestNetDialog testnetDialog = new TestNetDialog(requireContext(), info.chainId, this);
             testnetDialog.show();
-        }
-        else
-        {
+        } else {
             //go straight to chain change dialog
             showChainChangeDialog(callbackId, info);
         }
     }
 
     @Override
-    public void onRequestAccounts(long callbackId)
-    {
+    public void onRequestAccounts(long callbackId) {
         //TODO: Pop open dialog which asks user to confirm they wish to expose their address to this dapp eg:
         //title = "Request Account Address"
         //message = "${dappUrl} requests your address. \nAuthorise?"
@@ -1110,15 +988,26 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         web3.onWalletActionSuccessful(callbackId, "[\"" + wallet.address + "\"]");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onEthGetEncryptionPublickey(long callbackId) {
+        String key = KeyService.getEncryptionPublicKey(getContext(),wallet.address);
+        web3.onWalletActionSuccessful(callbackId, "[\"" + key + "\"]");
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onEthDecrypt(long callbackId,String encryptedMessage) {
+        web3.onWalletActionSuccessful(callbackId, "[\"我是解密后的消息，哈哈哈哈\"]");
+    }
+
     //EIP-3326
     @Override
-    public void onWalletSwitchEthereumChain(long callbackId, WalletAddEthereumChainObject chainObj)
-    {
+    public void onWalletSwitchEthereumChain(long callbackId, WalletAddEthereumChainObject chainObj) {
         //request user to change chains
         long chainId = chainObj.getChainId();
         final NetworkInfo info = viewModel.getNetworkInfo(chainId);
-        if (info == null)
-        {
+        if (info == null) {
             chainSwapDialog = new AWalletAlertDialog(getActivity());
             chainSwapDialog.setTitle(R.string.unknown_network_title);
             chainSwapDialog.setMessage(getString(R.string.unknown_network, String.valueOf(chainId)));
@@ -1128,9 +1017,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             chainSwapDialog.setSecondaryButton(R.string.action_cancel, v -> chainSwapDialog.dismiss());
             chainSwapDialog.setCancelable(false);
             chainSwapDialog.show();
-        }
-        else
-        {
+        } else {
             changeChainRequest(callbackId, info);
         }
     }
@@ -1142,8 +1029,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
      * @param callbackId
      * @param newNetwork
      */
-    private void showChainChangeDialog(long callbackId, NetworkInfo newNetwork)
-    {
+    private void showChainChangeDialog(long callbackId, NetworkInfo newNetwork) {
         Token baseToken = viewModel.getTokenService().getTokenOrBase(newNetwork.chainId, wallet.address);
         confirmationDialog = new ActionSheetDialog(requireActivity(), this, R.string.switch_chain_request, R.string.switch_and_reload,
                 callbackId, baseToken, activeNetwork, newNetwork);
@@ -1152,18 +1038,15 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         confirmationDialog.fullExpand();
     }
 
-    private void handleSignMessage(Signable message)
-    {
-        if (confirmationDialog == null || !confirmationDialog.isShowing())
-        {
+    private void handleSignMessage(Signable message) {
+        if (confirmationDialog == null || !confirmationDialog.isShowing()) {
             confirmationDialog = new ActionSheetSignDialog(requireActivity(), this, message);
             confirmationDialog.show();
         }
     }
 
     @Override
-    public void signingComplete(SignatureFromKey signature, Signable message)
-    {
+    public void signingComplete(SignatureFromKey signature, Signable message) {
         String signHex = Numeric.toHexString(signature.signature);
         Timber.d("Initial Msg: %s", message.getMessage());
         confirmationDialog.success();
@@ -1171,17 +1054,14 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void signingFailed(Throwable error, Signable message)
-    {
+    public void signingFailed(Throwable error, Signable message) {
         web3.onSignCancel(message.getCallbackId());
         confirmationDialog.dismiss();
     }
 
     @Override
-    public void onSignTransaction(Web3Transaction transaction, String url)
-    {
-        try
-        {
+    public void onSignTransaction(Web3Transaction transaction, String url) {
+        try {
             //minimum for transaction to be valid: recipient and value or payload
             if ((confirmationDialog == null || !confirmationDialog.isShowing()) &&
                     (transaction.recipient.equals(Address.EMPTY) && transaction.payload != null) // Constructor
@@ -1204,9 +1084,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
                 return;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -1222,8 +1100,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
      */
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    private Web3Transaction getDebugTx(@NotNull Web3Transaction tx)
-    {
+    private Web3Transaction getDebugTx(@NotNull Web3Transaction tx) {
         return new Web3Transaction(
                 tx.recipient,
                 tx.contract,
@@ -1237,8 +1114,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     //Transaction failed to be sent
-    private void txError(Throwable throwable)
-    {
+    private void txError(Throwable throwable) {
         if (resultDialog != null && resultDialog.isShowing()) resultDialog.dismiss();
         resultDialog = new AWalletAlertDialog(requireContext());
         resultDialog.setIcon(ERROR);
@@ -1254,8 +1130,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             confirmationDialog.dismiss();
     }
 
-    private void displayError(int title, int text)
-    {
+    private void displayError(int title, int text) {
         if (resultDialog != null && resultDialog.isShowing()) resultDialog.dismiss();
         resultDialog = new AWalletAlertDialog(requireContext());
         resultDialog.setIcon(ERROR);
@@ -1271,8 +1146,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             confirmationDialog.dismiss();
     }
 
-    private void showWalletWatch()
-    {
+    private void showWalletWatch() {
         if (resultDialog != null && resultDialog.isShowing()) resultDialog.dismiss();
         resultDialog = new AWalletAlertDialog(requireContext());
         resultDialog.setIcon(AWalletAlertDialog.WARNING);
@@ -1285,23 +1159,17 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         resultDialog.show();
     }
 
-    private void onInvalidTransaction(Web3Transaction transaction)
-    {
+    private void onInvalidTransaction(Web3Transaction transaction) {
         if (getActivity() == null) return;
         resultDialog = new AWalletAlertDialog(getActivity());
         resultDialog.setIcon(AWalletAlertDialog.ERROR);
         resultDialog.setTitle(getString(R.string.invalid_transaction));
 
-        if (transaction.recipient.equals(Address.EMPTY) && (transaction.payload == null || transaction.value != null))
-        {
+        if (transaction.recipient.equals(Address.EMPTY) && (transaction.payload == null || transaction.value != null)) {
             resultDialog.setMessage(getString(R.string.contains_no_recipient));
-        }
-        else if (transaction.payload == null && transaction.value == null)
-        {
+        } else if (transaction.payload == null && transaction.value == null) {
             resultDialog.setMessage(getString(R.string.contains_no_value));
-        }
-        else
-        {
+        } else {
             resultDialog.setMessage(getString(R.string.contains_no_data));
         }
         resultDialog.setButtonText(R.string.button_ok);
@@ -1313,43 +1181,32 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void backPressed()
-    {
-        if (!currentFragment.equals(DAPP_BROWSER))
-        {
+    public void backPressed() {
+        if (!currentFragment.equals(DAPP_BROWSER)) {
             detachFragment(currentFragment);
-        }
-        else if (web3.canGoBack())
-        {
+        } else if (web3.canGoBack()) {
             setUrlText(getSessionUrl(-1));
             web3.goBack();
             detachFragments();
-        }
-        else if (!web3.getUrl().equalsIgnoreCase(getDefaultDappUrl()))
-        {
+        } else if (!web3.getUrl().equalsIgnoreCase(getDefaultDappUrl())) {
             homePressed();
             addressBar.updateNavigationButtons(web3.copyBackForwardList());
         }
     }
 
-    private void goToNextPage()
-    {
-        if (web3.canGoForward())
-        {
+    private void goToNextPage() {
+        if (web3.canGoForward()) {
             setUrlText(getSessionUrl(1));
             web3.goForward();
         }
     }
 
-    private String getSessionUrl(int relative)
-    {
+    private String getSessionUrl(int relative) {
         WebBackForwardList sessionHistory = web3.copyBackForwardList();
         int newIndex = sessionHistory.getCurrentIndex() + relative;
-        if (newIndex < sessionHistory.getSize())
-        {
+        if (newIndex < sessionHistory.getSize()) {
             WebHistoryItem newItem = sessionHistory.getItemAtIndex(newIndex);
-            if (newItem != null)
-            {
+            if (newItem != null) {
                 return newItem.getUrl();
             }
         }
@@ -1358,20 +1215,16 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void onWebpageLoaded(String url, String title)
-    {
+    public void onWebpageLoaded(String url, String title) {
         if (getContext() == null) return; //could be a late return from dead fragment
-        if (homePressed)
-        {
+        if (homePressed) {
             homePressed = false;
-            if (currentFragment.equals(DAPP_BROWSER) && url.equals(getDefaultDappUrl()))
-            {
+            if (currentFragment.equals(DAPP_BROWSER) && url.equals(getDefaultDappUrl())) {
                 web3.clearHistory();
             }
         }
 
-        if (isValidUrl(url))
-        {
+        if (isValidUrl(url)) {
             DApp dapp = new DApp(title, url);
             DappBrowserUtils.addToHistory(getContext(), dapp);
             addressBar.addSuggestion(dapp);
@@ -1383,25 +1236,21 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void onWebpageLoadComplete()
-    {
+    public void onWebpageLoadComplete() {
         handler.post(() -> {
             addressBar.updateNavigationButtons(web3.copyBackForwardList());
-            if (loadUrlAfterReload != null)
-            {
+            if (loadUrlAfterReload != null) {
                 loadUrl(loadUrlAfterReload);
                 loadUrlAfterReload = null;
             }
         }); //execute on UI thread
 
-        if (forceChainChange != 0)
-        {
+        if (forceChainChange != 0) {
             handler.postDelayed(() -> forceChainChange = 0, 5000);
         }
     }
 
-    private boolean loadUrl(String urlText)
-    {
+    private boolean loadUrl(String urlText) {
         AnalyticsProperties props = new AnalyticsProperties();
         props.put(Analytics.PROPS_URL, urlText);
         viewModel.track(Analytics.Action.LOAD_URL, props);
@@ -1418,15 +1267,11 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         return true;
     }
 
-    public void loadDirect(String urlText)
-    {
-        if (web3 == null)
-        {
+    public void loadDirect(String urlText) {
+        if (web3 == null) {
             requireActivity().recreate();
             loadOnInit = urlText;
-        }
-        else
-        {
+        } else {
             // reset initial url, to avoid issues with initial load
             loadOnInit = null;
             cancelSearchSession();
@@ -1443,12 +1288,9 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         }
     }
 
-    public void reloadPage()
-    {
-        if (currentFragment.equals(DAPP_BROWSER))
-        {
-            if (refresh != null)
-            {
+    public void reloadPage() {
+        if (currentFragment.equals(DAPP_BROWSER)) {
+            if (refresh != null) {
                 refresh.setEnabled(false);
             }
             web3.resetView();
@@ -1458,8 +1300,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         }
     }
 
-    private void resetDappBrowser()
-    {
+    private void resetDappBrowser() {
         web3.clearHistory();
         web3.stopLoading();
         web3.resetView();
@@ -1468,23 +1309,18 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void handleQRCode(int resultCode, Intent data, FragmentMessenger messenger)
-    {
+    public void handleQRCode(int resultCode, Intent data, FragmentMessenger messenger) {
         //result
         String qrCode = null;
-        try
-        {
-            switch (resultCode)
-            {
+        try {
+            switch (resultCode) {
                 case Activity.RESULT_OK:
-                    if (data != null)
-                    {
+                    if (data != null) {
                         qrCode = data.getStringExtra(C.EXTRA_QR_CODE);
                         if (qrCode == null || checkForMagicLink(qrCode)) return;
                         QRParser parser = QRParser.getInstance(EthereumNetworkRepository.extraChains());
                         QRResult result = parser.parse(qrCode);
-                        switch (result.type)
-                        {
+                        switch (result.type) {
                             case ADDRESS:
                                 //ethereum address was scanned. In dapp browser what do we do? maybe populate an input field with address?
                                 copyToClipboard(result.getAddress());
@@ -1517,14 +1353,11 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                 default:
                     break;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             qrCode = null;
         }
 
-        if (qrCode == null && getActivity() != null)
-        {
+        if (qrCode == null && getActivity() != null) {
             Toast.makeText(getActivity(), R.string.toast_invalid_code, Toast.LENGTH_SHORT).show();
         }
     }
@@ -1534,13 +1367,11 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
      *
      * @param qrCode
      */
-    private void loadUrlRemote(final String qrCode)
-    {
+    private void loadUrlRemote(final String qrCode) {
         handler.post(() -> loadUrl(qrCode));
     }
 
-    private void showCameraDenied()
-    {
+    private void showCameraDenied() {
         if (getActivity() == null) return;
         resultDialog = new AWalletAlertDialog(getActivity());
         resultDialog.setTitle(R.string.title_dialog_error);
@@ -1553,21 +1384,17 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         resultDialog.show();
     }
 
-    private void copyToClipboard(String address)
-    {
+    private void copyToClipboard(String address) {
         ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(KEY_ADDRESS, address);
-        if (clipboard != null)
-        {
+        if (clipboard != null) {
             clipboard.setPrimaryClip(clip);
         }
         Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
     }
 
-    private boolean checkForMagicLink(String data)
-    {
-        try
-        {
+    private boolean checkForMagicLink(String data) {
+        try {
             ParseMagicLink parser = new ParseMagicLink(new CryptoFunctions(), EthereumNetworkRepository.extraChains());
             if (parser.parseUniversalLink(data).chainId > 0) //see if it's a valid link
             {
@@ -1575,9 +1402,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                 viewModel.showImportLink(getActivity(), data);
                 return true;
             }
-        }
-        catch (SalesOrderMalformed e)
-        {
+        } catch (SalesOrderMalformed e) {
             //
         }
 
@@ -1585,20 +1410,15 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
     }
 
-    private boolean checkReadPermission()
-    {
+    private boolean checkReadPermission() {
         if (ContextCompat.checkSelfPermission(requireActivity().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED)
-        {
+                == PackageManager.PERMISSION_GRANTED) {
             return true;
-        }
-        else
-        {
+        } else {
             String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
             requireActivity().requestPermissions(permissions, REQUEST_FILE_ACCESS);
             return false;
@@ -1607,31 +1427,24 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
     // Handles the requesting of the fine location permission.
     // Note: If you intend allowing geo-location in your app you need to ask the permission.
-    private void requestGeoPermission(String origin, GeolocationPermissions.Callback callback)
-    {
+    private void requestGeoPermission(String origin, GeolocationPermissions.Callback callback) {
         if (ContextCompat.checkSelfPermission(requireContext().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)
-        {
+                != PackageManager.PERMISSION_GRANTED) {
             geoCallback = callback;
             geoOrigin = origin;
             String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
             requireActivity().requestPermissions(permissions, REQUEST_FINE_LOCATION);
-        }
-        else
-        {
+        } else {
             callback.invoke(origin, true, false);
         }
     }
 
     // Handles the requesting of the camera permission.
-    private void requestCameraPermission(@NotNull PermissionRequest request)
-    {
+    private void requestCameraPermission(@NotNull PermissionRequest request) {
         final String[] requestedResources = request.getResources();
         requestCallback = request;
-        for (String r : requestedResources)
-        {
-            if (r.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE))
-            {
+        for (String r : requestedResources) {
+            if (r.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE)) {
                 final String[] permissions = new String[]{Manifest.permission.CAMERA};
                 requireActivity().requestPermissions(permissions, REQUEST_CAMERA_ACCESS);
             }
@@ -1639,13 +1452,10 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void gotCameraAccess(@NotNull String[] permissions, int[] grantResults)
-    {
+    public void gotCameraAccess(@NotNull String[] permissions, int[] grantResults) {
         boolean cameraAccess = false;
-        for (int i = 0; i < permissions.length; i++)
-        {
-            if (permissions[i].equals(Manifest.permission.CAMERA) && grantResults[i] != -1)
-            {
+        for (int i = 0; i < permissions.length; i++) {
+            if (permissions[i].equals(Manifest.permission.CAMERA) && grantResults[i] != -1) {
                 cameraAccess = true;
                 if (requestCallback != null)
                     requestCallback.grant(requestCallback.getResources()); //now we can grant permission
@@ -1656,13 +1466,10 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void gotGeoAccess(@NotNull String[] permissions, int[] grantResults)
-    {
+    public void gotGeoAccess(@NotNull String[] permissions, int[] grantResults) {
         boolean geoAccess = false;
-        for (int i = 0; i < permissions.length; i++)
-        {
-            if (permissions[i].equals(Manifest.permission.ACCESS_FINE_LOCATION) && grantResults[i] != -1)
-            {
+        for (int i = 0; i < permissions.length; i++) {
+            if (permissions[i].equals(Manifest.permission.ACCESS_FINE_LOCATION) && grantResults[i] != -1) {
                 geoAccess = true;
                 break;
             }
@@ -1674,13 +1481,10 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void gotFileAccess(@NotNull String[] permissions, int[] grantResults)
-    {
+    public void gotFileAccess(@NotNull String[] permissions, int[] grantResults) {
         boolean fileAccess = false;
-        for (int i = 0; i < permissions.length; i++)
-        {
-            if (permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE) && grantResults[i] != -1)
-            {
+        for (int i = 0; i < permissions.length; i++) {
+            if (permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE) && grantResults[i] != -1) {
                 fileAccess = true;
                 break;
             }
@@ -1690,8 +1494,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState)
-    {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         web3.saveState(outState);
         //serialise the bundle and store locally
         writeBundleToLocalStorage(outState);
@@ -1699,38 +1502,27 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         super.onSaveInstanceState(outState);
     }
 
-    private void writeBundleToLocalStorage(Bundle bundle)
-    {
+    private void writeBundleToLocalStorage(Bundle bundle) {
         File file = new File(requireContext().getFilesDir(), BUNDLE_FILE);
-        try (FileOutputStream fos = new FileOutputStream(file))
-        {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
             getSerialisedBundle(bundle).writeTo(fos);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             //
         }
     }
 
-    private ByteArrayOutputStream getSerialisedBundle(Bundle bundle) throws Exception
-    {
+    private ByteArrayOutputStream getSerialisedBundle(Bundle bundle) throws Exception {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try (ObjectOutputStream oos = new ObjectOutputStream(bos))
-        {
+        try (ObjectOutputStream oos = new ObjectOutputStream(bos)) {
             oos.writeObject(MAGIC_BUNDLE_VAL);
             Object item;
-            for (String key : bundle.keySet())
-            {
+            for (String key : bundle.keySet()) {
                 item = bundle.get(key);
-                if (item instanceof Serializable)
-                {
+                if (item instanceof Serializable) {
                     oos.writeObject(key);
-                    try
-                    {
+                    try {
                         oos.writeObject(item);
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         oos.writeObject(0);
                     }
                 }
@@ -1743,34 +1535,27 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         return bos;
     }
 
-    private Bundle readBundleFromLocal()
-    {
+    private Bundle readBundleFromLocal() {
         File file = new File(requireContext().getFilesDir(), BUNDLE_FILE);
-        try (FileInputStream fis = new FileInputStream(file))
-        {
+        try (FileInputStream fis = new FileInputStream(file)) {
             ObjectInputStream oos = new ObjectInputStream(fis);
             Object check = oos.readObject();
-            if (!((Long) MAGIC_BUNDLE_VAL).equals(check))
-            {
+            if (!((Long) MAGIC_BUNDLE_VAL).equals(check)) {
                 return null;
             }
 
             Bundle bundle = new Bundle();
 
-            while (fis.available() > 0)
-            {
+            while (fis.available() > 0) {
                 String key = (String) oos.readObject();
                 Object val = oos.readObject();
-                if (key != null && val instanceof Serializable && !((Integer) 0).equals(val))
-                {
+                if (key != null && val instanceof Serializable && !((Integer) 0).equals(val)) {
                     bundle.putSerializable(key, (Serializable) val);
                 }
             }
 
             return bundle;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             //
         }
 
@@ -1778,38 +1563,31 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void RefreshEvent()
-    {
+    public void RefreshEvent() {
         //determine scroll position
         Timber.tag("Touch").i("SCROLL: %s", web3.getScrollY());
-        if (web3.getScrollY() == 0)
-        {
+        if (web3.getScrollY() == 0) {
             loadUrl(web3.getUrl());
         }
     }
 
     @Override
-    public int getCurrentScrollPosition()
-    {
+    public int getCurrentScrollPosition() {
         return web3.getScrollY();
     }
 
     // this is called when the signing is approved by the user (e.g. fingerprint / PIN)
     @Override
-    public void gotAuthorisation(boolean gotAuth)
-    {
-        if (confirmationDialog != null && confirmationDialog.isShowing())
-        {
+    public void gotAuthorisation(boolean gotAuth) {
+        if (confirmationDialog != null && confirmationDialog.isShowing()) {
             confirmationDialog.dismiss();
         }
     }
 
     @Override
-    public void buttonClick(long callbackId, Token baseToken)
-    {
+    public void buttonClick(long callbackId, Token baseToken) {
         //handle button click
-        if (confirmationDialog != null && confirmationDialog.isShowing())
-        {
+        if (confirmationDialog != null && confirmationDialog.isShowing()) {
             confirmationDialog.dismiss();
         }
 
@@ -1819,8 +1597,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void cancelAuthentication()
-    {
+    public void cancelAuthentication() {
 
     }
 
@@ -1829,26 +1606,21 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
      */
 
     @Override
-    public void getAuthorisation(SignAuthenticationCallback callback)
-    {
+    public void getAuthorisation(SignAuthenticationCallback callback) {
         viewModel.getAuthorisation(wallet, getActivity(), callback);
     }
 
     @Override
-    public void sendTransaction(Web3Transaction finalTx)
-    {
-        final SendTransactionInterface callback = new SendTransactionInterface()
-        {
+    public void sendTransaction(Web3Transaction finalTx) {
+        final SendTransactionInterface callback = new SendTransactionInterface() {
             @Override
-            public void transactionSuccess(Web3Transaction web3Tx, String hashData)
-            {
+            public void transactionSuccess(Web3Transaction web3Tx, String hashData) {
                 confirmationDialog.transactionWritten(hashData);
                 web3.onSignTransactionSuccessful(web3Tx, hashData);
             }
 
             @Override
-            public void transactionError(long callbackId, Throwable error)
-            {
+            public void transactionError(long callbackId, Throwable error) {
                 confirmationDialog.dismiss();
                 txError(error);
                 web3.onSignCancel(callbackId);
@@ -1859,19 +1631,16 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public void dismissed(String txHash, long callbackId, boolean actionCompleted)
-    {
+    public void dismissed(String txHash, long callbackId, boolean actionCompleted) {
         //actionsheet dismissed - if action not completed then user cancelled
-        if (!actionCompleted)
-        {
+        if (!actionCompleted) {
             //actionsheet dismissed before completing signing.
             web3.onSignCancel(callbackId);
         }
     }
 
     @Override
-    public void notifyConfirm(String mode)
-    {
+    public void notifyConfirm(String mode) {
         AnalyticsProperties props = new AnalyticsProperties();
         props.put(Analytics.PROPS_ACTION_SHEET_MODE, mode);
         props.put(Analytics.PROPS_ACTION_SHEET_SOURCE, ActionSheetSource.BROWSER);
@@ -1879,28 +1648,22 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     @Override
-    public ActivityResultLauncher<Intent> gasSelectLauncher()
-    {
+    public ActivityResultLauncher<Intent> gasSelectLauncher() {
         return getGasSettings;
     }
 
     @NotNull
-    private String determineMimeType(@NotNull WebChromeClient.FileChooserParams fileChooserParams)
-    {
+    private String determineMimeType(@NotNull WebChromeClient.FileChooserParams fileChooserParams) {
         if (fileChooserParams == null || fileChooserParams.getAcceptTypes().length == 0)
             return "*/*"; // Allow anything
         String mime;
         String firstType = fileChooserParams.getAcceptTypes()[0];
 
-        if (fileChooserParams.getAcceptTypes().length == 1)
-        {
+        if (fileChooserParams.getAcceptTypes().length == 1) {
             mime = firstType;
-        }
-        else
-        {
+        } else {
             //TODO: Resolve types
-            switch (firstType)
-            {
+            switch (firstType) {
                 case "png":
                 case "gif":
                 case "svg":
@@ -1953,27 +1716,23 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         return mime;
     }
 
-    private String getDefaultDappUrl()
-    {
+    private String getDefaultDappUrl() {
         String customHome = viewModel.getHomePage(getContext());
         return customHome != null ? customHome : DappBrowserUtils.defaultDapp(activeNetwork != null ? activeNetwork.chainId : 0);
     }
 
     @Override
-    public void onTestNetDialogClosed()
-    {
+    public void onTestNetDialogClosed() {
         //don't change to the new network
 
     }
 
     @Override
-    public void onTestNetDialogConfirmed(long newChainId)
-    {
+    public void onTestNetDialogConfirmed(long newChainId) {
         viewModel.setMainNetsSelected(false);
         //proceed with new network change, no need to pop a second dialog, we are swapping from a main net to a testnet
         NetworkInfo newNetwork = viewModel.getNetworkInfo(newChainId);
-        if (newNetwork != null)
-        {
+        if (newNetwork != null) {
             loadNewNetwork(newChainId);
         }
     }

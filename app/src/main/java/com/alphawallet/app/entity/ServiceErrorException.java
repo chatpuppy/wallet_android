@@ -6,7 +6,7 @@ public class ServiceErrorException extends Exception {
 
     public enum ServiceErrorCode {
         UNKNOWN_ERROR, INVALID_DATA, KEY_STORE_ERROR, FAIL_TO_SAVE_IV_FILE, KEY_STORE_SECRET, USER_NOT_AUTHENTICATED, KEY_IS_GONE,
-        IV_OR_ALIAS_NO_ON_DISK, INVALID_KEY, FAIL_TO_SAVE_PUBKEY_FILE
+        IV_OR_ALIAS_NO_ON_DISK, INVALID_KEY, FAIL_TO_SAVE_PUBKEY_FILE,FAIL_FIND_PUBKEY_FILE
     }
 
     public final ServiceErrorCode code;

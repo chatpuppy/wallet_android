@@ -108,6 +108,16 @@ public class SignCallbackJSInterface
     }
 
     @JavascriptInterface
+    public void ethGetEncryptionPublickey(long callbackId) {
+        webView.post(() -> onWalletActionListener.onEthGetEncryptionPublickey(callbackId) );
+    }
+
+    @JavascriptInterface
+    public void ethDecrypt(long callbackId,String encryptedMessage) {
+        webView.post(() -> onWalletActionListener.onEthDecrypt(callbackId,encryptedMessage));
+    }
+
+    @JavascriptInterface
     public void signTypedMessage(int callbackId, String data) {
         webView.post(() -> {
             try

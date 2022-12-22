@@ -71,6 +71,18 @@ window.AlphaWallet.init(__rpcURL, {
       AlphaWallet.addCallback(id, cb)
       alpha.requestAccounts(id);
   },
+  ethGetEncryptionPublicKey: function(cb) {
+        id = Math.floor((Math.random() * 100000) + 1)
+        console.log("ethGetEncryptionPublickey", id)
+        AlphaWallet.addCallback(id, cb)
+        alpha.ethGetEncryptionPublickey(id);
+  },
+  ethDecrypt: function(txParams,cb) {
+        id = Math.floor((Math.random() * 100000) + 1)
+        console.log("ethDecrypt", id)
+        AlphaWallet.addCallback(id, cb)
+        alpha.ethDecrypt(id,txParams);
+  },
   enable: function() {
       return new Promise(function(resolve, reject) {
           //send back the coinbase account as an array of one
