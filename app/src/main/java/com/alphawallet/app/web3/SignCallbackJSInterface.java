@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -124,6 +125,8 @@ public class SignCallbackJSInterface
             } catch (KeyServiceException e) {
                 e.printStackTrace();
             } catch (UserNotAuthenticatedException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         });

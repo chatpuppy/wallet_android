@@ -128,6 +128,7 @@ import com.alphawallet.app.service.KeyService;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthCall;
 
@@ -999,7 +1000,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
     // Chatpuppy
     @Override
-    public void onEthDecrypt(long callbackId, String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException {
+    public void onEthDecrypt(long callbackId, String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException, JSONException {
         KeyService keyService = viewModel.getKeyService();
         String decryptedMessage = keyService.decrypt(getContext(), encryptedMessage, viewModel.defaultWallet().getValue().address);
         web3.onWalletActionSuccessful(callbackId, "[\"" + decryptedMessage + "\"]");

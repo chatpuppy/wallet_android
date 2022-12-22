@@ -46,8 +46,11 @@ import com.alphawallet.app.entity.cryptokeys.SignatureFromKey;
 import com.alphawallet.app.entity.cryptokeys.SignatureReturnType;
 import com.alphawallet.app.widget.AWalletAlertDialog;
 import com.alphawallet.app.widget.SignTransactionDialog;
+import com.google.gson.Gson;
 import com.iwebpp.crypto.TweetNacl;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
 import org.web3j.utils.Numeric;
@@ -635,17 +638,44 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
     }
 
     // Chatpuppy
-    public synchronized String decrypt(Context context, String encryptedMessage, String address) throws KeyServiceException, UserNotAuthenticatedException {
-        System.out.println("###### " + encryptedMessage);
-        System.out.println("###### " + address);
-
+    class EncryptedMessage {
+        String version;
+        String nonce;
+        String ephemPublicKey;
+        String ciphertext;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public synchronized String decrypt(Context context, String encryptedMessage, String address) throws KeyServiceException, UserNotAuthenticatedException, JSONException {
         currentWallet = new Wallet(address);
         HDWallet wallet = new HDWallet(unpackMnemonic(), "");
         PrivateKey pk = wallet.getKeyForCoin(CoinType.ETHEREUM);
-        System.out.println("###### 私钥" + Numeric.toHexString(pk.data()));
+//        System.out.println("###### 私钥" + Numeric.toHexString(pk.data()));
 
+        byte[] encryptedMessageByteArray = hexStringToByteArray(encryptedMessage.substring(2)); // cancel header: 0x
+        Gson g = new Gson();
+        EncryptedMessage encryptedMessageObject = g.fromJson(new String(encryptedMessageByteArray), EncryptedMessage.class);
+//        System.out.println("###### " + new String(encryptedMessageByteArray));
 
-        return "Hello decrypted";
+        if(encryptedMessageObject.version.equals("x25519-xsalsa20-poly1305")) {
+            byte[] recieverEncryptionPrivateKey = TweetNacl.Box.keyPair_fromSecretKey(pk.data()).getSecretKey();
+            byte[] nonce = Base64.getDecoder().decode(encryptedMessageObject.nonce);
+            byte[] ephemPublicKey = Base64.getDecoder().decode(encryptedMessageObject.ephemPublicKey);
+            byte[] ciphertext = Base64.getDecoder().decode(encryptedMessageObject.ciphertext);
+            TweetNacl.Box box = new TweetNacl.Box(ephemPublicKey, recieverEncryptionPrivateKey);
+            byte[] decryptedMessageByteArray = box.open(ciphertext, nonce);
+            String decryptedMessage = new String(decryptedMessageByteArray);
+            return decryptedMessage;
+        } else return "Wrong encryption algorithm";
+    }
+
+    private static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
     }
 
     private synchronized boolean storeEncryptedBytes(byte[] data, boolean createAuthLocked, String fileName) {

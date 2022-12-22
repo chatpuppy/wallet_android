@@ -36,6 +36,7 @@ import com.alphawallet.token.entity.Signable;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -126,7 +127,7 @@ public class Web3View extends WebView {
 
         // Chatpuppy
         @Override
-        public void onEthDecrypt(long callbackId,String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException {
+        public void onEthDecrypt(long callbackId,String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException, JSONException {
             onWalletActionListener.onEthDecrypt(callbackId,encryptedMessage);
         }
 
