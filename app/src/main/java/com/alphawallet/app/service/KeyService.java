@@ -44,13 +44,13 @@ import com.alphawallet.app.entity.cryptokeys.KeyEncodingType;
 import com.alphawallet.app.entity.cryptokeys.KeyServiceException;
 import com.alphawallet.app.entity.cryptokeys.SignatureFromKey;
 import com.alphawallet.app.entity.cryptokeys.SignatureReturnType;
+import com.alphawallet.app.ui.DappBrowserFragment;
 import com.alphawallet.app.widget.AWalletAlertDialog;
 import com.alphawallet.app.widget.SignTransactionDialog;
 import com.google.gson.Gson;
 import com.iwebpp.crypto.TweetNacl;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
 import org.web3j.utils.Numeric;
@@ -274,7 +274,6 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
      * 3. get mnemonic/password
      * 4. rebuild private key
      * 5. sign.
-     *
      * @param wallet
      * @param callingActivity
      * @param callback

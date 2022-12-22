@@ -992,6 +992,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     // Chatpuppy
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onEthGetEncryptionPublickey(long callbackId) {
         String key = KeyService.getEncryptionPublicKey(getContext(), wallet.address);
@@ -999,9 +1000,11 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     }
 
     // Chatpuppy
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onEthDecrypt(long callbackId, String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException, JSONException {
         KeyService keyService = viewModel.getKeyService();
+        viewModel.getAuthentication(wallet, this.getActivity(), this); // ###### 这里不完美
         String decryptedMessage = keyService.decrypt(getContext(), encryptedMessage, viewModel.defaultWallet().getValue().address);
         web3.onWalletActionSuccessful(callbackId, "[\"" + decryptedMessage + "\"]");
     }

@@ -36,6 +36,7 @@ import com.alphawallet.app.service.GasService;
 import com.alphawallet.app.service.KeyService;
 import com.alphawallet.app.service.TokensService;
 import com.alphawallet.app.ui.AddEditDappActivity;
+import com.alphawallet.app.ui.DappBrowserFragment;
 import com.alphawallet.app.ui.HomeActivity;
 import com.alphawallet.app.ui.ImportTokenActivity;
 import com.alphawallet.app.ui.MyAddressActivity;
@@ -474,5 +475,12 @@ public class DappBrowserViewModel extends BaseViewModel
         }
 
         tokensService.setupFilter(true);
+    }
+
+    // Chatpuppy
+    public void getAuthentication(Wallet wallet, Activity activity, SignAuthenticationCallback callback)
+    {
+        keyService.setRequireAuthentication(); // require authentication for any action involving the keystore
+        keyService.getAuthenticationForSignature(wallet, activity, callback);
     }
 }
