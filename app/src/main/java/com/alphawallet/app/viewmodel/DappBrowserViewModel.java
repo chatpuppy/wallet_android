@@ -357,9 +357,13 @@ public class DappBrowserViewModel extends BaseViewModel
         return intent;
     }
 
-    public TokensService getTokenService()
-    {
+    public TokensService getTokenService() {
         return tokensService;
+    }
+
+    // Chatpuppy
+    public KeyService getKeyService() {
+        return keyService;
     }
 
     public Single<BigInteger> calculateGasEstimate(Wallet wallet, Web3Transaction transaction, long chainId)

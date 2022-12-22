@@ -40,11 +40,9 @@ enum class WCMethod {
     @SerializedName("wallet_addEthereumChain")
     ADD_ETHEREUM_CHAIN,
 
-    // ###### 添加eth_getEncryptionPublicKey方法
     @SerializedName("eth_getEncryptionPublicKey")
     ETH_GET_ENCRYPTION_PUBLIC_KEY,
 
-    // ###### 添加eth_decrypt方法
     @SerializedName("eth_decrypt")
     ETH_DECRYPT
 }

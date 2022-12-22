@@ -2,6 +2,7 @@ package com.alphawallet.app.web3;
 
 import static com.alphawallet.app.entity.tokenscript.TokenscriptFunction.ZERO_ADDRESS;
 
+import android.security.keystore.UserNotAuthenticatedException;
 import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 
 import com.alphawallet.app.BuildConfig;
 import com.alphawallet.app.entity.CryptoFunctions;
+import com.alphawallet.app.entity.cryptokeys.KeyServiceException;
 import com.alphawallet.app.util.Hex;
 import com.alphawallet.app.util.Utils;
 import com.alphawallet.app.web3.entity.Address;
@@ -107,14 +109,24 @@ public class SignCallbackJSInterface
         webView.post(() -> onWalletActionListener.onRequestAccounts(callbackId) );
     }
 
+    // Chatpuppy
     @JavascriptInterface
     public void ethGetEncryptionPublickey(long callbackId) {
         webView.post(() -> onWalletActionListener.onEthGetEncryptionPublickey(callbackId) );
     }
 
+    // Chatpuppy
     @JavascriptInterface
     public void ethDecrypt(long callbackId,String encryptedMessage) {
-        webView.post(() -> onWalletActionListener.onEthDecrypt(callbackId,encryptedMessage));
+        webView.post(() -> {
+            try {
+                onWalletActionListener.onEthDecrypt(callbackId,encryptedMessage);
+            } catch (KeyServiceException e) {
+                e.printStackTrace();
+            } catch (UserNotAuthenticatedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @JavascriptInterface

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.security.keystore.UserNotAuthenticatedException;
 import android.util.AttributeSet;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -24,6 +25,7 @@ import androidx.webkit.WebViewFeature;
 
 import com.alphawallet.app.BuildConfig;
 import com.alphawallet.app.entity.URLLoadInterface;
+import com.alphawallet.app.entity.cryptokeys.KeyServiceException;
 import com.alphawallet.app.web3.entity.Address;
 import com.alphawallet.app.web3.entity.WalletAddEthereumChainObject;
 import com.alphawallet.app.web3.entity.Web3Call;
@@ -115,15 +117,16 @@ public class Web3View extends WebView {
             onWalletActionListener.onRequestAccounts(callbackId);
         }
 
+        // Chatpuppy
         @Override
         public void onEthGetEncryptionPublickey(long callbackId)
         {
             onWalletActionListener.onEthGetEncryptionPublickey(callbackId);
         }
 
+        // Chatpuppy
         @Override
-        public void onEthDecrypt(long callbackId,String encryptedMessage)
-        {
+        public void onEthDecrypt(long callbackId,String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException {
             onWalletActionListener.onEthDecrypt(callbackId,encryptedMessage);
         }
 

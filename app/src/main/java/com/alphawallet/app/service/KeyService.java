@@ -581,25 +581,23 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    // ###### Chatpuppy added
+    // Chatpuppy
     private synchronized boolean storePubKey(HDWallet newWallet) {
         PrivateKey pk = newWallet.getKeyForCoin(CoinType.ETHEREUM);
-        System.out.println("###### 私钥: " + Numeric.toHexString(pk.data()));
-        byte[] publicKey = createEncryptionPublicKey(pk.data()); // ###### Chatupppy added
-        System.out.println("###### Nacl公钥" + Base64.getEncoder().encodeToString(publicKey));
+        byte[] publicKey = createEncryptionPublicKey(pk.data());
         currentWallet = new Wallet(CoinType.ETHEREUM.deriveAddress(pk));
         return storeEncryptionPublicKey(publicKey, currentWallet.address);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    // ###### Chatpuppy added
+    // Chatpuppy
     private synchronized byte[] createEncryptionPublicKey(byte[] pkData) {
         // Get encryption public key by tweet nacl, same as eth_getEncryptionPublicKey RPC method of metamask.
         return TweetNacl.Box.keyPair_fromSecretKey(pkData).getPublicKey();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    // ###### Chatpuppy added
+    // Chatpuppy
     public synchronized static String getEncryptionPublicKey(Context context,String address) {
 
         try {
@@ -617,7 +615,7 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
         }
     }
 
-    // ###### Chatpuppy added
+    // Chatpuppy added
     private synchronized boolean storeEncryptionPublicKey(byte[] data, String fileName) {
         try {
             String encryptionPubKeyPath = getFilePath(context, fileName + "_pubkey");
@@ -636,10 +634,18 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
         return false;
     }
 
-    //TODO
-    private synchronized String decrypt(String version, String encryptedData) {
-        if (version != "x25519-xsalsa20-poly1305") return "";
-        return "";
+    // Chatpuppy
+    public synchronized String decrypt(Context context, String encryptedMessage, String address) throws KeyServiceException, UserNotAuthenticatedException {
+        System.out.println("###### " + encryptedMessage);
+        System.out.println("###### " + address);
+
+        currentWallet = new Wallet(address);
+        HDWallet wallet = new HDWallet(unpackMnemonic(), "");
+        PrivateKey pk = wallet.getKeyForCoin(CoinType.ETHEREUM);
+        System.out.println("###### 私钥" + Numeric.toHexString(pk.data()));
+
+
+        return "Hello decrypted";
     }
 
     private synchronized boolean storeEncryptedBytes(byte[] data, boolean createAuthLocked, String fileName) {

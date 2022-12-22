@@ -345,7 +345,6 @@ open class WCClient : WebSocketListener() {
     }
 
     private fun handleMessage(payload: String) {
-        Timber.d("###### handle Rpc message: " + payload);
         try {
             val request = gson.fromJson<JsonRpcRequest<JsonArray>>(
                 payload,
@@ -409,7 +408,6 @@ open class WCClient : WebSocketListener() {
             WCMethod.ADD_ETHEREUM_CHAIN -> {
                 handleAddChain(request)
             }
-            // ###### getEncryptionPublicKey
             WCMethod.ETH_GET_ENCRYPTION_PUBLIC_KEY -> {
                 handleGetEncryptionPublicKey(request)
             }
@@ -429,13 +427,11 @@ open class WCClient : WebSocketListener() {
         onAddEthereumChain(request.id, param.toWalletAddEthereumObject())
     }
 
-    // ###### 处理eth_getEncryptionPublicKey实现, 需要调用KeyService.java
     private fun handleGetEncryptionPublicKey(request: JsonRpcRequest<JsonArray>) {
         Timber.d("WCMethod: eth_getEncryptionPubicKey")
 
     }
 
-    // ###### 处理eth_decrypt实现, 需要调用
     private fun handleDecrypt(request: JsonRpcRequest<JsonArray>) {
         Timber.d("WCMethod: eth_decrypt")
 

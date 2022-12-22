@@ -1,5 +1,8 @@
 package com.alphawallet.app.web3;
 
+import android.security.keystore.UserNotAuthenticatedException;
+
+import com.alphawallet.app.entity.cryptokeys.KeyServiceException;
 import com.alphawallet.app.web3.entity.WalletAddEthereumChainObject;
 
 /**
@@ -9,9 +12,11 @@ public interface OnWalletActionListener
 {
     void onRequestAccounts(long callbackId);
 
+    // Chatpuppy
     void onEthGetEncryptionPublickey(long callbackId);
 
-    void onEthDecrypt(long callbackId,String encryptedMessage);
+    // Chatpuppy
+    void onEthDecrypt(long callbackId,String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException;
 
     void onWalletSwitchEthereumChain(long callbackId, WalletAddEthereumChainObject chainObj);
 }

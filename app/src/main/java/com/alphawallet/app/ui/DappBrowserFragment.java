@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.security.keystore.UserNotAuthenticatedException;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -76,6 +77,7 @@ import com.alphawallet.app.entity.Wallet;
 import com.alphawallet.app.entity.WalletConnectActions;
 import com.alphawallet.app.entity.WalletType;
 import com.alphawallet.app.entity.analytics.ActionSheetSource;
+import com.alphawallet.app.entity.cryptokeys.KeyServiceException;
 import com.alphawallet.app.entity.cryptokeys.SignatureFromKey;
 import com.alphawallet.app.entity.tokens.Token;
 import com.alphawallet.app.repository.EthereumNetworkRepository;
@@ -988,17 +990,19 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         web3.onWalletActionSuccessful(callbackId, "[\"" + wallet.address + "\"]");
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    // Chatpuppy
     @Override
     public void onEthGetEncryptionPublickey(long callbackId) {
-        String key = KeyService.getEncryptionPublicKey(getContext(),wallet.address);
+        String key = KeyService.getEncryptionPublicKey(getContext(), wallet.address);
         web3.onWalletActionSuccessful(callbackId, "[\"" + key + "\"]");
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    // Chatpuppy
     @Override
-    public void onEthDecrypt(long callbackId,String encryptedMessage) {
-        web3.onWalletActionSuccessful(callbackId, "[\"我是解密后的消息，哈哈哈哈\"]");
+    public void onEthDecrypt(long callbackId, String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException {
+        KeyService keyService = viewModel.getKeyService();
+        String decryptedMessage = keyService.decrypt(getContext(), encryptedMessage, viewModel.defaultWallet().getValue().address);
+        web3.onWalletActionSuccessful(callbackId, "[\"" + decryptedMessage + "\"]");
     }
 
     //EIP-3326
