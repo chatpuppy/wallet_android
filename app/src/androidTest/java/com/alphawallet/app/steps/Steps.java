@@ -77,6 +77,11 @@ public class Steps
         click(withId(R.id.nav_browser_text));
     }
 
+    public static void navigateToChatPuppy()
+    {
+        click(withId(R.id.nav_chatpuppy_text));
+    }
+
     public static void selectTestNet(String name)
     {
         gotoSettingsPage();

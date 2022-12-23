@@ -9,6 +9,7 @@ import static com.alphawallet.app.C.RESET_WALLET;
 import static com.alphawallet.app.C.SETTINGS_INSTANTIATED;
 import static com.alphawallet.app.C.SHOW_BACKUP;
 import static com.alphawallet.app.entity.WalletPage.ACTIVITY;
+import static com.alphawallet.app.entity.WalletPage.CHATPUPPY;
 import static com.alphawallet.app.entity.WalletPage.DAPP_BROWSER;
 import static com.alphawallet.app.entity.WalletPage.SETTINGS;
 import static com.alphawallet.app.entity.WalletPage.WALLET;
@@ -597,6 +598,11 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
                 showPage(DAPP_BROWSER);
                 return true;
             }
+            case CHATPUPPY:
+            {
+                showPage(CHATPUPPY);
+                return true;
+            }
             case WALLET:
             {
                 showPage(WALLET);
@@ -647,6 +653,12 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
                 hideToolbar();
                 setTitle(getString(R.string.toolbar_header_browser));
                 selectNavigationItem(DAPP_BROWSER);
+                enableDisplayAsHome = true;
+                break;
+            case CHATPUPPY:
+                hideToolbar();
+                setTitle(getString(R.string.toolbar_header_chatpuppy));
+                selectNavigationItem(CHATPUPPY);
                 enableDisplayAsHome = true;
                 break;
 
@@ -1234,6 +1246,8 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
                     return new WalletFragment();
                 case ACTIVITY:
                     return new ActivityFragment();
+                case CHATPUPPY:
+                    return new ChatPuppyFragment();
                 case DAPP_BROWSER:
                     if (CustomViewSettings.hideDappBrowser())
                     {

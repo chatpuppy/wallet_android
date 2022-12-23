@@ -205,7 +205,7 @@
     <string name="ethereum_blockchain">Blockchain Ethereum</string>
     <string name="issuer">Penerbit:</string>
     <string name="root_title">KEAMANAN PERANGKAT TERGANGGU</string>
-    <string name="root_body">Ponsel Anda di-root tetapi kuncinya masih dilindungi oleh enkripsi enklave Android. Vektor serangan akan berasal dari aplikasi papan ketik atau tampilan papan klip yang mempelajari kunci Anda ketika Anda memasukkannya. AlphaWallet melakukan yang terbaik untuk mengurangi risiko ini dengan mematikan saran otomatis papan ketik. Jika Anda menjalankan root, merekomendasikan Anda hanya menggunakan aplikasi papan ketik arus utama, rjalankan aplikasi anti-virus berkualitas baik dan gunakan pengelola root sumber terbuka yang terpercaya seperti Magisk atau SuperSU untuk membatasi akses ke hak akses root. Pada akhirnya, keselamatan kunci adalah tanggung jawab Anda.</string>
+    <string name="root_body">Ponsel Anda di-root tetapi kuncinya masih dilindungi oleh enkripsi enklave Android. Vektor serangan akan berasal dari aplikasi papan ketik atau tampilan papan klip yang mempelajari kunci Anda ketika Anda memasukkannya. ChatPuppy melakukan yang terbaik untuk mengurangi risiko ini dengan mematikan saran otomatis papan ketik. Jika Anda menjalankan root, merekomendasikan Anda hanya menggunakan aplikasi papan ketik arus utama, rjalankan aplikasi anti-virus berkualitas baik dan gunakan pengelola root sumber terbuka yang terpercaya seperti Magisk atau SuperSU untuk membatasi akses ke hak akses root. Pada akhirnya, keselamatan kunci adalah tanggung jawab Anda.</string>
     <string name="contact_us">Masih membutuhkan bantuan? Hubungi kami</string>
     <string name="confirm_sale_title">Konfirmasi Penjualan?</string>
     <string name="dialog_cancel_back">Batalkan dan Kembali</string>
@@ -264,7 +264,7 @@
     <string name="eth_00">0.00 ETH</string>
     <string name="toolbar_title_wallets">Ubah Dompet</string>
     <string name="what_is_eth">Ethereum adalah sistem yang terbuka, secara umum, platform komputasi terdistribusi berbasis blockchain dan sistem operasi yang menampilkan fungsionalitas Smart Contract (scripting). Ini adalah infrastruktur untuk produk dan layanan blockchain.\n\nETH/Ether adalah mata uang kripto yang blockchain-nya dihasilkan oleh platform Ethereum. Ether dapat ditransfer antar akun dan digunakan untuk mengkompensasi node penambangan peserta untuk perhitungan yang dilakukan. Ethereum menyediakan mesin virtual lengkap yang terdesentralisasi, Mesin Virtual Ethereum (EVM), yang dapat mengeksekusi skrip menggunakan jaringan internasional node publik. "Gas", mekanisme penetapan harga transaksi internal, digunakan untuk mengurangi spam dan mengalokasikan sumber daya pada jaringan.</string>
-    <string name="why_alphawallet_eth">Saat ini, Ethereum adalah blockchain terbaik dan terbesar untuk mengembangkan aplikasi dan layanan Smart Contract. AlphaWallet dimulai dengan mendukung blockchain Ethereum dan membantu meningkatkan teknologinya.</string>
+    <string name="why_ChatPuppy_eth">Saat ini, Ethereum adalah blockchain terbaik dan terbesar untuk mengembangkan aplikasi dan layanan Smart Contract. ChatPuppy dimulai dengan mendukung blockchain Ethereum dan membantu meningkatkan teknologinya.</string>
     <string name="how_i_get_money">Anda dapat mengubah Ethereum menjadi uang fiat dan mentransfernya ke rekening bank Anda melalui bursa mata uang kripto apa pun.</string>
     <string name="how_i_transfer_into_wallet">Anda bisa memberikan alamat dompet Anda kepada pengirim. Mereka dapat mentransfer ETH kepada Anda melalui alamat dompet Anda.</string>
     <string name="ticket_import_valid">Tiket Berlaku untuk Impor</string>
@@ -320,15 +320,15 @@
     <string name="ticket_not_valid">Token Tidak Berlaku</string>
     <string name="ticket_not_valid_body">Tidak ada kontrak yang berlaku di alamat ini pada jaringan ini. Kontrak bisa saja sudah diputuskan atau mungkin berada di jaringan yang berbeda. Coba ubah ke \'Ropsten (Uji)\'.</string>
     <string name="new_version_title">Pembaruan Tersedia</string>
-    <string name="new_version">Pembaruan versi tersedia di situs web AlphaWallet.</string>
+    <string name="new_version">Pembaruan versi tersedia di situs web ChatPuppy.</string>
     <string name="confirm_update">Unduh dan Pasang</string>
     <string name="dialog_later">Nanti</string>
-    <string name="alphawallet_update">Pembaruan Alphawallet</string>
+    <string name="ChatPuppy_update">Pembaruan ChatPuppy</string>
     <string name="install_error">Tidak dapat memperbarui Aplikasi</string>
     <string name="require_write_permission">Izin tulis penyimpanan tidak diberikan.</string>
     <string name="dialog_not_again">Lewati hingga rilis berikutnya</string>
     <string name="enable_xml_override_dir">Aktifkan Pengesampingan XML</string>
-    <string name="explain_xml_override">Aktifkan XML akan membuat direktori \'AlphaWallet\' di penyimpanan ponsel Anda. File konfigurasi Token (XML) dapat dimasukkan ke dalam direktori ini yang akan mengesampingkan konfigurasi Token default atau jaringan.</string>
+    <string name="explain_xml_override">Aktifkan XML akan membuat direktori \'ChatPuppy\' di penyimpanan ponsel Anda. File konfigurasi Token (XML) dapat dimasukkan ke dalam direktori ini yang akan mengesampingkan konfigurasi Token default atau jaringan.</string>
     <string name="ask_user_about_xml_override">Apakah Anda ingin mengaktifkan Token konfigurasi direktori?</string>
     <string name="label_contract">Perjanjian</string>
     <string name="toolbar_header_browser">Perambah DApp</string>
@@ -420,7 +420,7 @@
     <string name="title_enabled_networks">Jaringan yang Diaktifkan (%s)</string>
     <string name="collectibles">Barang Koleksi</string>
     <string name="token_function">Fungsi Token</string>
-    <string name="channel_description">Saluran pemberitahuan Alphawallet</string>
+    <string name="channel_description">Saluran pemberitahuan ChatPuppy</string>
     <string name="error_camera_permission_denied">Izin untuk menggunakan kamera ditolak.</string>
     <string name="confirm_tokenscript_transaction">Konfirmasi Transaksi TokenScript</string>
     <string name="tokenscript_send_native">Kirim %1$s %2$s to %3$s (%4$s)</string>
@@ -460,7 +460,7 @@
     <string name="set_keystore_password">Atur Kata Sandi Penyimpanan Kunci</string>
     <string name="keystore_loss_warning">CATATAN: Anda harus mengingat kata sandi Anda. Kami tidak menyimpan kata sandi Anda di tempat lain. pemyimpanan kunci selalu dienkripsi, Jika tidak, siapa pun yang memilikinya bisa mendapatkan uangnya.</string>
     <string name="save_keystore">Simpan Penyimpanan Kunci</string>
-    <string name="do_not_share">Jangan bagikan cadangan Anda. Anggota tim AlphaWallet tidak akan memintanya.</string>
+    <string name="do_not_share">Jangan bagikan cadangan Anda. Anggota tim ChatPuppy tidak akan memintanya.</string>
     <string name="enter_seed_phrase">Masukkan seed phrase</string>
     <string name="seed_phrase_conversion_message">Jika seed phrase Anda tidak dalam bahasa Inggris, feel free to convert it to English yourself using tools like these https://iancoleman.io/bip39/</string>
     <string name="bad_seed_phrase">Phrase pemulihan yang tidak valid. Mohon periksa dan coba lagi.</string>
@@ -499,7 +499,7 @@
     <string name="back_up_now">Cadangkan sekarang!</string>
     <string name="key_secure">Jangan bagikan kunci Anda</string>
     <string name="lock_key_upgrade">Kunci Seed Phrase Anda untuk meningkatkan keamanan</string>
-    <string name="upgrade_key_security_detail">Keamanan AlphaWallet sedang ditingkatkan menjadi yang terbaik yang dapat dicapai. Kunci frasa benih Anda dengan biometrik.</string>
+    <string name="upgrade_key_security_detail">Keamanan ChatPuppy sedang ditingkatkan menjadi yang terbaik yang dapat dicapai. Kunci frasa benih Anda dengan biometrik.</string>
     <string name="action_upgrade_key">Tingkatkan keamanan kunci</string>
     <string name="backup_wallet_detail">Kami sangat menyarankan Anda membuat cadangan dompet Anda.</string>
     <string name="skip_upgrade">Lewati Pembaruan</string>
@@ -511,7 +511,7 @@
     <string name="provide_authentication">Menyediakan pengesahan untuk membuat kunci</string>
     <string name="import_error">Kesalahan Impor, Coba impor ulang lagi.</string>
     <string name="watch_exists">Dompet %1$s sudah diimpor dengan kunci</string>
-    <string name="welcome_to_alphawallet">Selamat datang di AlphaWallet</string>
+    <string name="welcome_to_ChatPuppy">Selamat datang di ChatPuppy</string>
     <string name="lock_seed_phrase">Kunci Seed Phrase</string>
     <string name="no_key">Tidak ada Kunci yang ditemukan</string>
     <string name="pending_transaction">Transaksi Tertunda …</string>
@@ -585,7 +585,7 @@
     <string name="your_wallets">Dompet Anda</string>
     <string name="action_copy">Salin</string>
     <string name="title_version_support_warning">Pembaruan Penting</string>
-    <string name="message_version_support_warning">Mulai Versi 3.0, AlphaWallet tidak mendukung perangkat yang berjalan di Android 6.0 dan di bawahnya.</string>
+    <string name="message_version_support_warning">Mulai Versi 3.0, ChatPuppy tidak mendukung perangkat yang berjalan di Android 6.0 dan di bawahnya.</string>
     <string name="hide_notification">Sembunyikan Pemberitahuan</string>
     <string name="card_view_not_found_error">%1$s tidak ditemukan</string>
     <string name="tokenscript_management">Pengelolaan TokenScript</string>
@@ -597,12 +597,12 @@
     <string name="fast">Cepat</string>
     <string name="label_estimated_transaction_time">Perkiraan Waktu Transaksi</string>
     <string name="minutes_0">0 menit</string>
-    <string name="created_aw_directory">Membuat Direktori AlphaWallet</string>
-    <string name="created_aw_directory_detail">Direktori AlphaWallet dibuat. Letakkan skrip ke dalam direktori ini untuk menggunakan skrip Anda. Perhatikan tokenscript.org untuk detail lebih lanjut tentang cara mudah membuat tampilan yang aman dan berguna untuk token Anda.</string>
+    <string name="created_aw_directory">Membuat Direktori ChatPuppy</string>
+    <string name="created_aw_directory_detail">Direktori ChatPuppy dibuat. Letakkan skrip ke dalam direktori ini untuk menggunakan skrip Anda. Perhatikan tokenscript.org untuk detail lebih lanjut tentang cara mudah membuat tampilan yang aman dan berguna untuk token Anda.</string>
     <string name="title_no_need_to_watch">Sudah Menonton</string>
     <string name="error_while_signing_transaction">ETerjadi kesalahan saat menandatangani transaksi. Silakan masukkan kembali kunci untuk dompet ini.</string>
     <string name="error_not_whitelisted">Halaman Tidak Masuk Daftar Putih</string>
-    <string name="explain_not_whitelisted">TokenScript mencoba mengarahkan ke halaman yang tidak masuk daftar putih %1$s. Jika Anda adalah pemilik situs ini, silakan kirimkan PR ke AlphaWallet repo untuk menambahkan halaman untuk daftar putih.</string>
+    <string name="explain_not_whitelisted">TokenScript mencoba mengarahkan ke halaman yang tidak masuk daftar putih %1$s. Jika Anda adalah pemilik situs ini, silakan kirimkan PR ke ChatPuppy repo untuk menambahkan halaman untuk daftar putih.</string>
     <string name="token_spec">%1$s (%2$s)</string>
     <string name="check_function_availability">Ketersediaan Fungsi</string>
     <string name="invalid_parameters">Parameter tidak valid saat melakukan Transaksi TokenScript . Silakan periksa masukan.</string>
@@ -691,7 +691,7 @@
     <string name="gas_max">Biaya Maksimum</string>
     <string name="priority_fee">Biaya Prioritas</string>
     <string name="base_fee">Biaya Dasar: %1$s</string>
-    <string name="gas_message">Biaya didasarkan pada beban jaringan blockchain Ethereum saat ini. Mereka tidak bergantung pada AlphaWallet. AlphaWallet menggunakan oracle langsung %1$s dan memperbarui harga gas setiap 15 detik.</string>
+    <string name="gas_message">Biaya didasarkan pada beban jaringan blockchain Ethereum saat ini. Mereka tidak bergantung pada ChatPuppy. ChatPuppy menggunakan oracle langsung %1$s dan memperbarui harga gas setiap 15 detik.</string>
     <string name="set_your_speed">Tetapkan Milik Anda Sendiri</string>
     <string name="nonce_optional">Nonce (pilihan)</string>
     <string name="calc_gas_limit">Menghitung Batas Gas</string>
@@ -712,7 +712,7 @@
     <string name="deposit">Setoran</string>
     <string name="body_low_gas">Harga gas ditetapkan di bawah kecepatan \'lambat\'.\n Transaksi Anda mungkin membutuhkan waktu lama untuk ditulis atau mungkin tidak pernah ditulis.</string>
     <string name="low_gas_setting">Biaya Gas Mungkin Terlalu Rendah</string>
-    <string name="body_high_gas">Anda telah menetapkan biaya gas yang sangat tinggi. Tolong pastikan ini bukan kesalahan. AlphaWallet menggunakan gasnow.org live dan memperbarui harga gas setiap 15 detik.</string>
+    <string name="body_high_gas">Anda telah menetapkan biaya gas yang sangat tinggi. Tolong pastikan ini bukan kesalahan. ChatPuppy menggunakan gasnow.org live dan memperbarui harga gas setiap 15 detik.</string>
     <string name="high_gas_setting">Peringatan Biaya Tinggi!</string>
     <string name="body_insufficient_warning">Saldo Anda memiliki dana yang tidak mencukupi untuk nilai transaksi ditambah biaya transaksi.</string>
     <string name="convert_to_xdai">Konversi ke xDAI</string>
@@ -726,7 +726,7 @@
     <string name="disconnect">Putuskan hubungan</string>
     <string name="keep_connect">Tetap Terhubung</string>
     <string name="beware_of_scammers">Waspadalah terhadap penipu! Jangan membagikan Seed Phrase.</string>
-    <string name="alphawallet_never_ask">AlphaWallet TIDAK AKAN PERNAH bertanya tentang Seed Phrase Anda (terutama di Telegram).</string>
+    <string name="ChatPuppy_never_ask">ChatPuppy TIDAK AKAN PERNAH bertanya tentang Seed Phrase Anda (terutama di Telegram).</string>
     <string name="your_seed_phrase">Seed Phrase Anda (jangan bagikan dengan siapa pun)</string>
     <string name="hide_seed_text">OK, Sembunyikan Seed Phrase</string>
     <string name="ens_not_match_wallet">Nama ENS tidak cocok dengan alamat dompet</string>
@@ -747,7 +747,7 @@
     <string name="alerts_will_appear_here">Peringatan akan muncul di sini</string>
     <string name="token_text">Token</string>
     <string name="buy_eth">Beli ETH</string>
-    <string name="reload_token_data_desc">Setel ulang semua data token yang terlampir (misalnya saldo yang tercatat, dll). AlphaWallet akan memuat ulang status dompet Anda saat ini. Tidak mempengaruhi kunci atau aset.</string>
+    <string name="reload_token_data_desc">Setel ulang semua data token yang terlampir (misalnya saldo yang tercatat, dll). ChatPuppy akan memuat ulang status dompet Anda saat ini. Tidak mempengaruhi kunci atau aset.</string>
 
     <string name="title_activity_add_custom_rpcnetwork">Tambahkan Jaringan RPC Khusus</string>
     <string name="hint_network_name">Nama Jaringan</string>
@@ -868,7 +868,7 @@
     <string name="no_key_found">Tidak ditemukan Kunci</string>
     <string name="unable_store_key">Tidak dapat menyimpan kunci: %1$s</string>
     <string name="title_ens_lookup_warning">Peringatan Pencarian ENS</string>
-    <string name="message_ens_node_not_sync">AlphaWallet telah mendeteksi perbedaan antara penanda waktu ethereum dan waktu perangkat Anda saat ini, atau mungkin koneksi blockchain tidak disinkronkan, harap periksa waktu mobile Anda sudah benar, atau abaikan peringatan ini.</string>
+    <string name="message_ens_node_not_sync">ChatPuppy telah mendeteksi perbedaan antara penanda waktu ethereum dan waktu perangkat Anda saat ini, atau mungkin koneksi blockchain tidak disinkronkan, harap periksa waktu mobile Anda sudah benar, atau abaikan peringatan ini.</string>
     <string name="decrease">Penurunan</string>
     <string name="increase">Peningkatan</string>
     <string name="message_transaction_timeout">Transaksi telah habis waktunya. Anda bisa melihat status di halaman aktivitas.</string>

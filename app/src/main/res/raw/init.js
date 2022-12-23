@@ -28,7 +28,7 @@ window.AlphaWallet.init(__rpcURL, {
     alpha.signMessage(id, data);
   },
   signPersonalMessage: function (msgParams, cb) {
-      console.log('signPersonalMessage', msgParams)
+      console.log('signPersonalMessage', JSON.stringify(msgParams))
       const { data, chainType } = msgParams
       const { id = 8888 } = msgParams
     AlphaWallet.addCallback(id, cb)

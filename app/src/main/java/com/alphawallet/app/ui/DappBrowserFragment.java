@@ -211,7 +211,6 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     private AddressBar addressBar;
 
 
-
     // Handle resizing the browser view when the soft keyboard pops up and goes.
     // The issue this fixes is where you need to enter data at the bottom of the webpage,
     // and the keyboard hides the input field
@@ -996,17 +995,43 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     @Override
     public void onEthGetEncryptionPublickey(long callbackId) {
         String key = KeyService.getEncryptionPublicKey(getContext(), wallet.address);
-        web3.onWalletActionSuccessful(callbackId, "[\"" + key + "\"]");
+        web3.onWalletActionSuccessful(callbackId, "\"" + key + "\"");
     }
 
     // Chatpuppy
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onEthDecrypt(long callbackId, String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException, JSONException {
+    public void onEthDecrypt(long callbackId, String encryptedMessage) {
         KeyService keyService = viewModel.getKeyService();
-        viewModel.getAuthentication(wallet, this.getActivity(), this); // ###### 这里不完美
-        String decryptedMessage = keyService.decrypt(getContext(), encryptedMessage, viewModel.defaultWallet().getValue().address);
-        web3.onWalletActionSuccessful(callbackId, "[\"" + decryptedMessage + "\"]");
+
+        SignAuthenticationCallback cb = new SignAuthenticationCallback() {
+            @Override
+            public void gotAuthorisation(boolean gotAuth){
+                if (gotAuth) {
+                    String decryptedMessage = "";
+                    try {
+                        decryptedMessage = keyService.decrypt(getContext(), encryptedMessage, viewModel.defaultWallet().getValue().address);
+                    } catch (KeyServiceException e) {
+                        e.printStackTrace();
+                    } catch (UserNotAuthenticatedException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    web3.onWalletActionSuccessful(callbackId, "\"" + decryptedMessage + "\"");
+                } else {
+                    web3.onWalletActionSuccessful(callbackId, "\"\"");
+                }
+            }
+
+            @Override
+            public void cancelAuthentication() {
+                web3.onWalletActionSuccessful(callbackId, "\"\"");
+            }
+        };
+
+        viewModel.getAuthentication(wallet, this.getActivity(), cb);
+
     }
 
     //EIP-3326

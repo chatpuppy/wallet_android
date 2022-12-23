@@ -203,7 +203,7 @@
     <string name="ethereum_blockchain">Blockchain Ethereum</string>
     <string name="issuer">Emetter:</string>
     <string name="root_title">SECURITE DE L\'APPAREIL COMPROMISE</string>
-    <string name="root_body">Votre téléphone est rooté mais les clés sont toujours protégées par le cryptage sécurisé Android. Le vecteur d\'attaque proviendrait d\'une application de clavier ou d\'une visionneuse de presse-papiers apprenant votre clé lorsque vous la saisissez. AlphaWallet fait de son mieux pour atténuer ce risque en désactivant la suggestion automatique du clavier. Si vous exécutez root, nous vous recommandons d\'utiliser uniquement des applications de clavier grand public, d\'exécuter une application antivirus de bonne qualité et d\'utiliser un gestionnaire de racine open source respecté tel que Magisk ou SuperSU pour limiter l\'accès aux privilèges root. En fin de compte, la sécurité clé est de votre responsabilité.</string>
+    <string name="root_body">Votre téléphone est rooté mais les clés sont toujours protégées par le cryptage sécurisé Android. Le vecteur d\'attaque proviendrait d\'une application de clavier ou d\'une visionneuse de presse-papiers apprenant votre clé lorsque vous la saisissez. ChatPuppy fait de son mieux pour atténuer ce risque en désactivant la suggestion automatique du clavier. Si vous exécutez root, nous vous recommandons d\'utiliser uniquement des applications de clavier grand public, d\'exécuter une application antivirus de bonne qualité et d\'utiliser un gestionnaire de racine open source respecté tel que Magisk ou SuperSU pour limiter l\'accès aux privilèges root. En fin de compte, la sécurité clé est de votre responsabilité.</string>
     <string name="contact_us">Avez-vous toujours besoin d\'aide? Contactez nous</string>
     <string name="confirm_sale_title">Confirmer la Vente?</string>
     <string name="dialog_cancel_back">Annuler et revenir en arrière</string>
@@ -262,7 +262,7 @@
     <string name="eth_00">0.00 ETH</string>
     <string name="toolbar_title_wallets">Changer de portefeuille</string>
     <string name="what_is_eth">Ethereum est une plate-forme informatique distribuée et un système d\'exploitation open source, public et basé sur la blockchain, avec une fonctionnalité de contrat intelligent (script). C\'est l\'infrastructure des produits et services blockchain.\n\nETH/Ether est une crypto-monnaie dont la blockchain est générée par la plateforme Ethereum. L\'éther peut être transféré entre comptes et utilisé pour compenser les nœuds de minage des participants pour les calculs effectués. Ethereum fournit une machine virtuelle décentralisée complète de Turing, la machine virtuelle Ethereum (EVM), peut exécuter des scripts à l\'aide d\'un réseau international de nœuds publics. «Gas», un mécanisme interne de tarification des transactions, est utilisé pour atténuer le spam et allouer des ressources sur le réseau.</string>
-    <string name="why_alphawallet_eth">Actuellement, Ethereum est la meilleure et la plus grande blockchain pour le développement d\'applications et de services de contrats intelligents. AlphaWallet supporte la blockchain Ethereum et aide à améliorer sa technologie.</string>
+    <string name="why_ChatPuppy_eth">Actuellement, Ethereum est la meilleure et la plus grande blockchain pour le développement d\'applications et de services de contrats intelligents. ChatPuppy supporte la blockchain Ethereum et aide à améliorer sa technologie.</string>
     <string name="how_i_get_money">Vous pouvez convertir votre Ethereum en monnaie fiat et les tranférer sur votre compte bancaire avec n\'importe quel échange crypto.</string>
     <string name="how_i_transfer_into_wallet">Vous pouvez fournir l\'adresse de votre portefeuille à l\'envoyeur. Ils peuvent vous transférer de l\'ETH avec votre adresse de portefeuille.</string>
     <string name="ticket_import_valid">Tickets Valides pour l\'Import</string>
@@ -319,15 +319,15 @@
     <string name="ticket_not_valid">Token Invalide</string>
     <string name="ticket_not_valid_body">Aucun contrat valide à cette adresse sur ce réseau. Le contrat pourrait avoir été résilié ou il peut être sur un réseau différent. Essayez de changer pour \'Ropsten (Test)\'.</string>
     <string name="new_version_title">Mise à jour disponible</string>
-    <string name="new_version">Mise à jour de la version disponible sur le site AlphaWallet.</string>
+    <string name="new_version">Mise à jour de la version disponible sur le site ChatPuppy.</string>
     <string name="confirm_update">Télécharger et Installer</string>
     <string name="dialog_later">Plus tard</string>
-    <string name="alphawallet_update">Mise à jour Alphawallet </string>
+    <string name="ChatPuppy_update">Mise à jour ChatPuppy </string>
     <string name="install_error">Mise à jour impossible</string>
     <string name="require_write_permission">L\'autorisation d\'écriture de stockage n\'est pas donnée.</string>
     <string name="dialog_not_again">Passer jusqu\'à la prochaine version</string>
     <string name="enable_xml_override_dir">Activer XML Override</string>
-    <string name="explain_xml_override">Activer le XML Override créera un répertoire \'AlphaWallet\' dans la mémoire de votre téléphone. Les fichiers de configuration du token (XML) peuvent être déposés dans ce répertoire, ce qui remplacera les configurations du token par défaut ou réseau.</string>
+    <string name="explain_xml_override">Activer le XML Override créera un répertoire \'ChatPuppy\' dans la mémoire de votre téléphone. Les fichiers de configuration du token (XML) peuvent être déposés dans ce répertoire, ce qui remplacera les configurations du token par défaut ou réseau.</string>
     <string name="ask_user_about_xml_override">Souhaitez-vous activer le répertoire de remplacement de configuration de token?</string>
     <string name="label_contract">Contrat</string>
     <string name="toolbar_header_browser">Navigateur DApp</string>
@@ -419,7 +419,7 @@
     <string name="title_enabled_networks">Réseaux Activés (%s)</string>
     <string name="collectibles">Objects de Collections</string>
     <string name="token_function">Fonctions du Token</string>
-    <string name="channel_description">Chaine de notifications Alphawallet</string>
+    <string name="channel_description">Chaine de notifications ChatPuppy</string>
     <string name="error_camera_permission_denied">La permission d\'utiliser la caméra a été refusée</string>
     <string name="confirm_tokenscript_transaction">Confirmer la transaction TokenScript</string>
     <string name="tokenscript_send_native">Envoyer %1$s %2$s to %3$s (%4$s)</string>
@@ -459,7 +459,7 @@
     <string name="set_keystore_password">Entrer le mot de passe Keystore</string>
     <string name="keystore_loss_warning">REMARQUE: vous devez vous souvenir de votre mot de passe. Nous ne stockons pas votre mot de passe ailleurs. Un keyStore est toujours crypté, sinon celui qui le possède peut avoir accès à votre argent.</string>
     <string name="save_keystore">Sauvegarder Keystore</string>
-    <string name="do_not_share">Ne partager pas votre backup. L\'équipe AlphaWallet ne vous le demanderons jamais.</string>
+    <string name="do_not_share">Ne partager pas votre backup. L\'équipe ChatPuppy ne vous le demanderons jamais.</string>
     <string name="enter_seed_phrase">Entrer votre phrase seed</string>
     <string name="seed_phrase_conversion_message">Si votre phrase seed n\'est pas en anglais, veuillez la convertir vous-même en anglais à l\'aide d\'outils comme celui-ci https://iancoleman.io/bip39/</string>
     <string name="bad_seed_phrase">Phrase de récupération non valide. S\'il vous plaît, vérifiez et essayez à nouveau.</string>
@@ -498,7 +498,7 @@
     <string name="back_up_now">Sauvegarder maintenant</string>
     <string name="key_secure">Ne partager pas votre clé</string>
     <string name="lock_key_upgrade">Vérouiller votre phrase seed pour augmenter votre sécurité</string>
-    <string name="upgrade_key_security_detail">La sécurité de AlphaWallet est mise à niveau vers la meilleure version possible. Verrouillez votre phrase seed avec la biométrie.</string>
+    <string name="upgrade_key_security_detail">La sécurité de ChatPuppy est mise à niveau vers la meilleure version possible. Verrouillez votre phrase seed avec la biométrie.</string>
     <string name="action_upgrade_key">Améliorer la sécurité de la clé</string>
     <string name="backup_wallet_detail">Nous vous recommandons vivement de sauvegarder votre portefeuille.</string>
     <string name="skip_upgrade">Passer l\'amélioration</string>
@@ -510,7 +510,7 @@
     <string name="provide_authentication">Fournir authentification pour créer une clé</string>
     <string name="import_error">Importer Erreur, essayer de ré-importer encore.</string>
     <string name="watch_exists">Portefeuille %1$s portefeuille déja plein - pas besoinn de regarder</string>
-    <string name="welcome_to_alphawallet">Bienvenue sur AlphaWallet</string>
+    <string name="welcome_to_ChatPuppy">Bienvenue sur ChatPuppy</string>
     <string name="lock_seed_phrase">Vérouiller la Phrase Seed</string>
     <string name="no_key">Pas de Clé Trouvé</string>
     <string name="pending_transaction">Transaction en attente ...</string>
@@ -584,7 +584,7 @@
     <string name="your_wallets">Vos Portefeuilles</string>
     <string name="action_copy">Copier</string>
     <string name="title_version_support_warning">Mise à jour importante</string>
-    <string name="message_version_support_warning">À partir de la version 3.0, AlphaWallet ne prendra plus en charge les appareils fonctionnant sous Android 6.0 et versions antérieures.</string>
+    <string name="message_version_support_warning">À partir de la version 3.0, ChatPuppy ne prendra plus en charge les appareils fonctionnant sous Android 6.0 et versions antérieures.</string>
     <string name="hide_notification">Cacher Notification</string>
     <string name="card_view_not_found_error">%1$s pas trouvé</string>
     <string name="tokenscript_management">Gestion TokenScript</string>
@@ -596,12 +596,12 @@
     <string name="fast">Rapide</string>
     <string name="label_estimated_transaction_time">Temps de Transaction Estimé</string>
     <string name="minutes_0">0 min</string>
-    <string name="created_aw_directory">Creation du répertoire AlphaWallet</string>
-    <string name="created_aw_directory_detail">Répertoire AlphaWallet créé. Déposez les scripts dans ce répertoire pour utiliser vos scripts. Voir tokenscript.org pour plus de détails sur la façon de créer facilement une interface sécurisée et utile pour vos tokens.</string>
+    <string name="created_aw_directory">Creation du répertoire ChatPuppy</string>
+    <string name="created_aw_directory_detail">Répertoire ChatPuppy créé. Déposez les scripts dans ce répertoire pour utiliser vos scripts. Voir tokenscript.org pour plus de détails sur la façon de créer facilement une interface sécurisée et utile pour vos tokens.</string>
     <string name="title_no_need_to_watch">Regarde déja</string>
     <string name="error_while_signing_transaction">Une erreur s\'est produite lors de la signature de la transaction. Veuillez réimporter la clé de ce portefeuille.</string>
     <string name="error_not_whitelisted">Page non ajouté à la liste blanche</string>
-    <string name="explain_not_whitelisted">TokenScript tente de rediriger vers une page non inscrite sur la liste blanche %1$s. Si vous êtes le propriétaire de ce site, veuillez soumettre vos relations publiques au repo AlphaWallet pour ajouter une page à la liste blanche.</string>
+    <string name="explain_not_whitelisted">TokenScript tente de rediriger vers une page non inscrite sur la liste blanche %1$s. Si vous êtes le propriétaire de ce site, veuillez soumettre vos relations publiques au repo ChatPuppy pour ajouter une page à la liste blanche.</string>
     <string name="token_spec">%1$s (%2$s)</string>
     <string name="check_function_availability">Disponibilité de Fonction</string>
     <string name="invalid_parameters">Paramètre non valide lors de l\'appel de TokenScript Transaction. Veuillez vérifier les entrées.</string>
@@ -691,7 +691,7 @@
     <string name="gas_max">Max Fee</string>
     <string name="priority_fee">Priority Fee</string>
     <string name="base_fee">Base Fee: %1$s</string>
-    <string name="gas_message">Les frais sont basés sur la charge actuelle du réseau de la blockchain Ethereum. Ils ne dépendent pas d\'AlphaWallet. AlphaWallet utilise l\'oracle en direct de %1$s et met à jour les prix du gas toutes les 15 secondes.</string>
+    <string name="gas_message">Les frais sont basés sur la charge actuelle du réseau de la blockchain Ethereum. Ils ne dépendent pas d\'ChatPuppy. ChatPuppy utilise l\'oracle en direct de %1$s et met à jour les prix du gas toutes les 15 secondes.</string>
     <string name="set_your_speed">Définir Le Votre</string>
     <string name="nonce_optional">Nonce (optionnel)</string>
     <string name="calc_gas_limit">Calcul de la Limite de Gas</string>
@@ -712,7 +712,7 @@
     <string name="deposit">Deposer</string>
     <string name="body_low_gas">Le prix du gas est défini en dessous de la vitesse «lente». \n Votre transaction peut prendre du temps à être écrite ou ne jamais être écrite.</string>
     <string name="low_gas_setting">Les frais de Gas sont peut être trop Bas</string>
-    <string name="body_high_gas">Vous avez fixé des frais de Gas très élevés. Veuillez vous assurer que ce n\'est pas une erreur. AlphaWallet utilise l\'oracle en direct de gasnow.org et met à jour le prix du gaz toutes les 15 secondes.</string>
+    <string name="body_high_gas">Vous avez fixé des frais de Gas très élevés. Veuillez vous assurer que ce n\'est pas une erreur. ChatPuppy utilise l\'oracle en direct de gasnow.org et met à jour le prix du gaz toutes les 15 secondes.</string>
     <string name="high_gas_setting">Avertissement Frais Très élevés!</string>
     <string name="body_insufficient_warning">Votre solde est insuffisant pour la valeur de la transaction plus les frais de transaction.</string>
     <string name="convert_to_xdai">Convertir en xDAI</string>
@@ -726,7 +726,7 @@
     <string name="disconnect">Déconnecter</string>
     <string name="keep_connect">Rester Connecté(e)</string>
     <string name="beware_of_scammers"> Méfiez-vous des escrocs! \nNe partagez pas votre phrase seed.</string>
-    <string name="alphawallet_never_ask">AlphaWallet ne posera JAMAIS de questions sur votre phrase seed (en particulier sur Telegram).</string>
+    <string name="ChatPuppy_never_ask">ChatPuppy ne posera JAMAIS de questions sur votre phrase seed (en particulier sur Telegram).</string>
     <string name="your_seed_phrase">Votre phrase seed (ne la partager avec personne)</string>
     <string name="hide_seed_text">OK, Cacher votre Phrase Seed</string>
     <string name="ens_not_match_wallet">Le nom ENS ne correspond pas à l\'adresse du portefeuille</string>
@@ -747,7 +747,7 @@
     <string name="alerts_will_appear_here">Les alertes apparaîtront ici</string>
     <string name="token_text">Token</string>
     <string name="buy_eth">Buy ETH</string>
-    <string name="reload_token_data_desc">Reset all cached token data (eg recorded balance etc). AlphaWallet will re-load the current status of your wallet. Doesn\'t affect the keys or assets.</string>
+    <string name="reload_token_data_desc">Reset all cached token data (eg recorded balance etc). ChatPuppy will re-load the current status of your wallet. Doesn\'t affect the keys or assets.</string>
     <string name="text_speedup_note">Note that speeding up this transaction does not guarantee your original transaction will be accelerated. If your attempt is successful, you will be charged the miner fee as above.</string>
     <string name="text_cancel_note">Note that this transaction does not guarantee your original transaction will be cancelled. If your attempt is successful, you will be charged the miner fee as above.</string>
     <string name="text_resend_gas_note">In order to speed up this transaction, the gas price must be at least 10% higher than the original gas price.</string>
@@ -874,7 +874,7 @@
     <string name="no_key_found">No Key found</string>
     <string name="unable_store_key">Unable to store key: %1$s</string>
     <string name="title_ens_lookup_warning">ENS Lookup Warning</string>
-    <string name="message_ens_node_not_sync">AlphaWallet has detected a discrepancy between ethereum\'s timestamp and your device\'s current time, or possibly the blockchain connection is not synchronized, please check your phone\'s time is correct, or ignore this warning.</string>
+    <string name="message_ens_node_not_sync">ChatPuppy has detected a discrepancy between ethereum\'s timestamp and your device\'s current time, or possibly the blockchain connection is not synchronized, please check your phone\'s time is correct, or ignore this warning.</string>
     <string name="decrease">Diminuer</string>
     <string name="increase">Augmenter</string>
     <string name="message_transaction_timeout">The transaction has timed out. You can view the status in activity page.</string>
