@@ -19,6 +19,7 @@ app/awallet
 app/analytics
 app/noAnalytics
 app/CMakeCache.txt
+app/google-services.json
 
 # Files for the Dalvik VM
 *.dex

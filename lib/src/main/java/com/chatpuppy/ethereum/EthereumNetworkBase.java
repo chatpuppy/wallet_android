@@ -50,15 +50,15 @@ public abstract class EthereumNetworkBase { // implements EthereumNetworkReposit
     public static final long ARBITRUM_GOERLI_TEST_ID = 421613;
 
 
-    public static final String MAINNET_RPC_URL = "https://mainnet.infura.io/v3/da3717f25f824cc1baa32d812386d93f";
+    public static final String MAINNET_RPC_URL = "https://mainnet.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
     public static final String CLASSIC_RPC_URL = "https://www.ethercluster.com/etc";
     public static final String XDAI_RPC_URL = "https://rpc.ankr.com/gnosis";
     public static final String POA_RPC_URL = "https://core.poa.network/";
-    public static final String ROPSTEN_RPC_URL = "https://ropsten.infura.io/v3/da3717f25f824cc1baa32d812386d93f";
-    public static final String RINKEBY_RPC_URL = "https://rinkeby.infura.io/v3/da3717f25f824cc1baa32d812386d93f";
-    public static final String KOVAN_RPC_URL = "https://kovan.infura.io/v3/da3717f25f824cc1baa32d812386d93f";
+    public static final String ROPSTEN_RPC_URL = "https://ropsten.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
+    public static final String RINKEBY_RPC_URL = "https://rinkeby.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
+    public static final String KOVAN_RPC_URL = "https://kovan.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
     public static final String SOKOL_RPC_URL = "https://sokol.poa.network";
-    public static final String GOERLI_RPC_URL = "https://goerli.infura.io/v3/da3717f25f824cc1baa32d812386d93f";
+    public static final String GOERLI_RPC_URL = "https://goerli.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
     public static final String ARTIS_SIGMA1_RPC_URL = "https://rpc.sigma1.artis.network";
     public static final String ARTIS_TAU1_RPC_URL = "https://rpc.tau1.artis.network";
     public static final String BINANCE_TEST_RPC_URL = "https://data-seed-prebsc-1-s3.binance.org:8545";
@@ -75,10 +75,10 @@ public abstract class EthereumNetworkBase { // implements EthereumNetworkReposit
     public static final String OPTIMISTIC_TEST_FALLBACK_URL = "https://kovan.optimism.io";
     public static final String CRONOS_MAIN_RPC_URL = "https://evm.cronos.org";
     public static final String CRONOS_TEST_URL = "https://evm-t3.cronos.org";
-    public static final String ARBITRUM_RPC_URL = "https://arbitrum-mainnet.infura.io/v3/da3717f25f824cc1baa32d812386d93f";
-    public static final String ARBITRUM_TEST_RPC_URL = "https://arbitrum-rinkeby.infura.io/v3/da3717f25f824cc1baa32d812386d93f";
-    public static final String PALM_RPC_URL = "https://palm-mainnet.infura.io/v3/da3717f25f824cc1baa32d812386d93f";
-    public static final String PALM_TEST_RPC_URL = "https://palm-testnet.infura.io/v3/da3717f25f824cc1baa32d812386d93f";
+    public static final String ARBITRUM_RPC_URL = "https://arbitrum-mainnet.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
+    public static final String ARBITRUM_TEST_RPC_URL = "https://arbitrum-rinkeby.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
+    public static final String PALM_RPC_URL = "https://palm-mainnet.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
+    public static final String PALM_TEST_RPC_URL = "https://palm-testnet.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
     public static final String KLAYTN_RPC = "https://public-node-api.klaytnapi.com/v1/cypress";
     public static final String KLAYTN_BAOBAB_RPC = "https://api.baobab.klaytn.net:8651";
     public static final String AURORA_MAINNET_RPC_URL = "https://mainnet.aurora.dev";
