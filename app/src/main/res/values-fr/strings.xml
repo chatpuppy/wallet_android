@@ -221,6 +221,7 @@
     <string name="wallet_label">Portefeuille</string>
     <string name="tx_label">Transactions</string>
     <string name="browser_label">Navigateur</string>
+    <string name="chatpuppy_label">Discuter</string>
     <string name="settings_label">Paramètres</string>
     <string name="activity_label">Activité</string>
     <string name="toolbar_header_importing_tickets">Importation de Tokens</string>

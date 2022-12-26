@@ -85,10 +85,10 @@ android {
         }
     }
     defaultConfig {
-        versionCode 218
-        versionName "3.60.3"
+        versionCode 100
+        versionName "1.0.0"
 
-        applicationId "io.stormbird.wallet"
+        applicationId "com.chatpuppy.app"
         minSdkVersion 24
         targetSdkVersion 32
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'

@@ -1,7 +1,7 @@
-package com.alphawallet.app.util;
+package com.chatpuppy.app.util;
 
 import android.app.Activity;
-import com.alphawallet.app.repository.PreferenceRepositoryType;
+import com.chatpuppy.app.repository.PreferenceRepositoryType;
 
 public class RateApp {
     // should be shown on 5th run or after the first transaction (afterTransaction == true)

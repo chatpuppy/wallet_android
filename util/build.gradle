@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'application'
 
-mainClassName = 'com.alphawallet.scripttool.ScriptTool'
+mainClassName = 'com.chatpuppy.scripttool.ScriptTool'
 
 repositories {
     mavenCentral()

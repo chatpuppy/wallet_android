@@ -34,7 +34,7 @@
 #endif
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getInfuraKey( JNIEnv* env, jobject thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getInfuraKey( JNIEnv* env, jobject thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, infuraKey);
@@ -47,7 +47,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getInfuraKey( JNIEnv* env
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getAnalyticsKey( JNIEnv* env, jobject thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getAnalyticsKey( JNIEnv* env, jobject thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, mixpanelKey);
@@ -58,7 +58,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getAnalyticsKey( JNIEnv* 
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getRampKey( JNIEnv* env, jobject thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getRampKey( JNIEnv* env, jobject thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, rampKey);
@@ -69,7 +69,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getRampKey( JNIEnv* env, 
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getCoinbasePayAppId( JNIEnv* env, jobject thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getCoinbasePayAppId( JNIEnv* env, jobject thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, coinbasePayAppId);
@@ -80,7 +80,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getCoinbasePayAppId( JNIE
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getSecondaryInfuraKey( JNIEnv* env, jobject thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getSecondaryInfuraKey( JNIEnv* env, jobject thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, secondaryInfuraKey);
@@ -93,7 +93,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getSecondaryInfuraKey( JN
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getKlaytnKey( JNIEnv* env, jobject thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getKlaytnKey( JNIEnv* env, jobject thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, klaytnKey);
@@ -103,7 +103,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getKlaytnKey( JNIEnv* env
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getBSCExplorerKey( JNIEnv* env, jobject thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getBSCExplorerKey( JNIEnv* env, jobject thiz )
 {
 #if (HAS_KEYS == 1)
     return getBSCExplorerKey(env);
@@ -113,7 +113,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getBSCExplorerKey( JNIEnv
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getEtherscanKey( JNIEnv* env, jclass thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getEtherscanKey( JNIEnv* env, jclass thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, etherscanKey);
@@ -124,7 +124,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getEtherscanKey( JNIEnv* 
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getMailchimpKey(JNIEnv *env, jclass clazz)
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getMailchimpKey(JNIEnv *env, jclass clazz)
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, mailchimpKey);
@@ -135,7 +135,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getMailchimpKey(JNIEnv *e
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getPolygonScanKey(JNIEnv *env, jobject thiz) {
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getPolygonScanKey(JNIEnv *env, jobject thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, polygonScanKey);
 #elif (HAS_PS == 1)
@@ -147,7 +147,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getPolygonScanKey(JNIEnv 
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getCovalentKey( JNIEnv* env, jclass thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getCovalentKey( JNIEnv* env, jclass thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedCKey(env, 4, '_', covalentKey);
@@ -158,7 +158,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getCovalentKey( JNIEnv* e
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getAuroraScanKey( JNIEnv* env, jclass thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getAuroraScanKey( JNIEnv* env, jclass thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, auroraKey);
@@ -171,7 +171,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getAuroraScanKey( JNIEnv*
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getOpenSeaKey( JNIEnv* env, jclass thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getOpenSeaKey( JNIEnv* env, jclass thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, openSeaKey);
@@ -184,7 +184,7 @@ Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getOpenSeaKey( JNIEnv* en
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_alphawallet_app_repository_KeyProviderJNIImpl_getWalletConnectProjectId( JNIEnv* env, jclass thiz )
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getWalletConnectProjectId( JNIEnv* env, jclass thiz )
 {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, walletConnectProjectId);

@@ -26,7 +26,7 @@
                 android:background="@drawable/ic_components_charts_graph_stable"
                 android:visibility="invisible" />
 
-            <com.alphawallet.app.ui.widget.entity.HistoryChart
+            <com.chatpuppy.app.ui.widget.entity.HistoryChart
                 android:id="@+id/history_chart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

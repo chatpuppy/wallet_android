@@ -5,31 +5,31 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.alphawallet.app.widget.BottomSheetToolbarView
+    <com.chatpuppy.app.widget.BottomSheetToolbarView
         android:id="@+id/bottom_sheet_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         custom:title="@string/dialog_title_sign_message" />
 
-    <com.alphawallet.app.widget.AddressDetailView
+    <com.chatpuppy.app.widget.AddressDetailView
         android:id="@+id/requester"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         custom:label="@string/requester_url" />
 
-    <com.alphawallet.app.widget.SignDataWidget
+    <com.chatpuppy.app.widget.SignDataWidget
         android:id="@+id/sign_widget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <View style="@style/Aw.Component.Separator" />
 
-    <com.alphawallet.app.widget.ConfirmationWidget
+    <com.chatpuppy.app.widget.ConfirmationWidget
         android:id="@+id/confirmation_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.alphawallet.app.widget.FunctionButtonBar
+    <com.chatpuppy.app.widget.FunctionButtonBar
         android:id="@+id/layoutButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

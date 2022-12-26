@@ -213,6 +213,7 @@
     <string name="wallet_label">Monedero</string>
     <string name="tx_label">Transacciones</string>
     <string name="browser_label">Navegador</string>
+    <string name="chatpuppy_label">Charlar</string>
     <string name="settings_label">Ajustes</string>
     <string name="activity_label">Actividad</string>
     <string name="toolbar_header_importing_tickets">Importación de tokens</string>

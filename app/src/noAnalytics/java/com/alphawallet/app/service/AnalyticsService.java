@@ -1,8 +1,8 @@
-package com.alphawallet.app.service;
+package com.chatpuppy.app.service;
 
 import android.content.Context;
 
-import com.alphawallet.app.entity.ServiceErrorException;
+import com.chatpuppy.app.entity.ServiceErrorException;
 
 public class AnalyticsService<T> implements AnalyticsServiceType<T> {
 

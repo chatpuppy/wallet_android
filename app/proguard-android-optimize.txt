@@ -92,7 +92,7 @@
     @androidx.annotation.Keep <init>(...);
 }
 
--keep public class * extends com.alphawallet.*
+-keep public class * extends com.chatpuppy.*
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service

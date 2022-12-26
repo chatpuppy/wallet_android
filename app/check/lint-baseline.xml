@@ -2870,7 +2870,7 @@
     <issue
         id="IntentFilterExportedReceiver"
         message="As of Android 12, `android:exported` must be set; use `true` to make the activity \&#xA;available to other apps, and `false` otherwise. For launcher activities, this should be set to `true`."
-        errorLine1="        &lt;activity android:name=&quot;com.alphawallet.app.ui.HomeActivity&quot;>"
+        errorLine1="        &lt;activity android:name=&quot;com.chatpuppy.app.ui.HomeActivity&quot;>"
         errorLine2="         ~~~~~~~~">
         <location
             file="src/debug/AndroidManifest.xml"

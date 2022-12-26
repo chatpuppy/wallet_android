@@ -34,7 +34,7 @@
 
                 <View style="@style/Aw.Component.Separator" />
 
-                <com.alphawallet.app.widget.SettingsItemView
+                <com.chatpuppy.app.widget.SettingsItemView
                     android:id="@+id/setting_backup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
 
             <View style="@style/Aw.Component.Separator" />
 
-            <com.alphawallet.app.widget.SettingsItemView
+            <com.chatpuppy.app.widget.SettingsItemView
                 android:id="@+id/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                 style="@style/Aw.Component.Separator"
                 android:layout_marginTop="@dimen/dp20" />
 
-            <com.alphawallet.app.widget.InputAddress
+            <com.chatpuppy.app.widget.InputAddress
                 android:id="@+id/input_ens"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

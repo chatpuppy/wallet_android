@@ -1,8 +1,8 @@
-package com.alphawallet.app.util;
+package com.chatpuppy.app.util;
 
 import android.app.Activity;
 
-import com.alphawallet.app.entity.FragmentMessenger;
+import com.chatpuppy.app.entity.FragmentMessenger;
 
 public class UpdateUtils {
     public static void checkForUpdates(Activity context, FragmentMessenger messenger) {

@@ -229,6 +229,7 @@
     <string name="wallet_label">ဝေါလက်</string>
     <string name="tx_label">လုပ်ငန်းစဥ်များ</string>
     <string name="browser_label">Browser</string>
+    <string name="chatpuppy_label">Sembang</string>
     <string name="settings_label">အဆင့်မြှင့်တင်ခြင်း</string>
     <string name="activity_label">လုပ်ငန်းစဥ်</string>
     <string name="toolbar_header_importing_tickets">တိုကင်ထည့်သွင်းခြင်း</string>

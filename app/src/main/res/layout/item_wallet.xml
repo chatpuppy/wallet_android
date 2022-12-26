@@ -22,7 +22,7 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp">
 
-        <com.alphawallet.app.widget.UserAvatar
+        <com.chatpuppy.app.widget.UserAvatar
             android:id="@+id/wallet_icon"
             android:layout_width="23dp"
             android:layout_height="23dp"

@@ -223,6 +223,7 @@
     <string name="wallet_label">Dompet</string>
     <string name="tx_label">Transaksi</string>
     <string name="browser_label">Browser</string>
+    <string name="chatpuppy_label">Chat</string>
     <string name="settings_label">Pengaturan</string>
     <string name="activity_label">Aktivitas</string>
     <string name="toolbar_header_importing_tickets">Mengimpor Token</string>

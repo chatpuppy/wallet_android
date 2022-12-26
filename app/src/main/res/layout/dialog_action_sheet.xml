@@ -13,56 +13,56 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.alphawallet.app.widget.BottomSheetToolbarView
+        <com.chatpuppy.app.widget.BottomSheetToolbarView
             android:id="@+id/bottom_sheet_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/confirm_transaction" />
 
-        <com.alphawallet.app.widget.BalanceDisplayWidget
+        <com.chatpuppy.app.widget.BalanceDisplayWidget
             android:id="@+id/balance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.alphawallet.app.widget.NetworkDisplayWidget
+        <com.chatpuppy.app.widget.NetworkDisplayWidget
             android:id="@+id/network_display_widget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.alphawallet.app.widget.AddressDetailView
+        <com.chatpuppy.app.widget.AddressDetailView
             android:id="@+id/requester"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
             custom:label="@string/requester_url" />
 
-        <com.alphawallet.app.widget.GasWidget2
+        <com.chatpuppy.app.widget.GasWidget2
             android:id="@+id/gas_widgetx"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.alphawallet.app.widget.GasWidget
+        <com.chatpuppy.app.widget.GasWidget
             android:id="@+id/gas_widget_legacy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <com.alphawallet.app.widget.TransactionDetailWidget
+        <com.chatpuppy.app.widget.TransactionDetailWidget
             android:id="@+id/detail_widget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.alphawallet.app.widget.AddressDetailView
+        <com.chatpuppy.app.widget.AddressDetailView
             android:id="@+id/recipient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.alphawallet.app.widget.AmountDisplayWidget
+        <com.chatpuppy.app.widget.AmountDisplayWidget
             android:id="@+id/amount_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.alphawallet.app.widget.AssetDetailView
+        <com.chatpuppy.app.widget.AssetDetailView
             android:id="@+id/asset_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,12 +71,12 @@
 
         <View style="@style/Aw.Component.Separator" />
 
-        <com.alphawallet.app.widget.ConfirmationWidget
+        <com.chatpuppy.app.widget.ConfirmationWidget
             android:id="@+id/confirmation_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.alphawallet.app.widget.FunctionButtonBar
+        <com.chatpuppy.app.widget.FunctionButtonBar
             android:id="@+id/layoutButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

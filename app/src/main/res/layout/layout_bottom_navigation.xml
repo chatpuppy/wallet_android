@@ -47,9 +47,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/selector_bottom_navigation"
-            app:drawableTint="@color/selector_bottom_navigation"
-            app:drawableTopCompat="@drawable/ic_artis_sigma_logo" />
+                android:text="@string/chatpuppy_label"
+                android:textColor="@color/selector_bottom_navigation"
+                app:drawableTint="@color/selector_bottom_navigation"
+                app:drawableTopCompat="@drawable/ic_tab_chatpuppy" />
         <TextView
             android:id="@+id/nav_browser_text"
             style="@style/Aw.Typography.Small"

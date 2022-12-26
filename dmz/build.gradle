@@ -40,6 +40,6 @@ dependencies {
 }
 
 bootRun {
-	main = 'com.alphawallet.token.web.AppSiteController'
+	main = 'com.chatpuppy.token.web.AppSiteController'
 }
 

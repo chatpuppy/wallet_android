@@ -16,7 +16,7 @@
         android:contentDescription="Chain Logo"
         tools:ignore="HardcodedText" />
 
-    <com.alphawallet.app.widget.ChainName
+    <com.chatpuppy.app.widget.ChainName
         android:id="@+id/chain_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -153,7 +153,7 @@
         android:visibility="gone"
         android:indeterminateTint="@color/azure" />
 
-    <com.alphawallet.app.widget.FunctionButtonBar
+    <com.chatpuppy.app.widget.FunctionButtonBar
         android:id="@+id/layoutButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

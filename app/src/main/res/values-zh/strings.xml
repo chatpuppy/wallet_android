@@ -212,7 +212,8 @@
     <string name="dialog_ok">完成</string>
     <string name="wallet_label">钱包</string>
     <string name="tx_label">交易</string>
-    <string name="browser_label">浏览器</string>
+    <string name="browser_label">应用</string>
+    <string name="chatpuppy_label">聊天</string>
     <string name="settings_label">设置</string>
     <string name="activity_label">活动</string>
     <string name="toolbar_header_importing_tickets">导入门票</string>
