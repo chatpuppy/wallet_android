@@ -760,6 +760,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
             @Override
             public boolean onConsoleMessage(ConsoleMessage msg) {
+                // ###### JS Console
                 System.out.println("JS Console " + msg.messageLevel() + ", " + msg.sourceId() + ", " + msg.lineNumber() + ", " + msg.message());
                 boolean ret = super.onConsoleMessage(msg);
 

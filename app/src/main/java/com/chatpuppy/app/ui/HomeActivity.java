@@ -1065,16 +1065,13 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
     public void onBackPressed()
     {
         //Check if current page is WALLET or not
-        if (viewPager.getCurrentItem() == DAPP_BROWSER.ordinal())
-        {
+        if (viewPager.getCurrentItem() == DAPP_BROWSER.ordinal()) {
             getFragment(DAPP_BROWSER).backPressed();
-        }
-        else if (viewPager.getCurrentItem() != WALLET.ordinal() && isNavBarVisible())
-        {
+        } else if(viewPager.getCurrentItem() == CHATPUPPY.ordinal()) {
+            getFragment(CHATPUPPY).backPressed();
+        } else if (viewPager.getCurrentItem() != WALLET.ordinal() && isNavBarVisible()) {
             showPage(WALLET);
-        }
-        else
-        {
+        } else {
             super.onBackPressed();
         }
     }

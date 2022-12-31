@@ -37,6 +37,7 @@ import android.webkit.GeolocationPermissions;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
 //import android.webkit.WebBackForwardList;
+import android.webkit.WebBackForwardList;
 import android.webkit.WebChromeClient;
 //import android.webkit.WebHistoryItem;
 import android.webkit.WebView;
@@ -113,8 +114,8 @@ import com.chatpuppy.app.widget.AWalletAlertDialog;
 import com.chatpuppy.app.widget.ActionSheet;
 import com.chatpuppy.app.widget.ActionSheetDialog;
 import com.chatpuppy.app.widget.ActionSheetSignDialog;
-//import com.chatpuppy.app.widget.AddressBar;
-//import com.chatpuppy.app.widget.AddressBarListener;
+import com.chatpuppy.app.widget.AddressBar;
+import com.chatpuppy.app.widget.AddressBarListener;
 import com.chatpuppy.app.widget.TestNetDialog;
 import com.chatpuppy.token.entity.EthereumMessage;
 import com.chatpuppy.token.entity.EthereumTypedMessage;
@@ -205,6 +206,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     private FrameLayout webFrame;
     private TextView balance;
     private TextView symbol;
+    private AddressBar addressBar;
 
 
     // Handle resizing the browser view when the soft keyboard pops up and goes.
@@ -303,10 +305,45 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LocaleUtils.setActiveLocale(getContext());
         loadOnInit = URL;// null;
+//        int webViewID = CustomViewSettings.minimiseBrowserURLBar() ? R.layout.fragment_webview_compact : R.layout.fragment_webview;
         int webViewID = R.layout.fragment_webview_no_addressbar;
         View view = inflater.inflate(webViewID, container, false);
         initViewModel();
         initView(view);
+
+        addressBar.setup(viewModel.getDappsMasterList(getContext()), new AddressBarListener() {
+            @Override
+            public boolean onLoad(String urlText) {
+                addToBackStack(DAPP_BROWSER);
+                boolean handled = loadUrl(urlText);
+                detachFragments();
+                cancelSearchSession();
+                return handled;
+            }
+
+            @Override
+            public void onClear() {
+                cancelSearchSession();
+            }
+
+            @Override
+            public WebBackForwardList loadNext() {
+                goToNextPage();
+                return web3.copyBackForwardList();
+            }
+
+            @Override
+            public WebBackForwardList loadPrevious() {
+                backPressed();
+                return web3.copyBackForwardList();
+            }
+
+            @Override
+            public WebBackForwardList onHomePagePressed() {
+                homePressed();
+                return web3.copyBackForwardList();
+            }
+        });
 
         attachFragment(DAPP_BROWSER);
         return view;
@@ -339,6 +376,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         getChildFragmentManager().beginTransaction()
                 .add(R.id.frame, fragment, tag)
                 .commit();
+        addressBar.updateNavigationButtons(web3.copyBackForwardList());
     }
 
     private void detachFragments() {
@@ -352,6 +390,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         homePressed = true;
         detachFragments();
         currentFragment = DAPP_BROWSER;
+        addressBar.clear();
         if (web3 != null) {
             resetDappBrowser();
         }
@@ -368,6 +407,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         super.onDestroy();
         viewModel.onDestroy();
         stopBalanceListener();
+        addressBar.destroy();
     }
 
     private void updateNetworkMenuItem() {
@@ -384,6 +424,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         }
         loadOnInit = URL;
 
+        addressBar = view.findViewById(R.id.address_bar_widget);
         progressBar = view.findViewById(R.id.progressBar);
         webFrame = view.findViewById(R.id.frame);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
@@ -423,11 +464,13 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
                 viewModel.updateGasPrice(activeNetwork.chainId);
             }
         }
+        addressBar.leaveEditMode();
     }
 
     @Override
     public void leaveFocus() {
         if (web3 != null) web3.requestFocus();
+        addressBar.leaveFocus();
         if (viewModel != null) viewModel.stopBalanceUpdate();
         stopBalanceListener();
     }
@@ -445,6 +488,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
 
     private void cancelSearchSession() {
         detachFragment(SEARCH);
+        addressBar.updateNavigationButtons(web3.copyBackForwardList());
     }
 
     private void detachFragment(String tag) {
@@ -534,6 +578,8 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
                 viewModel.findWallet();
                 updateNetworkMenuItem();
             }
+            if (networkChanged && addressBar.isOnHomePage())
+                resetDappBrowser(); //trigger a reset if on homepage
 
             updateFilters(networkInfo);
         } else {
@@ -1037,6 +1083,13 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             detachFragments();
         } else if (!web3.getUrl().equalsIgnoreCase(getDefaultDappUrl())) {
             homePressed();
+            addressBar.updateNavigationButtons(web3.copyBackForwardList());
+        }
+    }
+
+    private void goToNextPage() {
+        if (web3.canGoForward()) {
+            web3.goForward();
         }
     }
 
@@ -1053,14 +1106,17 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         if (isValidUrl(url)) {
             DApp dapp = new DApp(title, url);
             DappBrowserUtils.addToHistory(getContext(), dapp);
+            addressBar.addSuggestion(dapp);
         }
 
         onWebpageLoadComplete();
+        addressBar.setUrl(url);
     }
 
     @Override
     public void onWebpageLoadComplete() {
         handler.post(() -> {
+            addressBar.updateNavigationButtons(web3.copyBackForwardList());
             if (loadUrlAfterReload != null) {
                 loadUrl(loadUrlAfterReload);
                 loadUrlAfterReload = null;
@@ -1083,6 +1139,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         if (checkForMagicLink(urlText)) return true;
         web3.resetView();
         web3.loadUrl(Utils.formatUrl(urlText));
+        addressBar.leaveEditMode();
         web3.requestFocus();
         getParentFragmentManager().setFragmentResult(RESET_TOOLBAR, new Bundle());
         return true;
@@ -1348,6 +1405,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             oos.writeObject(CURRENT_FRAGMENT);
             oos.writeObject(currentFragment);
             oos.writeObject(CURRENT_URL);
+            oos.writeObject(addressBar.getUrl());
         }
         return bos;
     }
