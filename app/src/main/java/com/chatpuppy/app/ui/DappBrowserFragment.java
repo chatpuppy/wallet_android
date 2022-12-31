@@ -127,6 +127,7 @@ import com.chatpuppy.app.service.KeyService;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthCall;
 
@@ -272,7 +273,6 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     public void onCreate(@Nullable Bundle savedInstanceState) {
         LocaleUtils.setActiveLocale(getContext());
         super.onCreate(savedInstanceState);
-
         getChildFragmentManager()
                 .setFragmentResultListener(DAPP_CLICK, this, (requestKey, bundle) -> {
                     DApp dapp = bundle.getParcelable(DAPP_CLICK);
@@ -760,6 +760,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
             @Override
             public boolean onConsoleMessage(ConsoleMessage msg) {
+                System.out.println("JS Console " + msg.messageLevel() + ", " + msg.sourceId() + ", " + msg.lineNumber() + ", " + msg.message());
                 boolean ret = super.onConsoleMessage(msg);
 
                 if (msg.messageLevel() == ConsoleMessage.MessageLevel.ERROR) {

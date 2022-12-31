@@ -201,7 +201,6 @@ public class Web3View extends WebView {
         getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         getSettings().setUserAgentString(getSettings().getUserAgentString()
                 + "ChatpuppyWallet(Platform=Android&AppVersion=" + BuildConfig.VERSION_NAME + ")");
-//        System.out.println("###### " + getSettings().getUserAgentString() + "ChatpuppyWallet(Platform=Android&AppVersion=" + BuildConfig.VERSION_NAME + ")");
         WebView.setWebContentsDebuggingEnabled(true); //so devs can debug their scripts/pages
         addJavascriptInterface(new SignCallbackJSInterface(
                 this,

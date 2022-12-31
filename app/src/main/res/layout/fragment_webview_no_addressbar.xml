@@ -12,8 +12,8 @@
 
     <View
             android:id="@+id/separator"
-            style="@style/Aw.Component.Separator"/>
-    android:layout_below="@id/address_bar_widget" />
+            style="@style/Aw.Component.Separator"
+            android:layout_below="@id/address_bar_widget" />
 
     <ProgressBar
             android:id="@+id/progressBar"

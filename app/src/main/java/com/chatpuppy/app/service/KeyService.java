@@ -647,12 +647,10 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
         currentWallet = new Wallet(address);
         HDWallet wallet = new HDWallet(unpackMnemonic(), "");
         PrivateKey pk = wallet.getKeyForCoin(CoinType.ETHEREUM);
-//        System.out.println("###### 私钥" + Numeric.toHexString(pk.data()));
 
         byte[] encryptedMessageByteArray = hexStringToByteArray(encryptedMessage.substring(2)); // cancel header: 0x
         Gson g = new Gson();
         EncryptedMessage encryptedMessageObject = g.fromJson(new String(encryptedMessageByteArray), EncryptedMessage.class);
-//        System.out.println("###### " + new String(encryptedMessageByteArray));
 
         if(encryptedMessageObject.version.equals("x25519-xsalsa20-poly1305")) {
             byte[] recieverEncryptionPrivateKey = TweetNacl.Box.keyPair_fromSecretKey(pk.data()).getSecretKey();
