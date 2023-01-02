@@ -5,6 +5,7 @@ import static com.chatpuppy.app.widget.AWalletAlertDialog.ERROR;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import android.view.WindowManager;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -328,6 +330,7 @@ public class ImportWalletActivity extends BaseActivity implements OnImportSeedLi
         viewModel.importHDWallet(seedPhrase, this, this);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onKeystore(String keystore, String password)
     {
@@ -385,16 +388,16 @@ public class ImportWalletActivity extends BaseActivity implements OnImportSeedLi
         dialog.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onPrivateKey(String privateKey)
-    {
-        try
-        {
+    public void onPrivateKey(String privateKey) {
+        try {
             BigInteger key = new BigInteger(privateKey, 16);
             if (!WalletUtils.isValidPrivateKey(privateKey))
                 throw new Exception(getString(R.string.invalid_private_key));
             ECKeyPair keypair = ECKeyPair.create(key);
             String address = Numeric.prependHexPrefix(Keys.getAddress(keypair));
+            viewModel.storePubKey(keypair.getPrivateKey().toByteArray(), address);
 
             if (viewModel.keystoreExists(address))
             {
@@ -447,6 +450,7 @@ public class ImportWalletActivity extends BaseActivity implements OnImportSeedLi
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {

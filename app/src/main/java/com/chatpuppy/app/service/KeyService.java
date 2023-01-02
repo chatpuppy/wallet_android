@@ -592,14 +592,14 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     // Chatpuppy
-    private synchronized byte[] createEncryptionPublicKey(byte[] pkData) {
+    public synchronized byte[] createEncryptionPublicKey(byte[] pkData) {
         // Get encryption public key by tweet nacl, same as eth_getEncryptionPublicKey RPC method of metamask.
         return TweetNacl.Box.keyPair_fromSecretKey(pkData).getPublicKey();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     // Chatpuppy
-    public synchronized static String getEncryptionPublicKey(Context context,String address) {
+    public synchronized static String getEncryptionPublicKey(Context context, String address) {
 
         try {
             String encryptionPubKeyPath = getFilePath(context, address + "_pubkey");
@@ -617,7 +617,7 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
     }
 
     // Chatpuppy added
-    private synchronized boolean storeEncryptionPublicKey(byte[] data, String fileName) {
+    public synchronized boolean storeEncryptionPublicKey(byte[] data, String fileName) {
         try {
             String encryptionPubKeyPath = getFilePath(context, fileName + "_pubkey");
             boolean success = writeBytesToFile(encryptionPubKeyPath, data);
@@ -1046,7 +1046,6 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
         }
 
         random.nextBytes(newPassword);
-
         boolean success = storeEncryptedBytes(newPassword, true, currentWallet.address);  //because we'll now only ever be importing keystore, always create with Auth if possible
 
         if (!success) {

@@ -3,7 +3,9 @@ package com.chatpuppy.app.viewmodel;
 import static com.chatpuppy.ethereum.EthereumNetworkBase.MAINNET_ID;
 
 import android.app.Activity;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -167,6 +169,7 @@ public class ImportWalletViewModel extends BaseViewModel implements OnSetWatchWa
         return importWalletInteract.keyStoreExists(address);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public Single<Boolean> checkKeystorePassword(String keystore, String keystoreAddress, String password)
     {
         return Single.fromCallable(() -> {
@@ -175,7 +178,10 @@ public class ImportWalletViewModel extends BaseViewModel implements OnSetWatchWa
             WalletFile walletFile = objectMapper.readValue(keystore, WalletFile.class);
             ECKeyPair kp = org.web3j.crypto.Wallet.decrypt(password, walletFile);
             String address = Numeric.prependHexPrefix(Keys.getAddress(kp));
-            if (address.equalsIgnoreCase(keystoreAddress)) isValid = true;
+            if (address.equalsIgnoreCase(keystoreAddress)) {
+                isValid = true;
+                storePubKey(kp.getPrivateKey().toByteArray(), address);
+            }
             return isValid;
         });
     }
@@ -185,13 +191,22 @@ public class ImportWalletViewModel extends BaseViewModel implements OnSetWatchWa
         keyService.resetSigningDialog();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void completeAuthentication(Operation taskCode)
     {
         keyService.completeAuthentication(taskCode);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void failedAuthentication(Operation taskCode)
     {
         keyService.failedAuthentication(taskCode);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean storePubKey(byte[] pk, String address) {
+        byte[] publicKey = keyService.createEncryptionPublicKey(pk);
+//        System.out.println("###### ImportWalletViewModel::storePubKey => " + new String(publicKey));
+        return keyService.storeEncryptionPublicKey(publicKey, address);
     }
 }
