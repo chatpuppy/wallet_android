@@ -100,7 +100,7 @@ import io.reactivex.Single;
 
 public abstract class EthereumNetworkBase implements EthereumNetworkRepositoryType
 {
-    public static final String COVALENT = "[COVALENT]";
+    public static final String COVALENT = "ckey_ce266e13a4534c628658d103a92";
 
     private static final String GAS_API = "module=gastracker&action=gasoracle";
 
@@ -114,7 +114,7 @@ public abstract class EthereumNetworkBase implements EthereumNetworkRepositoryTy
      */
 
     private static final KeyProvider keyProvider = KeyProviderFactory.get();
-    public static final boolean usesProductionKey = !keyProvider.getInfuraKey().equals(DEFAULT_INFURA_KEY);
+    public static final boolean usesProductionKey = true;// !keyProvider.getInfuraKey().equals(DEFAULT_INFURA_KEY);
 
     public static final String FREE_MAINNET_RPC_URL = "https://rpc.ankr.com/eth";
     public static final String FREE_POLYGON_RPC_URL = "https://polygon-rpc.com";
