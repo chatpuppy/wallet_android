@@ -181,7 +181,14 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-                    if (uri != null) uploadMessage.onReceiveValue(new Uri[]{uri});
+                    if (uri != null) {
+                        uploadMessage.onReceiveValue(new Uri[]{uri});
+                    } else {
+                       if(null!= uploadMessage){
+                           uploadMessage.onReceiveValue(null);
+                           uploadMessage = null;
+                       }
+                    };
                 }
             });
     private WebChromeClient.FileChooserParams fileChooserParams;
@@ -800,6 +807,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                 if (checkReadPermission()) return requestUpload();
                 else return true;
             }
+
         });
 
         web3.setWebViewClient(new WebViewClient() {

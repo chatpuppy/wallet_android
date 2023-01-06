@@ -182,7 +182,14 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-                    if (uri != null) uploadMessage.onReceiveValue(new Uri[]{uri});
+                    if (uri != null) {
+                        uploadMessage.onReceiveValue(new Uri[]{uri});
+                    } else {
+                        if(null!= uploadMessage){
+                            uploadMessage.onReceiveValue(null);
+                            uploadMessage = null;
+                        }
+                    };
                 }
             });
     private WebChromeClient.FileChooserParams fileChooserParams;
