@@ -16,12 +16,14 @@ import static com.chatpuppy.app.ui.HomeActivity.RESET_TOKEN_SERVICE;
 import static com.chatpuppy.token.tools.TokenDefinition.TOKENSCRIPT_CURRENT_SCHEMA;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +33,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.chatpuppy.app.BuildConfig;
@@ -369,14 +372,25 @@ public class NewSettingsFragment extends BaseFragment
         supportSettingsLayout.addView(supportSetting, supportIndex++);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setInitialSettingsData(View view)
     {
         TextView appVersionText = view.findViewById(R.id.text_version);
         appVersionText.setText(String.format(Locale.getDefault(), "%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+
         TextView tokenScriptVersionText = view.findViewById(R.id.text_tokenscript_compatibility);
         tokenScriptVersionText.setText(TOKENSCRIPT_CURRENT_SCHEMA);
 
+        TextView webviewVersionText = view.findViewById(R.id.text_webview_version);
+        webviewVersionText.setText(getWebviewVersionInfo());
+
         notificationsSetting.setToggleState(viewModel.getNotificationState());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    String getWebviewVersionInfo() {
+        PackageInfo info = WebView.getCurrentWebViewPackage();
+        return info.packageName + " " + info.versionName;
     }
 
     private void openShowSeedPhrase(Wallet wallet)

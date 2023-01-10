@@ -18,6 +18,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.security.keystore.UserNotAuthenticatedException;
 //import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 //import android.view.MenuItem;
@@ -214,7 +216,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     private TextView balance;
     private TextView symbol;
     private AddressBar addressBar;
-
 
     // Handle resizing the browser view when the soft keyboard pops up and goes.
     // The issue this fixes is where you need to enter data at the bottom of the webpage,

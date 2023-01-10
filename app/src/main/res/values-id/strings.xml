@@ -574,6 +574,7 @@
     <string name="title_faq">TANYA JAWAB</string>
     <string name="title_console">Console</string>
     <string name="title_clear_browser_cache">Hapus Perambah Cache</string>
+    <string name="title_webview_version">Webview</string>
     <string name="title_reload_token_data">Muat Ulang Data Token</string>
     <string name="title_change_language">Ubah Bahasa</string>
     <string name="add_hide_tokens">Tambahkan / Sembunyikan Token</string>

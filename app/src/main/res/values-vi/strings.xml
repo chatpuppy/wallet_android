@@ -576,6 +576,7 @@
     <string name="title_faq">Câu hỏi thường gặp</string>
     <string name="title_console">Bảng điều khiển</string>
     <string name="title_clear_browser_cache">Xóa bộ nhớ đệm của trình duyệt</string>
+    <string name="title_webview_version">Webview</string>
     <string name="title_reload_token_data">Tải lại dữ liệu tiền mã hóa</string>
     <string name="title_change_language">Thay đổi ngôn ngữ</string>
     <string name="add_hide_tokens">Thêm / Ẩn Token</string>

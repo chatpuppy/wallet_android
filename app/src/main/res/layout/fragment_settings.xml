@@ -126,6 +126,30 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                    android:id="@+id/layout_webview_version"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="?colorSurfaceSecondary"
+                    android:paddingLeft="@dimen/standard_16"
+                    android:paddingRight="@dimen/standard_16">
+
+                <TextView
+                        style="@style/Aw.Typography.Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/title_webview_version" />
+
+                <TextView
+                    android:id="@+id/text_webview_version"
+                    style="@style/Aw.Typography.Sub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
         </LinearLayout>
 
     </ScrollView>

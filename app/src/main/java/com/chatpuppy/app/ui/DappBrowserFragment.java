@@ -18,6 +18,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -427,6 +428,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         addressBar.destroy();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setupMenu(@NotNull View baseView) {
         refresh = baseView.findViewById(R.id.refresh);
         final MenuItem reload = toolbar.getMenu().findItem(R.id.action_reload);
@@ -780,6 +782,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                 return ret;
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);

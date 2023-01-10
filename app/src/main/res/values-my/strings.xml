@@ -579,6 +579,7 @@
     <string name="title_faq">အမေးများသောမေးခွန်းများ</string>
     <string name="title_console">ထိန်းချုပ်ခန်း</string>
     <string name="title_clear_browser_cache">Browser Cacheဖိုင်များကိုရှင်းလင်းမည်</string>
+    <string name="title_webview_version">Webview</string>
     <string name="title_reload_token_data">တိုကင်အချက်အလက်များကိုပြန်လည်ဖော်ပြပါ</string>
     <string name="title_change_language">ဘာသာစကားပြောင်းမည်</string>
     <string name="add_hide_tokens">တိုကင်များကိုပုန်းကွယ်မည်/ထည့်မည်</string>

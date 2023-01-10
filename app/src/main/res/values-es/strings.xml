@@ -563,6 +563,7 @@
     <string name="title_faq">Preguntas frecuentes</string>
     <string name="title_console">Consola</string>
     <string name="title_clear_browser_cache">Borrar la caché del navegador</string>
+    <string name="title_webview_version">Webview</string>
     <string name="title_reload_token_data">Recargar datos del Token</string>
     <string name="title_change_language">Cambiar idioma</string>
     <string name="add_hide_tokens">Añadir / Ocultar tokens</string>

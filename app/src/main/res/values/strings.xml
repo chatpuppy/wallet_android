@@ -604,6 +604,7 @@
     <string name="title_faq">FAQ</string>
     <string name="title_console">Console</string>
     <string name="title_clear_browser_cache">Clear Browser Cache</string>
+    <string name="title_webview_version">Webview</string>
     <string name="title_reload_token_data">Reload Token Data</string>
     <string name="title_tokenscript" translatable="false">TokenScript</string>
     <string name="title_change_language">Change Language</string>

@@ -564,6 +564,7 @@
     <string name="title_faq">常见问题</string>
     <string name="title_console">控制台</string>
     <string name="title_clear_browser_cache">清除浏览器缓存</string>
+    <string name="title_webview_version">Webview</string>
     <string name="title_reload_token_data">重新加载通证数据</string>
     <string name="title_change_language">更换语言</string>
     <string name="add_hide_tokens">添加/隐藏通证</string>
