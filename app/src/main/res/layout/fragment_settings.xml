@@ -66,7 +66,7 @@
             <RelativeLayout
                 android:id="@+id/layout_version"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="36dp"
                 android:background="?colorSurfaceSecondary"
                 android:paddingLeft="@dimen/standard_16"
                 android:paddingRight="@dimen/standard_16">
@@ -91,7 +91,7 @@
             <RelativeLayout
                 android:id="@+id/layout_tokenscript_compatibility"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="36dp"
                 android:background="?colorSurfaceSecondary"
                 android:paddingLeft="@dimen/standard_16"
                 android:paddingRight="@dimen/standard_16">
@@ -129,7 +129,7 @@
             <RelativeLayout
                     android:id="@+id/layout_webview_version"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="36dp"
                     android:background="?colorSurfaceSecondary"
                     android:paddingLeft="@dimen/standard_16"
                     android:paddingRight="@dimen/standard_16">

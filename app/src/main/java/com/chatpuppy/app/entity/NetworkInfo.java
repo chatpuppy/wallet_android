@@ -12,7 +12,7 @@ import com.chatpuppy.app.util.Utils;
 public class NetworkInfo extends com.chatpuppy.ethereum.NetworkInfo {
     private final String BLOCKSCOUT_API = "blockscout";
     private final String MATIC_API = "polygonscan";
-    private final String PALM_API = "explorer.palm";
+//    private final String PALM_API = "explorer.palm";
 
     public  String backupNodeUrl = null;
     public  String etherscanAPI = null; //This is used by the API call to fetch transactions
@@ -55,7 +55,7 @@ public class NetworkInfo extends com.chatpuppy.ethereum.NetworkInfo {
     public boolean usesSeparateNFTTransferQuery()
     {
         return (etherscanAPI != null && !etherscanAPI.contains(BLOCKSCOUT_API)
-                && !etherscanAPI.contains(COVALENT) && !etherscanAPI.contains(PALM_API));
+                && !etherscanAPI.contains(COVALENT));
     }
 
     @Nullable

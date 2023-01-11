@@ -66,7 +66,7 @@ public class OpenSeaService
                 .addHeader("Content-Type", "application/json");
 
         String apiKey = KeyProviderFactory.get().getOpenSeaKey();
-        if (networkId != EthereumNetworkBase.RINKEBY_ID && !TextUtils.isEmpty(apiKey) && !apiKey.equals("..."))
+        if (!TextUtils.isEmpty(apiKey) && !apiKey.equals("..."))
         {
             requestB.addHeader("X-API-KEY", apiKey);
         }
@@ -360,10 +360,10 @@ public class OpenSeaService
         {
             api = C.OPENSEA_ASSETS_API_MAINNET;
         }
-        else if (networkId == EthereumNetworkBase.RINKEBY_ID)
-        {
-            api = C.OPENSEA_ASSETS_API_RINKEBY;
-        }
+//        else if (networkId == EthereumNetworkBase.RINKEBY_ID)
+//        {
+//            api = C.OPENSEA_ASSETS_API_RINKEBY;
+//        }
         else if (networkId == EthereumNetworkBase.POLYGON_ID)
         {
             api = C.OPENSEA_ASSETS_API_MATIC;
@@ -386,10 +386,10 @@ public class OpenSeaService
         {
             api = C.OPENSEA_SINGLE_ASSET_API_MAINNET + contractAddress + "/" + tokenId;
         }
-        else if (networkId == EthereumNetworkBase.RINKEBY_ID)
-        {
-            api = C.OPENSEA_SINGLE_ASSET_API_RINKEBY + contractAddress + "/" + tokenId;
-        }
+//        else if (networkId == EthereumNetworkBase.RINKEBY_ID)
+//        {
+//            api = C.OPENSEA_SINGLE_ASSET_API_RINKEBY + contractAddress + "/" + tokenId;
+//        }
         else if (networkId == EthereumNetworkBase.POLYGON_ID)
         {
             api = C.OPENSEA_SINGLE_ASSET_API_MATIC + contractAddress + "/" + tokenId;

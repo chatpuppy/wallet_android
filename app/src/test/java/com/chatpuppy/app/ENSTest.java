@@ -2,8 +2,8 @@ package com.chatpuppy.app;
 
 import static com.chatpuppy.app.web3j.ens.NameHash.nameHash;
 import static com.chatpuppy.ethereum.EthereumNetworkBase.MAINNET_ID;
-import static com.chatpuppy.ethereum.EthereumNetworkBase.RINKEBY_ID;
-import static com.chatpuppy.ethereum.EthereumNetworkBase.ROPSTEN_ID;
+//import static com.chatpuppy.ethereum.EthereumNetworkBase.RINKEBY_ID;
+//import static com.chatpuppy.ethereum.EthereumNetworkBase.ROPSTEN_ID;
 import static org.junit.Assert.assertEquals;
 
 import com.chatpuppy.app.service.AWHttpService;
@@ -55,8 +55,8 @@ public class ENSTest
     @Test
     public void testResolveRegistryContract() {
         assertEquals(Contracts.resolveRegistryContract(MAINNET_ID), (Contracts.MAINNET));
-        assertEquals(Contracts.resolveRegistryContract(ROPSTEN_ID), (Contracts.ROPSTEN));
-        assertEquals(Contracts.resolveRegistryContract(RINKEBY_ID), (Contracts.RINKEBY));
+//        assertEquals(Contracts.resolveRegistryContract(ROPSTEN_ID), (Contracts.ROPSTEN));
+//        assertEquals(Contracts.resolveRegistryContract(RINKEBY_ID), (Contracts.RINKEBY));
     }
 
     @Test
