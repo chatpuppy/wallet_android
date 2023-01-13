@@ -206,7 +206,6 @@ public class ImportWalletViewModel extends BaseViewModel implements OnSetWatchWa
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean storePubKey(byte[] pk, String address) {
         byte[] publicKey = keyService.createEncryptionPublicKey(pk);
-//        System.out.println("###### ImportWalletViewModel::storePubKey => " + new String(publicKey));
         return keyService.storeEncryptionPublicKey(publicKey, address);
     }
 }

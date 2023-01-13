@@ -182,14 +182,18 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-                    if (uri != null) {
-                        uploadMessage.onReceiveValue(new Uri[]{uri});
-                    } else {
-                       if(null!= uploadMessage){
-                           uploadMessage.onReceiveValue(null);
-                           uploadMessage = null;
-                       }
-                    };
+                    try {
+                        if (uri != null) {
+                            uploadMessage.onReceiveValue(new Uri[]{uri}); // ######
+                        } else {
+                            if(null!= uploadMessage){
+                                uploadMessage.onReceiveValue(null);
+                                uploadMessage = null;
+                            }
+                        };
+                    } catch (Exception error) {
+                        System.out.println("###### " + error.getMessage());
+                    }
                 }
             });
     private WebChromeClient.FileChooserParams fileChooserParams;
@@ -312,6 +316,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         startBalanceListener();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -498,6 +503,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void initView(@NotNull View view) {
         web3 = view.findViewById(R.id.web3view);
         Bundle savedState = readBundleFromLocal();
@@ -804,13 +810,12 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
                                              FileChooserParams fCParams) {
-                if (filePathCallback == null) return true;
-                uploadMessage = filePathCallback;
-                fileChooserParams = fCParams;
-                if (checkReadPermission()) return requestUpload();
-                else return true;
+                    if (filePathCallback == null) return true;
+                    uploadMessage = filePathCallback;
+                    fileChooserParams = fCParams;
+                    if (checkReadPermission()) return requestUpload();
+                    else return true;
             }
-
         });
 
         web3.setWebViewClient(new WebViewClient() {

@@ -95,6 +95,7 @@ public class NewSettingsFragment extends BaseFragment
     private ActivityResultLauncher<Intent> updateLocale;
     private ActivityResultLauncher<Intent> updateCurrency;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
