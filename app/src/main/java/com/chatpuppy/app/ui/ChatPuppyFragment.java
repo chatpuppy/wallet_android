@@ -317,7 +317,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             web3.setWebLoadCallback(this);
         }
 
-        startBalanceListener();
+//        startBalanceListener();
     }
 
     @Nullable
@@ -459,8 +459,8 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             refresh.setOnClickListener(v -> reloadPage());
         }
 
-        balance = view.findViewById(R.id.balance);
-        symbol = view.findViewById(R.id.symbol);
+//        balance = view.findViewById(R.id.balance);
+//        symbol = view.findViewById(R.id.symbol);
         web3.setWebLoadCallback(this);
 
         webFrame.setOnApplyWindowInsetsListener(resizeListener);
@@ -480,7 +480,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
                 viewModel.checkForNetworkChanges();
             } else {
                 viewModel.startBalanceUpdate();
-                startBalanceListener();
+//                startBalanceListener();
                 viewModel.updateGasPrice(activeNetwork.chainId);
             }
         }
@@ -534,24 +534,24 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         viewModel.findWallet();
     }
 
-    private void startBalanceListener() {
-        if (wallet == null || activeNetwork == null) return;
-        if (realm == null || realm.isClosed()) realm = viewModel.getRealmInstance(wallet);
-
-        if (realmUpdate != null) realmUpdate.removeAllChangeListeners();
-        realmUpdate = realm.where(RealmToken.class)
-                .equalTo("address", TokensRealmSource.databaseKey(activeNetwork.chainId, "eth")).findAllAsync();
-        realmUpdate.addChangeListener(realmTokens -> {
-            //update balance
-            if (realmTokens.size() == 0) return;
-            RealmToken realmToken = realmTokens.first();
-            balance.setVisibility(View.VISIBLE);
-            symbol.setVisibility(View.VISIBLE);
-            String newBalanceStr = BalanceUtils.getScaledValueFixed(new BigDecimal(realmToken.getBalance()), ETHER_DECIMALS, TOKEN_BALANCE_PRECISION);
-            balance.setText(newBalanceStr);
-            symbol.setText(activeNetwork != null ? activeNetwork.getShortName() : "");
-        });
-    }
+//    private void startBalanceListener() {
+//        if (wallet == null || activeNetwork == null) return;
+//        if (realm == null || realm.isClosed()) realm = viewModel.getRealmInstance(wallet);
+//
+//        if (realmUpdate != null) realmUpdate.removeAllChangeListeners();
+//        realmUpdate = realm.where(RealmToken.class)
+//                .equalTo("address", TokensRealmSource.databaseKey(activeNetwork.chainId, "eth")).findAllAsync();
+//        realmUpdate.addChangeListener(realmTokens -> {
+//            //update balance
+//            if (realmTokens.size() == 0) return;
+//            RealmToken realmToken = realmTokens.first();
+//            balance.setVisibility(View.VISIBLE);
+//            symbol.setVisibility(View.VISIBLE);
+//            String newBalanceStr = BalanceUtils.getScaledValueFixed(new BigDecimal(realmToken.getBalance()), ETHER_DECIMALS, TOKEN_BALANCE_PRECISION);
+//            balance.setText(newBalanceStr);
+//            symbol.setText(activeNetwork != null ? activeNetwork.getShortName() : "");
+//        });
+//    }
 
     private void stopBalanceListener() {
         if (realmUpdate != null) {
@@ -584,7 +584,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         activeNetwork = viewModel.getNetworkInfo(chainId);
         updateNetworkMenuItem();
         viewModel.setNetwork(chainId);
-        startBalanceListener();
+//        startBalanceListener();
         setupWeb3();
         web3.resetView();
         web3.reload();
@@ -821,7 +821,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             symbol.setVisibility(View.GONE);
             viewModel.setNetwork(newNetworkId);
             onNetworkChanged(viewModel.getNetworkInfo(newNetworkId));
-            startBalanceListener();
+//            startBalanceListener();
             viewModel.updateGasPrice(newNetworkId);
         }
         //refresh URL page

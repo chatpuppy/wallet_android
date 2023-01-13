@@ -188,7 +188,7 @@ public class App extends Application
         if (!startX5WebProcessPreinitService()) {
             return;
         }
-//        QbSdk.setDownloadWithoutWifi(true);
+        QbSdk.setDownloadWithoutWifi(true);
 
         QbSdk.setCoreMinVersion(QbSdk.CORE_VER_ENABLE_202112);
 

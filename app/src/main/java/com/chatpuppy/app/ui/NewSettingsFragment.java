@@ -383,8 +383,8 @@ public class NewSettingsFragment extends BaseFragment
         TextView tokenScriptVersionText = view.findViewById(R.id.text_tokenscript_compatibility);
         tokenScriptVersionText.setText(TOKENSCRIPT_CURRENT_SCHEMA);
 
-        TextView webviewVersionText = view.findViewById(R.id.text_webview_version);
-        webviewVersionText.setText(getWebviewVersionInfo());
+//        TextView webviewVersionText = view.findViewById(R.id.text_webview_version);
+//        webviewVersionText.setText(getWebviewVersionInfo());
 
         notificationsSetting.setToggleState(viewModel.getNotificationState());
     }

@@ -62,26 +62,26 @@
                 android:paddingStart="@dimen/tiny_8"
                 android:paddingEnd="@dimen/tiny_8">
 
-            <TextView
-                    android:id="@+id/balance"
-                    style="@style/Aw.Typography.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/mini_4"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:gravity="center_vertical"
-                    custom:text="0.0" />
+<!--            <TextView-->
+<!--                    android:id="@+id/balance"-->
+<!--                    style="@style/Aw.Typography.Caption"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="@dimen/mini_4"-->
+<!--                    android:clickable="false"-->
+<!--                    android:focusable="false"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    custom:text="0.0" />-->
 
-            <TextView
-                    android:id="@+id/symbol"
-                    style="@style/Aw.Typography.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:gravity="center_vertical"
-                    android:text="@string/eth" />
+<!--            <TextView-->
+<!--                    android:id="@+id/symbol"-->
+<!--                    style="@style/Aw.Typography.Caption"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:clickable="false"-->
+<!--                    android:focusable="false"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:text="@string/eth" />-->
 
         </LinearLayout>
 
