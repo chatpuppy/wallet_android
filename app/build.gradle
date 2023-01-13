@@ -299,6 +299,7 @@ dependencies {
 
     // dagger-hilt
     implementation "com.google.dagger:hilt-android:2.40.5"
+    implementation files('libs/tbs_sdk_thirdapp_v4.3.0.375_44275_sharewithdownloadwithfile_withoutGame_obfs_20230104_145521.jar')
     annotationProcessor "com.google.dagger:hilt-compiler:2.40.5"
 
     // WebKit - for WebView Dark Mode

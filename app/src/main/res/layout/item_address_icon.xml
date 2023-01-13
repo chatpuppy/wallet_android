@@ -141,7 +141,7 @@
         tools:visibility="visible" />
 
 
-    <WebView
+    <com.tencent.smtt.sdk.WebView
         android:id="@+id/web_view_for_svg"
         android:layout_width="0dp"
         android:layout_height="0dp"

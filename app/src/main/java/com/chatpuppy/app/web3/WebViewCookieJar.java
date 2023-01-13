@@ -2,8 +2,8 @@ package com.chatpuppy.app.web3;
 
 import androidx.annotation.NonNull;
 import android.text.TextUtils;
-import android.webkit.CookieManager;
-
+//import android.webkit.CookieManager;
+import com.tencent.smtt.sdk.CookieManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

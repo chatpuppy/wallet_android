@@ -3,8 +3,10 @@ package com.chatpuppy.app.ui;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+//import android.webkit.WebView;
+//import android.webkit.WebViewClient;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;

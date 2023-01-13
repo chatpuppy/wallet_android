@@ -14,8 +14,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
+//import android.webkit.WebResourceRequest;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+//import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;

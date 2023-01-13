@@ -1,6 +1,7 @@
 package com.chatpuppy.app.widget;
 
-import android.webkit.WebBackForwardList;
+//import android.webkit.WebBackForwardList;
+import com.tencent.smtt.sdk.WebBackForwardList;
 
 public interface AddressBarListener
 {
@@ -8,9 +9,9 @@ public interface AddressBarListener
 
     void onClear();
 
-    WebBackForwardList loadNext();
+    com.tencent.smtt.sdk.WebBackForwardList loadNext();
 
-    WebBackForwardList loadPrevious();
+    com.tencent.smtt.sdk.WebBackForwardList loadPrevious();
 
     WebBackForwardList onHomePagePressed();
 }

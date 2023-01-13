@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
-        <WebView
+        <com.tencent.smtt.sdk.WebView
             android:id="@+id/image_web_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

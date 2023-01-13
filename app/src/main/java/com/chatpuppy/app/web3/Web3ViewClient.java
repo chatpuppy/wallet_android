@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.http.SslError;
-import android.webkit.SslErrorHandler;
+//import android.webkit.SslErrorHandler;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+//import android.webkit.WebResourceResponse;
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
+//import android.webkit.WebView;
+//import android.webkit.WebViewClient;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import android.widget.Toast;
 
 import com.chatpuppy.app.R;
@@ -31,28 +35,28 @@ public class Web3ViewClient extends WebViewClient {
         return jsInjectorClient;
     }
 
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        return handleTrustedApps(url);
-    }
+//    @Override
+//    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//        return handleTrustedApps(url);
+//    }
 
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-        if (request == null || view == null) {
-            return false;
-        }
-        String url = request.getUrl().toString();
-        return handleTrustedApps(url);
-    }
+//    @Override
+//    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//        if (request == null || view == null) {
+//            return false;
+//        }
+//        String url = request.getUrl().toString();
+//        return handleTrustedApps(url);
+//    }
 
-    @Override
-    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-        if (request == null) {
-            return null;
-        }
-
-        return super.shouldInterceptRequest(view, request);
-    }
+//    @Override
+//    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+//        if (request == null) {
+//            return null;
+//        }
+//
+//        return super.shouldInterceptRequest(view, request);
+//    }
 
     public String getInitString(WebView view)
     {
@@ -64,25 +68,25 @@ public class Web3ViewClient extends WebViewClient {
         return jsInjectorClient.providerJs(view.getContext());
     }
 
-    @Override
-    public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error)
-    {
-        AWalletAlertDialog aDialog = new AWalletAlertDialog(context);
-        aDialog.setTitle(R.string.title_dialog_error);
-        aDialog.setIcon(AWalletAlertDialog.ERROR);
-        aDialog.setMessage(R.string.ssl_cert_invalid);
-        aDialog.setButtonText(R.string.dialog_approve);
-        aDialog.setButtonListener(v -> {
-            handler.proceed();
-            aDialog.dismiss();
-        });
-        aDialog.setSecondaryButtonText(R.string.action_cancel);
-        aDialog.setButtonListener(v -> {
-            handler.cancel();
-            aDialog.dismiss();
-        });
-        aDialog.show();
-    }
+//    @Override
+//    public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error)
+//    {
+//        AWalletAlertDialog aDialog = new AWalletAlertDialog(context);
+//        aDialog.setTitle(R.string.title_dialog_error);
+//        aDialog.setIcon(AWalletAlertDialog.ERROR);
+//        aDialog.setMessage(R.string.ssl_cert_invalid);
+//        aDialog.setButtonText(R.string.dialog_approve);
+//        aDialog.setButtonListener(v -> {
+//            handler.proceed();
+//            aDialog.dismiss();
+//        });
+//        aDialog.setSecondaryButtonText(R.string.action_cancel);
+//        aDialog.setButtonListener(v -> {
+//            handler.cancel();
+//            aDialog.dismiss();
+//        });
+//        aDialog.show();
+//    }
 
     //Handling of trusted apps
     private boolean handleTrustedApps(String url)

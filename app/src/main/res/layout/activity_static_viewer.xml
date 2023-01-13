@@ -7,12 +7,12 @@
 
     <include layout="@layout/layout_simple_toolbar" />
 
-    <WebView
+    <com.tencent.smtt.sdk.WebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible">
 
-    </WebView>
+    </com.tencent.smtt.sdk.WebView>
 
 </LinearLayout>

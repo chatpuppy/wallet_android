@@ -3,7 +3,8 @@ package com.chatpuppy.app.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.webkit.WebView;
+//import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
 
 import com.chatpuppy.app.C;
 import com.chatpuppy.app.R;

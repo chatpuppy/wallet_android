@@ -18,8 +18,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
@@ -27,21 +27,36 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.security.keystore.UserNotAuthenticatedException;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.ConsoleMessage;
-import android.webkit.GeolocationPermissions;
+//import android.webkit.ConsoleMessage;
+//import android.webkit.GeolocationPermissions;
+import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
 import android.webkit.PermissionRequest;
-import android.webkit.ValueCallback;
-import android.webkit.WebBackForwardList;
-import android.webkit.WebChromeClient;
-import android.webkit.WebHistoryItem;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+//import android.webkit.ValueCallback;
+import com.tencent.smtt.export.external.interfaces.JsPromptResult;
+import com.tencent.smtt.export.external.interfaces.JsResult;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
+import com.tencent.smtt.sdk.ValueCallback;
+//import android.webkit.WebBackForwardList;
+import com.tencent.smtt.sdk.WebBackForwardList;
+//import android.webkit.WebChromeClient;
+import com.tencent.smtt.sdk.WebChromeClient;
+//import android.webkit.WebHistoryItem;
+import com.tencent.smtt.sdk.WebHistoryItem;
+//import android.webkit.WebView;
+//import android.webkit.WebViewClient;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
+
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -55,6 +70,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -128,7 +144,6 @@ import com.chatpuppy.app.service.KeyService;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthCall;
 
@@ -136,6 +151,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -255,7 +271,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
         return insets;
     };
-    private GeolocationPermissions.Callback geoCallback = null;
+    private GeolocationPermissionsCallback geoCallback = null;
     private PermissionRequest requestCallback = null;
     private String geoOrigin;
     private String walletConnectSession;
@@ -773,20 +789,24 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                 }
             }
 
-            @Override
-            public boolean onConsoleMessage(ConsoleMessage msg) {
-                // ###### JS Console
-                System.out.println("JS Console " + msg.messageLevel() + ", " + msg.sourceId() + ", " + msg.lineNumber() + ", " + msg.message());
-                boolean ret = super.onConsoleMessage(msg);
-
-                if (msg.messageLevel() == ConsoleMessage.MessageLevel.ERROR) {
-                    if (msg.message().contains(WALLETCONNECT_CHAINID_ERROR)) {
-                        displayCloseWC();
-                    }
-                }
-
-                return ret;
-            }
+//            @Override
+//            public boolean onConsoleMessage(ConsoleMessage msg) {
+//                // ###### JS Console
+//                System.out.println("JS Console " + msg.messageLevel() + ", " + msg.sourceId() + ", " + msg.lineNumber() + ", " + msg.message());
+//                boolean ret = super.onConsoleMessage(msg);
+//
+//                if (msg.messageLevel() == ConsoleMessage.MessageLevel.ERROR) {
+//                    if (msg.message().contains(WALLETCONNECT_CHAINID_ERROR)) {
+//                        displayCloseWC();
+//                    }
+//                }
+//
+//                return ret;
+//            }
+//            @Override
+//            public void onPermissionRequest(final PermissionRequest request) {
+//                requestCameraPermission(request);
+//            }
 
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -795,14 +815,55 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                 currentWebpageTitle = title;
             }
 
+            // These are X5 webview callbacks
             @Override
-            public void onPermissionRequest(final PermissionRequest request) {
-                requestCameraPermission(request);
+            public boolean onJsAlert(WebView webView, String url, String message, JsResult result) {
+                new AlertDialog.Builder(DappBrowserFragment.super.getActivity()).setTitle("Alert")
+                        .setMessage(message)
+                        .setPositiveButton("OK", (dialogInterface, i) -> result.confirm())
+                        .setCancelable(false)
+                        .show();
+                return true;
+            }
+
+            @Override
+            public boolean onJsConfirm(WebView webView, String url, String message, JsResult result) {
+                new AlertDialog.Builder(DappBrowserFragment.super.getActivity()).setTitle("JS弹窗Override")
+                        .setMessage(message)
+                        .setPositiveButton("OK", (dialogInterface, i) -> result.confirm())
+                        .setNegativeButton("Cancel", (dialogInterface, i) -> result.cancel())
+                        .setCancelable(false)
+                        .show();
+                return true;
+            }
+
+            @Override
+            public boolean onJsBeforeUnload(WebView webView, String url, String message, JsResult result) {
+                new AlertDialog.Builder(DappBrowserFragment.super.getActivity()).setTitle("页面即将跳转")
+                        .setMessage(message)
+                        .setPositiveButton("OK", (dialogInterface, i) -> result.confirm())
+                        .setNegativeButton("Cancel", (dialogInterface, i) -> result.cancel())
+                        .setCancelable(false)
+                        .show();
+                return true;
+            }
+
+            @Override
+            public boolean onJsPrompt(WebView webView, String url, String message, String defaultValue, JsPromptResult result) {
+                final EditText input = new EditText(DappBrowserFragment.super.getActivity());
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                new AlertDialog.Builder(DappBrowserFragment.super.getActivity()).setTitle("JS弹窗Override")
+                        .setMessage(message)
+                        .setView(input)
+                        .setPositiveButton("OK", (dialogInterface, i) -> result.confirm(input.getText().toString()))
+                        .setCancelable(false)
+                        .show();
+                return true;
             }
 
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin,
-                                                           GeolocationPermissions.Callback callback) {
+                                                           GeolocationPermissionsCallback callback) {
                 super.onGeolocationPermissionsShowPrompt(origin, callback);
                 requestGeoPermission(origin, callback);
             }
@@ -819,6 +880,40 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         });
 
         web3.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                Log.i(TAG, "onPageStarted, view:" + view + ", url:" + url);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                Log.i(TAG, "onPageFinished, view:" + view + ", url:" + url);
+            }
+
+            @Override
+            public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
+                Log.e(TAG, "onReceivedError: " + errorCode
+                        + ", description: " + description
+                        + ", url: " + failingUrl);
+            }
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView webView, WebResourceRequest webResourceRequest) {
+                if (webResourceRequest.getUrl().toString().contains("debugdebug")) {
+                    InputStream in = null;
+                    Log.i("AterDebug", "shouldInterceptRequest");
+                    try {
+                        in = new FileInputStream(new File("/sdcard/1.png"));
+                    } catch (Exception e) {
+
+                    }
+
+                    return new WebResourceResponse("image/*", "utf-8", in);
+                } else {
+                    return super.shouldInterceptRequest(webView, webResourceRequest);
+                }
+
+            }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 String[] prefixCheck = url.split(":");
@@ -1475,7 +1570,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
     // Handles the requesting of the fine location permission.
     // Note: If you intend allowing geo-location in your app you need to ask the permission.
-    private void requestGeoPermission(String origin, GeolocationPermissions.Callback callback) {
+    private void requestGeoPermission(String origin, GeolocationPermissionsCallback callback) {
         if (ContextCompat.checkSelfPermission(requireContext().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             geoCallback = callback;

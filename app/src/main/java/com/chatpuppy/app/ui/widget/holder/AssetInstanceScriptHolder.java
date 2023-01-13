@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
+//import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;

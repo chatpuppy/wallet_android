@@ -11,7 +11,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.WebBackForwardList;
+//import android.webkit.WebBackForwardList;
+import com.tencent.smtt.sdk.WebBackForwardList;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 

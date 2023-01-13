@@ -5,7 +5,8 @@ import static com.chatpuppy.app.entity.tokenscript.TokenscriptFunction.ZERO_ADDR
 import android.security.keystore.UserNotAuthenticatedException;
 import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebView;
+//import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
 
 import androidx.annotation.NonNull;
 

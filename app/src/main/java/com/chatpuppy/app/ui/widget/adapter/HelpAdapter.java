@@ -3,7 +3,8 @@ package com.chatpuppy.app.ui.widget.adapter;
 import androidx.recyclerview.widget.SortedList;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
-import android.webkit.WebView;
+//import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
 
 import com.chatpuppy.app.R;
 import com.chatpuppy.app.entity.HelpItem;

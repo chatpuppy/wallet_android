@@ -11,7 +11,8 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.view.View;
-import android.webkit.WebView;
+//import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 

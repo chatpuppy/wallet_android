@@ -1,6 +1,7 @@
 package com.chatpuppy.app.web3.entity;
 
-import android.webkit.WebView;
+//import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
 
 /**
  * Created by James on 3/04/2019.

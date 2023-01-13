@@ -14,14 +14,19 @@ import android.util.AttributeSet;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.ConsoleMessage;
+//import android.webkit.ConsoleMessage;
+import com.tencent.smtt.export.external.interfaces.ConsoleMessage;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
+//import android.webkit.WebChromeClient;
+import com.tencent.smtt.sdk.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+//import android.webkit.WebSettings;
+import com.tencent.smtt.sdk.WebSettings;
+//import android.webkit.WebView;
+//import android.webkit.WebViewClient;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -122,20 +127,24 @@ public class Web3TokenView extends WebView
         webSettings.setUserAgentString(webSettings.getUserAgentString()
                                                + "ChatpuppyWallet(Platform=Android&AppVersion=" + BuildConfig.VERSION_NAME + ")");
         WebView.setWebContentsDebuggingEnabled(true);
+        // X5 Webview settings
+        webSettings.setAllowFileAccess(true);
+        webSettings.setSupportZoom(true);
+//        webSettings.setDatabaseEnabled(true);
 
-        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK))
-        {
-            switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-            {
-                case Configuration.UI_MODE_NIGHT_YES:
-                    WebSettingsCompat.setForceDark(getSettings(), FORCE_DARK_ON);
-                    break;
-                case Configuration.UI_MODE_NIGHT_NO:
-                case Configuration.UI_MODE_NIGHT_UNDEFINED:
-                    WebSettingsCompat.setForceDark(getSettings(), FORCE_DARK_OFF);
-                    break;
-            }
-        }
+//        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK))
+//        {
+//            switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+//            {
+//                case Configuration.UI_MODE_NIGHT_YES:
+//                    WebSettingsCompat.setForceDark(getSettings(), FORCE_DARK_ON);
+//                    break;
+//                case Configuration.UI_MODE_NIGHT_NO:
+//                case Configuration.UI_MODE_NIGHT_UNDEFINED:
+//                    WebSettingsCompat.setForceDark(getSettings(), FORCE_DARK_OFF);
+//                    break;
+//            }
+//        }
 
         setScrollBarSize(0);
         setVerticalScrollBarEnabled(false);
@@ -156,8 +165,7 @@ public class Web3TokenView extends WebView
         setWebChromeClient(new WebChromeClient()
         {
             @Override
-            public boolean onConsoleMessage(ConsoleMessage msg)
-            {
+            public boolean onConsoleMessage(ConsoleMessage msg) {
                 if (!showingError && msg.messageLevel() == ConsoleMessage.MessageLevel.ERROR)
                 {
                     if (msg.message().contains(REFRESH_ERROR)) return true; //don't stop for refresh error
@@ -394,11 +402,11 @@ public class Web3TokenView extends WebView
             }
         }
 
-        @Override
-        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error)
-        {
-            showError(RENDERING_ERROR.replace("${ERR1}", error.getDescription()));
-        }
+//        @Override
+//        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error)
+//        {
+//            showError(RENDERING_ERROR.replace("${ERR1}", error.getDescription()));
+//        }
     }
 
     // Rendering

@@ -6,12 +6,16 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.security.keystore.UserNotAuthenticatedException;
 import android.util.AttributeSet;
-import android.webkit.WebChromeClient;
+//import android.webkit.WebChromeClient;
+import com.tencent.smtt.sdk.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+//import android.webkit.WebSettings;
+import com.tencent.smtt.sdk.WebSettings;
+//import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
+//import android.webkit.WebViewClient;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -202,6 +206,11 @@ public class Web3View extends WebView {
         getSettings().setUserAgentString(getSettings().getUserAgentString()
                 + "ChatpuppyWallet(Platform=Android&AppVersion=" + BuildConfig.VERSION_NAME + ")");
         WebView.setWebContentsDebuggingEnabled(true); //so devs can debug their scripts/pages
+        // X5 webview settings
+        getSettings().setAllowFileAccess(true);
+        getSettings().setSupportZoom(true);
+//        webSettings.setDatabaseEnabled(true);
+
         addJavascriptInterface(new SignCallbackJSInterface(
                 this,
                 innerOnSignTransactionListener,
@@ -387,31 +396,30 @@ public class Web3View extends WebView {
             loadingError = false;
         }
 
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url)
-        {
-            redirect = true;
+//        @Override
+//        public boolean shouldOverrideUrlLoading(WebView view, String url)
+//        {
+//            redirect = true;
+//
+//            return externalClient.shouldOverrideUrlLoading(view, url)
+//                    || internalClient.shouldOverrideUrlLoading(view, url);
+//        }
 
-            return externalClient.shouldOverrideUrlLoading(view, url)
-                    || internalClient.shouldOverrideUrlLoading(view, url);
-        }
+//        @Override
+//        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error)
+//        {
+//            loadingError = true;
+//            if (externalClient != null)
+//                externalClient.onReceivedError(view, request, error);
+//        }
 
-        @Override
-        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error)
-        {
-            loadingError = true;
-            if (externalClient != null)
-                externalClient.onReceivedError(view, request, error);
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request)
-        {
-            redirect = true;
-
-            return externalClient.shouldOverrideUrlLoading(view, request)
-                    || internalClient.shouldOverrideUrlLoading(view, request);
-        }
+//        @RequiresApi(api = Build.VERSION_CODES.N)
+//        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request)
+//        {
+//            redirect = true;
+//
+//            return externalClient.shouldOverrideUrlLoading(view, request)
+//                    || internalClient.shouldOverrideUrlLoading(view, request);
+//        }
     }
 }

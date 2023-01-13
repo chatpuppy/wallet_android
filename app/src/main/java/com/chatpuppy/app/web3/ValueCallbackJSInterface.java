@@ -2,7 +2,8 @@ package com.chatpuppy.app.web3;
 
 import androidx.annotation.NonNull;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebView;
+//import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
