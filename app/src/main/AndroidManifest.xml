@@ -352,6 +352,10 @@
             android:enabled="true"
             android:exported="false"
             android:stopWithTask="true" />
+        <service
+                android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+                android:label="dexopt"
+                android:process=":dexopt" />
 
     </application>
 

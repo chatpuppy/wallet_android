@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 //import android.webkit.WebView;
 import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.QbSdk;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -383,16 +384,21 @@ public class NewSettingsFragment extends BaseFragment
         TextView tokenScriptVersionText = view.findViewById(R.id.text_tokenscript_compatibility);
         tokenScriptVersionText.setText(TOKENSCRIPT_CURRENT_SCHEMA);
 
-//        TextView webviewVersionText = view.findViewById(R.id.text_webview_version);
-//        webviewVersionText.setText(getWebviewVersionInfo());
+        TextView webviewVersionText = view.findViewById(R.id.text_webview_version);
+        webviewVersionText.setText(getWebviewVersionInfo());
 
         notificationsSetting.setToggleState(viewModel.getNotificationState());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     String getWebviewVersionInfo() {
+        try{
         PackageInfo info = WebView.getCurrentWebViewPackage();
         return info.packageName + " " + info.versionName;
+
+        }catch (Exception e){
+            return "X5:"+QbSdk.getTbsVersion(getContext());
+        }
     }
 
     private void openShowSeedPhrase(Wallet wallet)

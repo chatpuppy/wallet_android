@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.security.keystore.UserNotAuthenticatedException;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -64,6 +65,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -189,30 +191,36 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     private static final long MAGIC_BUNDLE_VAL = 0xACED00D;
     private static final String BUNDLE_FILE = "awbrowse";
     private static volatile long forceChainChange = 0;
+    private final int CHOOSE_REQUEST_CODE = 1000;
+    private final int FILE_CHOOSER_RESULT_CODE = 2000;
+
     /**
      * Below object is used to set Animation duration for expand/collapse and rotate
      */
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private ValueCallback<Uri[]> uploadMessage;
-    ActivityResultLauncher<String> getContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
-            new ActivityResultCallback<Uri>() {
-                @Override
-                public void onActivityResult(Uri uri) {
-                    try {
-                        if (uri != null) {
-                            uploadMessage.onReceiveValue(new Uri[]{uri}); // ######
-                        } else {
-                            if(null!= uploadMessage){
-                                uploadMessage.onReceiveValue(null);
-                                uploadMessage = null;
-                            }
-                        };
-                    } catch (Exception error) {
-                        System.out.println("###### " + error.getMessage());
-                    }
-                }
-            });
-    private WebChromeClient.FileChooserParams fileChooserParams;
+    private ValueCallback<Uri> uploadMessage;
+//    ActivityResultLauncher<String> getContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+//            new ActivityResultCallback<Uri>() {
+//                @Override
+//                public void onActivityResult(Uri uri) {
+//                    try {
+//                        if (uri != null) {
+//                            uploadMessage.onReceiveValue(uri); // ######
+//                            uploadMessage=null;
+//                            fileChooserParams=null;
+//                        } else {
+//                            if(null!= uploadMessage){
+//                                uploadMessage.onReceiveValue(null);
+//                                uploadMessage = null;
+//                                fileChooserParams=null;
+//                            }
+//                        };
+//                    } catch (Exception error) {
+//                        System.out.println("###### " + error.getMessage());
+//                    }
+//                }
+//            });
+//    private WebChromeClient.FileChooserParams fileChooserParams;
     private RealmResults<RealmToken> realmUpdate;
     private Realm realm = null;
     private ActionSheet confirmationDialog;
@@ -868,16 +876,20 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                 requestGeoPermission(origin, callback);
             }
 
+
             @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
-                                             FileChooserParams fCParams) {
-                    if (filePathCallback == null) return true;
-                    uploadMessage = filePathCallback;
-                    fileChooserParams = fCParams;
-                    if (checkReadPermission()) return requestUpload();
-                    else return true;
+            public void openFileChooser(ValueCallback<Uri> valueCallback,
+                                        String acceptType, String capture) {
+                if(acceptType.equals("image/*")){
+                    openImageChooserActivity(valueCallback);
+                }else{
+                    openFileChooserActivity(valueCallback);
+                }
             }
+
         });
+
+
 
         web3.setWebViewClient(new WebViewClient() {
             @Override
@@ -974,6 +986,53 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         }
     }
 
+
+    private void openImageChooserActivity(ValueCallback<Uri> valueCallback) {
+        uploadMessage = valueCallback;
+        Intent intent = new Intent();
+        if (Build.VERSION.SDK_INT < 19) {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+        } else {
+            intent.setAction(Intent.ACTION_PICK);
+            intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        }
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent,"选择图片"),CHOOSE_REQUEST_CODE);
+    }
+
+    private void openFileChooserActivity(ValueCallback<Uri> valueCallback) {
+        uploadMessage = valueCallback;
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType("*/*");
+        startActivityForResult(Intent.createChooser(i, "选择文件"), FILE_CHOOSER_RESULT_CODE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        switch (requestCode) {
+            case CHOOSE_REQUEST_CODE://以下选择图片后的回调
+                processResult(resultCode, intent);
+                break;
+            case FILE_CHOOSER_RESULT_CODE:
+                processResult(resultCode,intent);
+                break;
+        }
+    }
+
+    private void processResult(int resultCode, Intent intent) {
+        if (uploadMessage == null) {
+            return;
+        }
+        if (resultCode == Activity.RESULT_OK && intent != null) {
+            Uri result = intent.getData();
+            uploadMessage.onReceiveValue(result);
+        } else {
+            uploadMessage.onReceiveValue(null);
+        }
+        uploadMessage = null;
+    }
+
+
     private void setUrlText(String newUrl) {
         addressBar.setUrl(newUrl);
         addressBar.updateNavigationButtons(web3.copyBackForwardList());
@@ -992,17 +1051,17 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         reloadPage();
     }
 
-    protected boolean requestUpload() {
-        try {
-            getContent.launch(determineMimeType(fileChooserParams));
-        } catch (ActivityNotFoundException e) {
-            uploadMessage = null;
-            Toast.makeText(requireActivity().getApplicationContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        return true;
-    }
+//    protected boolean requestUpload() {
+//        try {
+//            getContent.launch(determineMimeType(fileChooserParams));
+//        } catch (ActivityNotFoundException e) {
+//            uploadMessage = null;
+//            Toast.makeText(requireActivity().getApplicationContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
     @Override
     public void onSignMessage(final EthereumMessage message) {
@@ -1633,7 +1692,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             }
         }
 
-        if (fileAccess) requestUpload();
+//        if (fileAccess) requestUpload();
     }
 
     @Override
