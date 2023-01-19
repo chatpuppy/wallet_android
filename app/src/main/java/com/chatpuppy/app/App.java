@@ -2,24 +2,33 @@ package com.chatpuppy.app;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+import static androidx.core.app.ActivityCompat.requestPermissions;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
 import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
 
+import com.chatpuppy.app.ui.HomeActivity;
+import com.chatpuppy.app.util.FileUtils;
 import com.chatpuppy.app.util.ReleaseTree;
 import com.chatpuppy.app.walletconnect.AWWalletConnectClient;
+import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.QbSdk;
 import com.tencent.smtt.sdk.TbsListener;
 import com.tencent.smtt.sdk.WebView;
 
+import java.util.HashMap;
 import java.util.Stack;
 
 import javax.inject.Inject;
@@ -32,6 +41,7 @@ import timber.log.Timber;
 @HiltAndroidApp
 public class App extends Application
 {
+
     @Inject
     AWWalletConnectClient awWalletConnectClient;
 
@@ -57,7 +67,9 @@ public class App extends Application
         Realm.init(this);
 
         // Chatpuppy: Initialize X5 webview engine instead of default android webview
-        initX5Webview();
+//        initX5Webview();
+
+
 
         if (BuildConfig.DEBUG)
         {
@@ -183,14 +195,17 @@ public class App extends Application
         activityStack.pop();
     }
 
+
+
     // Chatpuppy: using X5 webview engine
     private void initX5Webview () {
         if (!startX5WebProcessPreinitService()) {
             return;
         }
+
         QbSdk.setDownloadWithoutWifi(true);
 
-        QbSdk.setCoreMinVersion(QbSdk.CORE_VER_ENABLE_202112);
+//        QbSdk.setCoreMinVersion(QbSdk.CORE_VER_ENABLE_202112);
 
         QbSdk.setTbsListener(new TbsListener() {
             /**
@@ -219,6 +234,7 @@ public class App extends Application
             }
         });
 
+        QbSdk.installLocalTbsCore(getApplicationContext(),46141,getApplicationContext().getFilesDir().getPath() +"/x5.tbs.org.apk");
         /* 此过程包括X5内核的下载、预初始化，接入方不需要接管处理x5的初始化流程，希望无感接入 */
         QbSdk.initX5Environment(this, new QbSdk.PreInitCallback() {
             @Override

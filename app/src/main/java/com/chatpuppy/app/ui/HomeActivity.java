@@ -18,8 +18,13 @@ import static com.chatpuppy.ethereum.EthereumNetworkBase.MAINNET_ID;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -28,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -73,6 +79,7 @@ import com.chatpuppy.app.service.NotificationService;
 import com.chatpuppy.app.service.PriceAlertsService;
 import com.chatpuppy.app.ui.widget.entity.ActionSheetCallback;
 import com.chatpuppy.app.ui.widget.entity.PagerCallback;
+import com.chatpuppy.app.util.FileUtils;
 import com.chatpuppy.app.util.LocaleUtils;
 import com.chatpuppy.app.util.UpdateUtils;
 import com.chatpuppy.app.util.Utils;
@@ -89,11 +96,15 @@ import com.chatpuppy.token.entity.Signable;
 import com.chatpuppy.token.tools.Numeric;
 import com.chatpuppy.token.tools.ParseMagicLink;
 import com.github.florent37.tutoshowcase.TutoShowcase;
+import com.tencent.smtt.export.external.TbsCoreSettings;
+import com.tencent.smtt.sdk.QbSdk;
+import com.tencent.smtt.sdk.TbsListener;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -133,6 +144,10 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
     private boolean isForeground;
     private volatile boolean tokenClicked = false;
     private String openLink;
+
+    private static final int REQUEST_CODE_CONTACT = 101;
+    private static final String TAG = "X5Webview";
+
 
     public HomeActivity()
     {
@@ -204,8 +219,11 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
+
         LocaleUtils.setDeviceLocale(getBaseContext());
         super.onCreate(savedInstanceState);
+        initTBS();
+
         LocaleUtils.setActiveLocale(this);
         getLifecycle().addObserver(this);
         isForeground = true;
@@ -1264,5 +1282,84 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
         {
             return WalletPage.values().length;
         }
+    }
+
+
+    public void initTBS() {
+        if(!QbSdk.isX5Core() && QbSdk.getTbsVersion(getApplicationContext())==0){
+            Log.d("X5","开始初始化X5");
+            String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+            //验证是否许可权限
+//            for (String str : permissions) {
+//                if (checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+//                    //申请权限
+////                    requestPermissions(getApplicationContext(),permissions, REQUEST_CODE_CONTACT);
+//                    ActivityCompat.requestPermissions(HomeActivity.this,permissions, REQUEST_CODE_CONTACT);
+//                    return;
+//                }
+//            }
+//            Toast.makeText(getApplicationContext(),"正在进行首次初始化，初始化完成app会自动重启!", Toast.LENGTH_LONG).show();
+            FileUtils.copyAssets(getApplicationContext(), "x5.tbs.org.apk", FileUtils.getTBSFileDir(getApplicationContext()).getPath() + "/046141.x5.tbs.apk");
+            HashMap<String, Object> map = new HashMap<>(2);
+            map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+            map.put(TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE, true);
+            QbSdk.initTbsSettings(map);
+
+//            boolean canLoadX5 = QbSdk.canLoadX5(getApplicationContext());
+//            Log.e(TAG, "canLoadX5: " + canLoadX5+"|TbsVersion:"+QbSdk.getTbsVersion(getApplicationContext()));
+//            if (canLoadX5) {
+//                return;
+//            }
+            QbSdk.setTbsListener(new TbsListener() {
+                @Override
+                public void onDownloadFinish(int i) {
+
+                }
+
+                @Override
+                public void onInstallFinish(int i) {
+                    Log.e(TAG, "onInstallFinish: " + i);
+                    int tbsVersion = QbSdk.getTbsVersion(getApplicationContext());
+                    Log.e(TAG, "tbsVersion: " + tbsVersion);
+                    Toast.makeText(getApplicationContext(),"初始化完成，App正在自动重启。", Toast.LENGTH_LONG).show();
+
+//                    ActivityManager manager = （ActivityManager）this.getSystemService（Context.ACTIVITY_SERVICE）;
+//                    manager.restartPackage("com.example.test");
+
+//                    final Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+
+
+                    new AlertDialog.Builder(getApplicationContext())
+                            .setTitle("请重启应用")
+                            .setMessage("初始化完成，App正在自动重启。")
+                            .setPositiveButton("确定关闭", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface arg0, int arg1) {
+                                            Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+                                            //与正常页面跳转一样可传递序列化数据,在Launch页面内获得
+                                            intent.putExtra("REBOOT","reboot");
+                                            Log.e(TAG, "tbsVersion: " + tbsVersion);
+                                            PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+                                            AlarmManager mgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, restartIntent);
+                                            android.os.Process.killProcess(android.os.Process.myPid());
+                                        }
+                                    })
+                            .show();
+                }
+
+                @Override
+                public void onDownloadProgress(int i) {
+
+                }
+            });
+
+            QbSdk.reset(getApplicationContext());
+            QbSdk.installLocalTbsCore(getApplicationContext(),46141,FileUtils.getTBSFileDir(getApplicationContext()).getPath() +"/046141.x5.tbs.apk");
+
+        }
+
     }
 }
