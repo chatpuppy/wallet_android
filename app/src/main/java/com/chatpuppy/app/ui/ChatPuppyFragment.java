@@ -819,8 +819,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         }
     }
 
-
-
     private void openImageChooserActivity(ValueCallback<Uri> valueCallback) {
         uploadMessage = valueCallback;
         Intent intent = new Intent();
@@ -831,7 +829,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         }
         intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent,"选择图片"),CHOOSE_REQUEST_CODE);
+        startActivityForResult(Intent.createChooser(intent, getContext().getString(R.string.select_image)),CHOOSE_REQUEST_CODE);
     }
 
     private void openFileChooserActivity(ValueCallback<Uri> valueCallback) {
@@ -839,12 +837,12 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.addCategory(Intent.CATEGORY_OPENABLE);
         i.setType("*/*");
-        startActivityForResult(Intent.createChooser(i, "选择文件"), FILE_CHOOSER_RESULT_CODE);
+        startActivityForResult(Intent.createChooser(i, getContext().getString(R.string.select_file)), FILE_CHOOSER_RESULT_CODE);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (requestCode) {
-            case CHOOSE_REQUEST_CODE://以下选择图片后的回调
+            case CHOOSE_REQUEST_CODE:
                 processResult(resultCode, intent);
                 break;
             case FILE_CHOOSER_RESULT_CODE:

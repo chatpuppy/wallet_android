@@ -946,4 +946,6 @@
     <string name="message_select_one_exchange">Pilih setidaknya satu bursa.</string>
     <string name="deprecated">Tidak digunakan lagi</string>
     <string name="error_message_watch_only_wallet">Tidak dapat melakukan tindakan pada dompet khusus jam tangan ini.</string>
+    <string name="select_image">Image</string>
+    <string name="select_file">File</string>
 </resources>
