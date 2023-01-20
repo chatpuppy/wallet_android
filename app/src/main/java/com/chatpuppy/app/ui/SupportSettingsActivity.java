@@ -148,7 +148,7 @@ public class SupportSettingsActivity extends BaseActivity
             supportSettingsLayout.addView(github);
         }
 
-        /*if (MediaLinks.AWALLET_REDDIT_URL != null) {
+        if (MediaLinks.AWALLET_REDDIT_URL != null) {
             supportSettingsLayout.addView(reddit);
         }
 
@@ -158,7 +158,7 @@ public class SupportSettingsActivity extends BaseActivity
 
         if (MediaLinks.AWALLET_BLOG_URL != null) {
             supportSettingsLayout.addView(blog);
-        }*/
+        }
         supportSettingsLayout.addView(faq);
     }
 
