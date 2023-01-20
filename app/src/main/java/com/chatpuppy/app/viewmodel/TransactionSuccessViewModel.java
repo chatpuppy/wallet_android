@@ -21,7 +21,7 @@ public class TransactionSuccessViewModel extends BaseViewModel {
         this.preferenceRepository = preferenceRepository;
     }
 
-    public void tryToShowRateAppDialog(Activity context) {
-        RateApp.showRateTheApp(context, preferenceRepository, true);
-    }
+//    public void tryToShowRateAppDialog(Activity context) {
+//        RateApp.showRateTheApp(context, preferenceRepository, true);
+//    }
 }

@@ -50,7 +50,7 @@ public class TransactionSuccessActivity extends BaseActivity implements Standard
         functionBar.setupFunctions(this, new ArrayList<>(Collections.singletonList(R.string.action_show_tx_details)));
         functionBar.revealButtons();
 
-        viewModel.tryToShowRateAppDialog(this);
+//        viewModel.tryToShowRateAppDialog(this);
     }
 
     @Override

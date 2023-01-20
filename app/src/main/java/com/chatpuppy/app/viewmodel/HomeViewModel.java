@@ -63,7 +63,7 @@ import com.chatpuppy.app.util.RateApp;
 import com.chatpuppy.app.util.Utils;
 import com.chatpuppy.app.walletconnect.WCClient;
 import com.chatpuppy.app.walletconnect.entity.WCUtils;
-import com.chatpuppy.app.widget.EmailPromptView;
+//import com.chatpuppy.app.widget.EmailPromptView;
 import com.chatpuppy.app.widget.QRCodeActionsView;
 import com.chatpuppy.app.widget.WhatsNewView;
 import com.chatpuppy.token.entity.MagicLinkData;
@@ -482,10 +482,10 @@ public class HomeViewModel extends BaseViewModel {
         return preferenceRepository.getFullScreenState();
     }
 
-    public void tryToShowRateAppDialog(Activity context) {
-        //only if installed from PlayStore (checked within the showRateTheApp method)
-        RateApp.showRateTheApp(context, preferenceRepository, false);
-    }
+//    public void tryToShowRateAppDialog(Activity context) {
+//        //only if installed from PlayStore (checked within the showRateTheApp method)
+//        RateApp.showRateTheApp(context, preferenceRepository, false);
+//    }
 
     public int getUpdateWarnings() {
         return preferenceRepository.getUpdateWarningCount();
@@ -514,19 +514,19 @@ public class HomeViewModel extends BaseViewModel {
         return preferenceRepository.getLastFragmentPage();
     }
 
-    public void tryToShowEmailPrompt(Context context, View successOverlay, Handler handler, Runnable onSuccessRunnable) {
-        if (preferenceRepository.getLaunchCount() == 4) {
-            EmailPromptView emailPromptView = new EmailPromptView(context, successOverlay, handler, onSuccessRunnable);
-            BottomSheetDialog emailPromptDialog = new BottomSheetDialog(context);
-            emailPromptDialog.setContentView(emailPromptView);
-            emailPromptDialog.setCancelable(true);
-            emailPromptDialog.setCanceledOnTouchOutside(true);
-            emailPromptView.setParentDialog(emailPromptDialog);
-            BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) emailPromptView.getParent());
-            emailPromptDialog.setOnShowListener(dialog -> behavior.setPeekHeight(emailPromptView.getHeight()));
-            emailPromptDialog.show();
-        }
-    }
+//    public void tryToShowEmailPrompt(Context context, View successOverlay, Handler handler, Runnable onSuccessRunnable) {
+//        if (preferenceRepository.getLaunchCount() == 4) {
+//            EmailPromptView emailPromptView = new EmailPromptView(context, successOverlay, handler, onSuccessRunnable);
+//            BottomSheetDialog emailPromptDialog = new BottomSheetDialog(context);
+//            emailPromptDialog.setContentView(emailPromptView);
+//            emailPromptDialog.setCancelable(true);
+//            emailPromptDialog.setCanceledOnTouchOutside(true);
+//            emailPromptView.setParentDialog(emailPromptDialog);
+//            BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) emailPromptView.getParent());
+//            emailPromptDialog.setOnShowListener(dialog -> behavior.setPeekHeight(emailPromptView.getHeight()));
+//            emailPromptDialog.show();
+//        }
+//    }
 
     public void tryToShowWhatsNewDialog(Context context) {
         PackageInfo packageInfo;
