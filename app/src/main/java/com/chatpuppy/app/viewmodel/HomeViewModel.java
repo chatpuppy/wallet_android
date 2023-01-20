@@ -528,52 +528,52 @@ public class HomeViewModel extends BaseViewModel {
 //        }
 //    }
 
-    public void tryToShowWhatsNewDialog(Context context) {
-        PackageInfo packageInfo;
-        try {
-            packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
-
-            int versionCode = packageInfo.versionCode;
-            if (preferenceRepository.getLastVersionCode(versionCode) < versionCode) {
-                // load what's new
-                Request request = new Request.Builder()
-                        .header("Accept", "application/vnd.github.v3+json")
-                        .url("https://api.github.com/repos/alphawallet/alpha-wallet-android/releases")
-                        .get()
-                        .build();
-
-                Single.fromCallable(() -> {
-                    try (okhttp3.Response response = httpClient.newCall(request)
-                            .execute()) {
-                        return new Gson().<List<GitHubRelease>>fromJson(response.body().string(), new TypeToken<List<GitHubRelease>>() {
-                        }.getType());
-                    } catch (Exception e) {
-                        Timber.tag(TAG).e(e);
-                    }
-                    return null;
-                }).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()).subscribe((releases) -> {
-
-                    BottomSheetDialog dialog = new BottomSheetDialog(context);
-
-                    WhatsNewView view = new WhatsNewView(context, releases, v -> dialog.dismiss(), true);
-                    dialog.setContentView(view);
-                    dialog.setCancelable(true);
-                    dialog.setCanceledOnTouchOutside(true);
-                    BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) view.getParent());
-                    dialog.setOnShowListener(d -> behavior.setPeekHeight(view.getHeight()));
-                    dialog.show();
-
-                    preferenceRepository.setLastVersionCode(versionCode);
-
-                }).isDisposed();
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            Timber.e(e);
-        }
-
-    }
+//    public void tryToShowWhatsNewDialog(Context context) {
+//        PackageInfo packageInfo;
+//        try {
+//            packageInfo = context.getPackageManager()
+//                    .getPackageInfo(context.getPackageName(), 0);
+//
+//            int versionCode = packageInfo.versionCode;
+//            if (preferenceRepository.getLastVersionCode(versionCode) < versionCode) {
+//                // load what's new
+//                Request request = new Request.Builder()
+//                        .header("Accept", "application/vnd.github.v3+json")
+//                        .url("https://api.github.com/repos/alphawallet/alpha-wallet-android/releases")
+//                        .get()
+//                        .build();
+//
+//                Single.fromCallable(() -> {
+//                    try (okhttp3.Response response = httpClient.newCall(request)
+//                            .execute()) {
+//                        return new Gson().<List<GitHubRelease>>fromJson(response.body().string(), new TypeToken<List<GitHubRelease>>() {
+//                        }.getType());
+//                    } catch (Exception e) {
+//                        Timber.tag(TAG).e(e);
+//                    }
+//                    return null;
+//                }).subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread()).subscribe((releases) -> {
+//
+//                    BottomSheetDialog dialog = new BottomSheetDialog(context);
+//
+//                    WhatsNewView view = new WhatsNewView(context, releases, v -> dialog.dismiss(), true);
+//                    dialog.setContentView(view);
+//                    dialog.setCancelable(true);
+//                    dialog.setCanceledOnTouchOutside(true);
+//                    BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) view.getParent());
+//                    dialog.setOnShowListener(d -> behavior.setPeekHeight(view.getHeight()));
+//                    dialog.show();
+//
+//                    preferenceRepository.setLastVersionCode(versionCode);
+//
+//                }).isDisposed();
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//            Timber.e(e);
+//        }
+//
+//    }
 
     private TokenDefinition parseFile(Context ctx, InputStream xmlInputStream) throws Exception {
         Locale locale;

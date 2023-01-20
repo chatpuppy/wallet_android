@@ -239,7 +239,7 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
         viewModel.identify();
         viewModel.setWalletStartup();
         viewModel.setCurrencyAndLocale(this);
-        viewModel.tryToShowWhatsNewDialog(this);
+//        viewModel.tryToShowWhatsNewDialog(this);
         setContentView(R.layout.activity_home);
 
         initViews();
