@@ -27,9 +27,9 @@ import com.chatpuppy.app.ui.HomeActivity;
 public class NotificationService
 {
     private final Context context;
-    private final String CHANNEL_ID = "ALPHAWALLET CHANNEL";
+    private final String CHANNEL_ID = "CHATPUPPY CHANNEL";
     private final int NOTIFICATION_ID = 314151024;
-    public static final String AWSTARTUP = "AW://";
+    public static final String CPSTARTUP = "CP://";
 
     public NotificationService(Context ctx)
     {
@@ -60,7 +60,7 @@ public class NotificationService
         }
     }
 
-    void DisplayNotification(String title, String content, int priority)
+    public void DisplayNotification(String title, String content, int priority)
     {
         checkNotificationPermission();
         int color = context.getColor(R.color.brand);
@@ -69,7 +69,7 @@ public class NotificationService
         Intent openAppIntent = new Intent(context, HomeActivity.class);
         openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //openAppIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        openAppIntent.setData(Uri.parse(AWSTARTUP + content));
+        openAppIntent.setData(Uri.parse(CPSTARTUP + content));
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                                                                 openAppIntent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 

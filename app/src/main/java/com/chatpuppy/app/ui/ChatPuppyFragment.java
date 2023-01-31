@@ -1,19 +1,15 @@
 package com.chatpuppy.app.ui;
 
-import static com.chatpuppy.app.C.ETHER_DECIMALS;
 import static com.chatpuppy.app.C.RESET_TOOLBAR;
-import static com.chatpuppy.app.entity.tokens.Token.TOKEN_BALANCE_PRECISION;
 import static com.chatpuppy.app.ui.HomeActivity.RESET_TOKEN_SERVICE;
 import static com.chatpuppy.app.ui.MyAddressActivity.KEY_ADDRESS;
 import static com.chatpuppy.app.util.Utils.isValidUrl;
 import static com.chatpuppy.app.widget.AWalletAlertDialog.ERROR;
-import static com.chatpuppy.app.widget.AWalletAlertDialog.WARNING;
 import static org.web3j.protocol.core.methods.request.Transaction.createFunctionCallTransaction;
 
 import android.Manifest;
 import android.animation.LayoutTransition;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -28,33 +24,20 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.security.keystore.UserNotAuthenticatedException;
-//import android.text.TextUtils;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
-//import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-//import android.webkit.ConsoleMessage;
-//import android.webkit.GeolocationPermissions;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
 import android.webkit.PermissionRequest;
-//import android.webkit.ValueCallback;
 import com.tencent.smtt.export.external.interfaces.JsPromptResult;
 import com.tencent.smtt.export.external.interfaces.JsResult;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 import com.tencent.smtt.sdk.ValueCallback;
-//import android.webkit.WebBackForwardList;
-//import android.webkit.WebBackForwardList;
-import com.tencent.smtt.sdk.WebBackForwardList;
-//import android.webkit.WebChromeClient;
 import com.tencent.smtt.sdk.WebChromeClient;
-//import android.webkit.WebHistoryItem;
-import com.tencent.smtt.sdk.WebHistoryItem;
-//import android.webkit.WebView;
 import com.tencent.smtt.sdk.WebView;
-//import android.webkit.WebViewClient;
 import com.tencent.smtt.sdk.WebViewClient;
 
 import android.widget.EditText;
@@ -62,16 +45,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-//import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -90,25 +70,20 @@ import com.chatpuppy.app.entity.SendTransactionInterface;
 import com.chatpuppy.app.entity.SignAuthenticationCallback;
 import com.chatpuppy.app.entity.URLLoadInterface;
 import com.chatpuppy.app.entity.Wallet;
-import com.chatpuppy.app.entity.WalletConnectActions;
-import com.chatpuppy.app.entity.WalletType;
 import com.chatpuppy.app.entity.analytics.ActionSheetSource;
 import com.chatpuppy.app.entity.cryptokeys.KeyServiceException;
 import com.chatpuppy.app.entity.cryptokeys.SignatureFromKey;
 import com.chatpuppy.app.entity.tokens.Token;
 import com.chatpuppy.app.repository.EthereumNetworkRepository;
 import com.chatpuppy.app.repository.TokenRepository;
-import com.chatpuppy.app.repository.TokensRealmSource;
 import com.chatpuppy.app.repository.entity.RealmToken;
 import com.chatpuppy.app.service.KeyService;
-import com.chatpuppy.app.service.WalletConnectService;
 import com.chatpuppy.app.ui.QRScanning.QRScannerActivity;
 import com.chatpuppy.app.ui.widget.OnDappHomeNavClickListener;
 import com.chatpuppy.app.ui.widget.entity.ActionSheetCallback;
 import com.chatpuppy.app.ui.widget.entity.DappBrowserSwipeInterface;
 import com.chatpuppy.app.ui.widget.entity.DappBrowserSwipeLayout;
 import com.chatpuppy.app.ui.widget.entity.ItemClickListener;
-import com.chatpuppy.app.util.BalanceUtils;
 import com.chatpuppy.app.util.DappBrowserUtils;
 import com.chatpuppy.app.util.LocaleUtils;
 import com.chatpuppy.app.util.QRParser;
@@ -154,7 +129,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import io.reactivex.Single;
@@ -170,10 +144,8 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         OnWalletActionListener, URLLoadInterface, ItemClickListener, OnDappHomeNavClickListener, DappBrowserSwipeInterface,
         SignAuthenticationCallback, ActionSheetCallback, TestNetDialog.TestNetDialogCallback {
     public static final String SEARCH = "SEARCH";
-    //    public static final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
     public static final String CURRENT_FRAGMENT = "currentFragment";
     public static final String DAPP_CLICK = "dapp_click";
-    //    public static final String DAPP_REMOVE_HISTORY = "dapp_remove";
     public static final int REQUEST_FILE_ACCESS = 31;
     public static final int REQUEST_FINE_LOCATION = 110;
     public static final int REQUEST_CAMERA_ACCESS = 111;
@@ -187,6 +159,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     private static final long MAGIC_BUNDLE_VAL = 0xACED00D;
     private static final String BUNDLE_FILE = "awbrowse";
     private static volatile long forceChainChange = 0;
+//    private static final String URL = "http://192.168.50.38:5173";
     private static final String URL = "https://www.puppy.chat";
     private final int CHOOSE_REQUEST_CODE = 1000;
     private final int FILE_CHOOSER_RESULT_CODE = 2000;
@@ -195,21 +168,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
      */
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ValueCallback<Uri> uploadMessage;
-//    ActivityResultLauncher<String> getContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
-//            new ActivityResultCallback<Uri>() {
-//                @Override
-//                public void onActivityResult(Uri uri) {
-//                    if (uri != null) {
-//                        uploadMessage.onReceiveValue(new Uri[]{uri});
-//                    } else {
-//                        if(null!= uploadMessage){
-//                            uploadMessage.onReceiveValue(null);
-//                            uploadMessage = null;
-//                        }
-//                    };
-//                }
-//            });
-//    private WebChromeClient.FileChooserParams fileChooserParams;
+
     private RealmResults<RealmToken> realmUpdate;
     private Realm realm = null;
     private ActionSheet confirmationDialog;
@@ -228,8 +187,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     private AddEthereumChainPrompt addCustomChainDialog;
     private ImageView refresh;
     private FrameLayout webFrame;
-    private TextView balance;
-    private TextView symbol;
     private AddressBar addressBar;
 
     // Handle resizing the browser view when the soft keyboard pops up and goes.
@@ -267,8 +224,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     private GeolocationPermissionsCallback geoCallback = null;
     private PermissionRequest requestCallback = null;
     private String geoOrigin;
-    private String walletConnectSession;
-    private String currentWebpageTitle;
     private String currentFragment;
     ActivityResultLauncher<Intent> getNetwork = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -319,8 +274,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             viewModel.track(Analytics.Navigation.BROWSER);
             web3.setWebLoadCallback(this);
         }
-
-//        startBalanceListener();
     }
 
     @Nullable
@@ -433,12 +386,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         addressBar.destroy();
     }
 
-    private void updateNetworkMenuItem() {
-        if (activeNetwork != null) {
-            symbol.setText(activeNetwork.getShortName());
-        }
-    }
-
     private void initView(@NotNull View view) {
         web3 = view.findViewById(R.id.web3view);
         Bundle savedState = readBundleFromLocal();
@@ -461,11 +408,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         if (refresh != null) {
             refresh.setOnClickListener(v -> reloadPage());
         }
-
-//        balance = view.findViewById(R.id.balance);
-//        symbol = view.findViewById(R.id.symbol);
         web3.setWebLoadCallback(this);
-
         webFrame.setOnApplyWindowInsetsListener(resizeListener);
     }
 
@@ -483,7 +426,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
                 viewModel.checkForNetworkChanges();
             } else {
                 viewModel.startBalanceUpdate();
-//                startBalanceListener();
                 viewModel.updateGasPrice(activeNetwork.chainId);
             }
         }
@@ -537,25 +479,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         viewModel.findWallet();
     }
 
-//    private void startBalanceListener() {
-//        if (wallet == null || activeNetwork == null) return;
-//        if (realm == null || realm.isClosed()) realm = viewModel.getRealmInstance(wallet);
-//
-//        if (realmUpdate != null) realmUpdate.removeAllChangeListeners();
-//        realmUpdate = realm.where(RealmToken.class)
-//                .equalTo("address", TokensRealmSource.databaseKey(activeNetwork.chainId, "eth")).findAllAsync();
-//        realmUpdate.addChangeListener(realmTokens -> {
-//            //update balance
-//            if (realmTokens.size() == 0) return;
-//            RealmToken realmToken = realmTokens.first();
-//            balance.setVisibility(View.VISIBLE);
-//            symbol.setVisibility(View.VISIBLE);
-//            String newBalanceStr = BalanceUtils.getScaledValueFixed(new BigDecimal(realmToken.getBalance()), ETHER_DECIMALS, TOKEN_BALANCE_PRECISION);
-//            balance.setText(newBalanceStr);
-//            symbol.setText(activeNetwork != null ? activeNetwork.getShortName() : "");
-//        });
-//    }
-
     private void stopBalanceListener() {
         if (realmUpdate != null) {
             realmUpdate.removeAllChangeListeners();
@@ -574,32 +497,12 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         }
     }
 
-    @Override
-    public void switchNetworkAndLoadUrl(long chainId, String url) {
-        forceChainChange = chainId; //avoid prompt to change chain for 1inch
-        loadUrlAfterReload = url;   //after reload with new chain inject, page is clean to load the correct site
-
-        if (viewModel == null) {
-            initViewModel();
-            return;
-        }
-
-        activeNetwork = viewModel.getNetworkInfo(chainId);
-        updateNetworkMenuItem();
-        viewModel.setNetwork(chainId);
-//        startBalanceListener();
-        setupWeb3();
-        web3.resetView();
-        web3.reload();
-    }
-
     private void onNetworkChanged(NetworkInfo networkInfo) {
         boolean networkChanged = networkInfo != null && (activeNetwork == null || activeNetwork.chainId != networkInfo.chainId);
         this.activeNetwork = networkInfo;
         if (networkInfo != null) {
             if (networkChanged) {
                 viewModel.findWallet();
-                updateNetworkMenuItem();
             }
             if (networkChanged && addressBar.isOnHomePage())
                 resetDappBrowser(); //trigger a reset if on homepage
@@ -621,39 +524,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         getParentFragmentManager().setFragmentResult(RESET_TOKEN_SERVICE, new Bundle()); //reset tokens service and wallet page with updated filters
     }
 
-    private void launchNetworkPicker() {
-        Intent intent = new Intent(getContext(), SelectNetworkActivity.class);
-        intent.putExtra(C.EXTRA_SINGLE_ITEM, true);
-        if (activeNetwork != null) intent.putExtra(C.EXTRA_CHAIN_ID, activeNetwork.chainId);
-        getNewNetwork.launch(intent);
-    }
-
-    private void launchWalletConnectSessionCancel() {
-        String sessionId = walletConnectSession != null ? viewModel.getSessionId(walletConnectSession) : "";
-        Intent bIntent = new Intent(getContext(), WalletConnectService.class);
-        bIntent.setAction(String.valueOf(WalletConnectActions.CLOSE.ordinal()));
-        bIntent.putExtra("session", sessionId);
-        requireActivity().startService(bIntent);
-        reloadPage();
-    }
-
-    private void displayCloseWC() {
-        handler.post(() -> {
-            if (resultDialog != null && resultDialog.isShowing()) resultDialog.dismiss();
-            resultDialog = new AWalletAlertDialog(requireContext());
-            resultDialog.setIcon(WARNING);
-            resultDialog.setTitle(R.string.title_wallet_connect);
-            resultDialog.setMessage(getString(R.string.unsupported_walletconnect));
-            resultDialog.setButtonText(R.string.button_ok);
-            resultDialog.setButtonListener(v -> {
-                launchWalletConnectSessionCancel();
-                launchNetworkPicker();
-                resultDialog.dismiss();
-            });
-            resultDialog.show();
-        });
-    }
-
     private void setupWeb3() {
         web3.setChainId(activeNetwork.chainId);
         web3.setRpcUrl(viewModel.getNetworkNodeRPC(activeNetwork.chainId));
@@ -673,32 +543,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
                     progressBar.setProgress(newProgress);
                     swipeRefreshLayout.setRefreshing(true);
                 }
-            }
-
-//            @Override
-//            public boolean onConsoleMessage(ConsoleMessage msg) {
-//                // ###### JS Console
-//                System.out.println("JS Console " + msg.messageLevel() + ", " + msg.sourceId() + ", " + msg.lineNumber() + ", " + msg.message());
-//                boolean ret = super.onConsoleMessage(msg);
-//
-//                if (msg.messageLevel() == ConsoleMessage.MessageLevel.ERROR) {
-//                    if (msg.message().contains(WALLETCONNECT_CHAINID_ERROR)) {
-//                        displayCloseWC();
-//                    }
-//                }
-//
-//                return ret;
-//            }
-//            @Override
-//            public void onPermissionRequest(final PermissionRequest request) {
-//                requestCameraPermission(request);
-//            }
-
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-                currentWebpageTitle = title;
             }
 
             // These are X5 webview callbacks
@@ -801,7 +645,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             }
         });
 
-
         web3.setOnSignMessageListener(this);
         web3.setOnSignPersonalMessageListener(this);
         web3.setOnSignTransactionListener(this);
@@ -866,28 +709,13 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
 
     private void loadNewNetwork(long newNetworkId) {
         if (activeNetwork == null || activeNetwork.chainId != newNetworkId) {
-            balance.setVisibility(View.GONE);
-            symbol.setVisibility(View.GONE);
             viewModel.setNetwork(newNetworkId);
             onNetworkChanged(viewModel.getNetworkInfo(newNetworkId));
-//            startBalanceListener();
             viewModel.updateGasPrice(newNetworkId);
         }
         //refresh URL page
         reloadPage();
     }
-
-//    protected boolean requestUpload() {
-//        try {
-//            getContent.launch(determineMimeType(fileChooserParams));
-//        } catch (ActivityNotFoundException e) {
-//            uploadMessage = null;
-//            Toast.makeText(requireActivity().getApplicationContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
-//            return false;
-//        }
-//
-//        return true;
-//    }
 
     @Override
     public void onSignMessage(final EthereumMessage message) {
@@ -1152,19 +980,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             confirmationDialog.dismiss();
     }
 
-    private void showWalletWatch() {
-        if (resultDialog != null && resultDialog.isShowing()) resultDialog.dismiss();
-        resultDialog = new AWalletAlertDialog(requireContext());
-        resultDialog.setIcon(AWalletAlertDialog.WARNING);
-        resultDialog.setTitle(R.string.title_wallet_connect);
-        resultDialog.setMessage(R.string.action_watch_account);
-        resultDialog.setButtonText(R.string.button_ok);
-        resultDialog.setButtonListener(v -> {
-            resultDialog.dismiss();
-        });
-        resultDialog.show();
-    }
-
     private void onInvalidTransaction(Web3Transaction transaction) {
         if (getActivity() == null) return;
         resultDialog = new AWalletAlertDialog(getActivity());
@@ -1401,17 +1216,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         super.onPause();
     }
 
-    private boolean checkReadPermission() {
-        if (ContextCompat.checkSelfPermission(requireActivity().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
-            requireActivity().requestPermissions(permissions, REQUEST_FILE_ACCESS);
-            return false;
-        }
-    }
-
     // Handles the requesting of the fine location permission.
     // Note: If you intend allowing geo-location in your app you need to ask the permission.
     private void requestGeoPermission(String origin, GeolocationPermissionsCallback callback) {
@@ -1423,18 +1227,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             requireActivity().requestPermissions(permissions, REQUEST_FINE_LOCATION);
         } else {
             callback.invoke(origin, true, false);
-        }
-    }
-
-    // Handles the requesting of the camera permission.
-    private void requestCameraPermission(@NotNull PermissionRequest request) {
-        final String[] requestedResources = request.getResources();
-        requestCallback = request;
-        for (String r : requestedResources) {
-            if (r.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE)) {
-                final String[] permissions = new String[]{Manifest.permission.CAMERA};
-                requireActivity().requestPermissions(permissions, REQUEST_CAMERA_ACCESS);
-            }
         }
     }
 
@@ -1476,8 +1268,6 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
                 break;
             }
         }
-
-//        if (fileAccess) requestUpload();
     }
 
     @Override

@@ -45,6 +45,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -147,7 +148,6 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
 
     private static final int REQUEST_CODE_CONTACT = 101;
     private static final String TAG = "X5Webview";
-
 
     public HomeActivity()
     {
@@ -1115,9 +1115,9 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
         {
             if (importData != null) importData = URLDecoder.decode(importData, "UTF-8");
             DappBrowserFragment dappFrag = (DappBrowserFragment) getFragment(DAPP_BROWSER);
-            if (importData != null && importData.startsWith(NotificationService.AWSTARTUP))
+            if (importData != null && importData.startsWith(NotificationService.CPSTARTUP))
             {
-                importData = importData.substring(NotificationService.AWSTARTUP.length());
+                importData = importData.substring(NotificationService.CPSTARTUP.length());
                 //move window to token if found
                 getFragment(WALLET).setImportFilename(importData);
             }

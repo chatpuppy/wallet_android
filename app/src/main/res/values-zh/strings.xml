@@ -412,7 +412,7 @@
     <string name="title_enabled_networks">启用网络 (%s)</string>
     <string name="collectibles">收藏品</string>
     <string name="token_function">通证功能</string>
-    <string name="channel_description">Alphawallet 通知渠道</string>
+    <string name="channel_description">Chatpuppy通知频道</string>
     <string name="error_camera_permission_denied">相机使用权限遭拒。</string>
     <string name="confirm_tokenscript_transaction">确认 TokenScript 交易</string>
     <string name="tokenscript_send_native">发送%1$s %2$s至%3$s (%4$s)</string>
