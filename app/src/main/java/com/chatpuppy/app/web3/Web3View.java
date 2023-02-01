@@ -7,7 +7,9 @@ import android.os.Build;
 import android.security.keystore.UserNotAuthenticatedException;
 import android.util.AttributeSet;
 //import android.webkit.WebChromeClient;
+import com.chatpuppy.app.web3.entity.NoticeMessage;
 import com.tencent.smtt.sdk.WebChromeClient;
+
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 //import android.webkit.WebSettings;
@@ -51,10 +53,8 @@ public class Web3View extends WebView {
     private OnSignTransactionListener onSignTransactionListener;
     private final OnSignTransactionListener innerOnSignTransactionListener = new OnSignTransactionListener() {
         @Override
-        public void onSignTransaction(Web3Transaction transaction, String url)
-        {
-            if (onSignTransactionListener != null)
-            {
+        public void onSignTransaction(Web3Transaction transaction, String url) {
+            if (onSignTransactionListener != null) {
                 onSignTransactionListener.onSignTransaction(transaction, url);
             }
         }
@@ -63,10 +63,8 @@ public class Web3View extends WebView {
     private OnSignMessageListener onSignMessageListener;
     private final OnSignMessageListener innerOnSignMessageListener = new OnSignMessageListener() {
         @Override
-        public void onSignMessage(EthereumMessage message)
-        {
-            if (onSignMessageListener != null)
-            {
+        public void onSignMessage(EthereumMessage message) {
+            if (onSignMessageListener != null) {
                 onSignMessageListener.onSignMessage(message);
             }
         }
@@ -75,8 +73,7 @@ public class Web3View extends WebView {
     private OnSignPersonalMessageListener onSignPersonalMessageListener;
     private final OnSignPersonalMessageListener innerOnSignPersonalMessageListener = new OnSignPersonalMessageListener() {
         @Override
-        public void onSignPersonalMessage(EthereumMessage message)
-        {
+        public void onSignPersonalMessage(EthereumMessage message) {
             onSignPersonalMessageListener.onSignPersonalMessage(message);
         }
     };
@@ -84,8 +81,7 @@ public class Web3View extends WebView {
     private OnSignTypedMessageListener onSignTypedMessageListener;
     private final OnSignTypedMessageListener innerOnSignTypedMessageListener = new OnSignTypedMessageListener() {
         @Override
-        public void onSignTypedMessage(EthereumTypedMessage message)
-        {
+        public void onSignTypedMessage(EthereumTypedMessage message) {
             onSignTypedMessageListener.onSignTypedMessage(message);
         }
     };
@@ -93,8 +89,7 @@ public class Web3View extends WebView {
     private OnEthCallListener onEthCallListener;
     private final OnEthCallListener innerOnEthCallListener = new OnEthCallListener() {
         @Override
-        public void onEthCall(Web3Call txData)
-        {
+        public void onEthCall(Web3Call txData) {
             onEthCallListener.onEthCall(txData);
         }
     };
@@ -102,8 +97,7 @@ public class Web3View extends WebView {
     private OnWalletAddEthereumChainObjectListener onWalletAddEthereumChainObjectListener;
     private final OnWalletAddEthereumChainObjectListener innerAddChainListener = new OnWalletAddEthereumChainObjectListener() {
         @Override
-        public void onWalletAddEthereumChainObject(long callbackId, WalletAddEthereumChainObject chainObject)
-        {
+        public void onWalletAddEthereumChainObject(long callbackId, WalletAddEthereumChainObject chainObject) {
             onWalletAddEthereumChainObjectListener.onWalletAddEthereumChainObject(callbackId, chainObject);
         }
     };
@@ -111,75 +105,72 @@ public class Web3View extends WebView {
     private OnWalletActionListener onWalletActionListener;
     private final OnWalletActionListener innerOnWalletActionListener = new OnWalletActionListener() {
         @Override
-        public void onRequestAccounts(long callbackId)
-        {
+        public void onRequestAccounts(long callbackId) {
             onWalletActionListener.onRequestAccounts(callbackId);
         }
 
         // Chatpuppy
         @Override
-        public void onEthGetEncryptionPublickey(long callbackId)
-        {
+        public void onEthGetEncryptionPublickey(long callbackId) {
             onWalletActionListener.onEthGetEncryptionPublickey(callbackId);
         }
 
         // Chatpuppy
         @Override
-        public void onEthDecrypt(long callbackId,String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException, JSONException {
-            onWalletActionListener.onEthDecrypt(callbackId,encryptedMessage);
+        public void onEthDecrypt(long callbackId, String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException, JSONException {
+            onWalletActionListener.onEthDecrypt(callbackId, encryptedMessage);
         }
 
+        // Chatpuppy
         @Override
-        public void onWalletSwitchEthereumChain(long callbackId, WalletAddEthereumChainObject chainObj)
-        {
+        public void onNoticeMsg(long callbackId, NoticeMessage noticeMessage) {
+            onWalletActionListener.onNoticeMsg(callbackId, noticeMessage);
+        }
+
+
+        @Override
+        public void onWalletSwitchEthereumChain(long callbackId, WalletAddEthereumChainObject chainObj) {
             onWalletActionListener.onWalletSwitchEthereumChain(callbackId, chainObj);
         }
     };
     private URLLoadInterface loadInterface;
 
-    public Web3View(@NonNull Context context, @Nullable AttributeSet attrs)
-    {
+    public Web3View(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         webViewClient = new Web3ViewClient(getContext());
         init();
     }
 
-    public Web3View(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr)
-    {
+    public Web3View(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         webViewClient = new Web3ViewClient(getContext());
         init();
     }
 
     @Override
-    public void setWebChromeClient(WebChromeClient client)
-    {
+    public void setWebChromeClient(WebChromeClient client) {
         super.setWebChromeClient(client);
     }
 
     @Override
-    public void setWebViewClient(WebViewClient client)
-    {
+    public void setWebViewClient(WebViewClient client) {
         super.setWebViewClient(new WrapWebViewClient(webViewClient, client));
     }
 
     @Override
-    public void loadUrl(@NonNull String url, @NonNull Map<String, String> additionalHttpHeaders)
-    {
+    public void loadUrl(@NonNull String url, @NonNull Map<String, String> additionalHttpHeaders) {
         super.loadUrl(url, additionalHttpHeaders);
     }
 
     @Override
-    public void loadUrl(@NonNull String url)
-    {
+    public void loadUrl(@NonNull String url) {
         loadUrl(url, getWeb3Headers());
     }
 
     /* Required for CORS requests */
     @NotNull
     @Contract(" -> new")
-    private Map<String, String> getWeb3Headers()
-    {
+    private Map<String, String> getWeb3Headers() {
         //headers
         return new HashMap<String, String>() {{
             put("Connection", "close");
@@ -193,8 +184,7 @@ public class Web3View extends WebView {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    public void init()
-    {
+    public void init() {
         getSettings().setJavaScriptEnabled(true);
         getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         getSettings().setBuiltInZoomControls(true);
@@ -220,7 +210,7 @@ public class Web3View extends WebView {
                 innerOnEthCallListener,
                 innerAddChainListener,
                 innerOnWalletActionListener), "alpha");
-        
+
 //        Removing this block for now.
 //        TODO: Figure out if we should support dark mode for external websites
 //        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK))
@@ -239,112 +229,91 @@ public class Web3View extends WebView {
     }
 
     @Nullable
-    public Address getWalletAddress()
-    {
+    public Address getWalletAddress() {
         return webViewClient.getJsInjectorClient().getWalletAddress();
     }
 
-    public void setWalletAddress(@NonNull Address address)
-    {
+    public void setWalletAddress(@NonNull Address address) {
         webViewClient.getJsInjectorClient().setWalletAddress(address);
     }
 
-    public long getChainId()
-    {
+    public long getChainId() {
         return webViewClient.getJsInjectorClient().getChainId();
     }
 
-    public void setChainId(long chainId)
-    {
+    public void setChainId(long chainId) {
         webViewClient.getJsInjectorClient().setChainId(chainId);
     }
 
-    public void setWebLoadCallback(URLLoadInterface iFace)
-    {
+    public void setWebLoadCallback(URLLoadInterface iFace) {
         loadInterface = iFace;
     }
 
-    public void setRpcUrl(@NonNull String rpcUrl)
-    {
+    public void setRpcUrl(@NonNull String rpcUrl) {
         webViewClient.getJsInjectorClient().setRpcUrl(rpcUrl);
     }
 
-    public void setOnSignTransactionListener(@Nullable OnSignTransactionListener onSignTransactionListener)
-    {
+    public void setOnSignTransactionListener(@Nullable OnSignTransactionListener onSignTransactionListener) {
         this.onSignTransactionListener = onSignTransactionListener;
     }
 
-    public void setOnSignMessageListener(@Nullable OnSignMessageListener onSignMessageListener)
-    {
+    public void setOnSignMessageListener(@Nullable OnSignMessageListener onSignMessageListener) {
         this.onSignMessageListener = onSignMessageListener;
     }
 
-    public void setOnSignPersonalMessageListener(@Nullable OnSignPersonalMessageListener onSignPersonalMessageListener)
-    {
+    public void setOnSignPersonalMessageListener(@Nullable OnSignPersonalMessageListener onSignPersonalMessageListener) {
         this.onSignPersonalMessageListener = onSignPersonalMessageListener;
     }
 
-    public void setOnSignTypedMessageListener(@Nullable OnSignTypedMessageListener onSignTypedMessageListener)
-    {
+    public void setOnSignTypedMessageListener(@Nullable OnSignTypedMessageListener onSignTypedMessageListener) {
         this.onSignTypedMessageListener = onSignTypedMessageListener;
     }
 
-    public void setOnEthCallListener(@Nullable OnEthCallListener onEthCallListener)
-    {
+    public void setOnEthCallListener(@Nullable OnEthCallListener onEthCallListener) {
         this.onEthCallListener = onEthCallListener;
     }
 
-    public void setOnWalletAddEthereumChainObjectListener(@Nullable OnWalletAddEthereumChainObjectListener onWalletAddEthereumChainObjectListener)
-    {
+    public void setOnWalletAddEthereumChainObjectListener(@Nullable OnWalletAddEthereumChainObjectListener onWalletAddEthereumChainObjectListener) {
         this.onWalletAddEthereumChainObjectListener = onWalletAddEthereumChainObjectListener;
     }
 
-    public void setOnWalletActionListener(@Nullable OnWalletActionListener onWalletActionListener)
-    {
+    public void setOnWalletActionListener(@Nullable OnWalletActionListener onWalletActionListener) {
         this.onWalletActionListener = onWalletActionListener;
     }
 
-    public void onSignTransactionSuccessful(Web3Transaction transaction, String signHex)
-    {
+    public void onSignTransactionSuccessful(Web3Transaction transaction, String signHex) {
         long callbackId = transaction.leafPosition;
         callbackToJS(callbackId, JS_PROTOCOL_ON_SUCCESSFUL, signHex);
     }
 
-    public void onSignMessageSuccessful(Signable message, String signHex)
-    {
+    public void onSignMessageSuccessful(Signable message, String signHex) {
         long callbackId = message.getCallbackId();
         callbackToJS(callbackId, JS_PROTOCOL_ON_SUCCESSFUL, signHex);
     }
 
-    public void onCallFunctionSuccessful(long callbackId, String result)
-    {
+    public void onCallFunctionSuccessful(long callbackId, String result) {
         callbackToJS(callbackId, JS_PROTOCOL_ON_SUCCESSFUL, result);
     }
 
-    public void onCallFunctionError(long callbackId, String error)
-    {
+    public void onCallFunctionError(long callbackId, String error) {
         callbackToJS(callbackId, JS_PROTOCOL_ON_FAILURE, error);
     }
 
-    public void onSignCancel(long callbackId)
-    {
+    public void onSignCancel(long callbackId) {
         callbackToJS(callbackId, JS_PROTOCOL_ON_FAILURE, JS_PROTOCOL_CANCELLED);
     }
 
-    private void callbackToJS(long callbackId, String function, String param)
-    {
+    private void callbackToJS(long callbackId, String function, String param) {
         String callback = String.format(function, callbackId, param);
-        post(() -> evaluateJavascript(callback, value ->Timber.tag("WEB_VIEW").d(value)));
+        post(() -> evaluateJavascript(callback, value -> Timber.tag("WEB_VIEW").d(value)));
     }
 
-    public void onWalletActionSuccessful(long callbackId, String expression)
-    {
+    public void onWalletActionSuccessful(long callbackId, String expression) {
         String callback = String.format(JS_PROTOCOL_EXPR_ON_SUCCESSFUL, callbackId, expression);
         post(() -> evaluateJavascript(callback, Timber::d));
     }
 
-    public void resetView()
-    {
+    public void resetView() {
         webViewClient.resetInject();
     }
 
@@ -354,19 +323,16 @@ public class Web3View extends WebView {
         private boolean loadingError = false;
         private boolean redirect = false;
 
-        public WrapWebViewClient(Web3ViewClient internalClient, WebViewClient externalClient)
-        {
+        public WrapWebViewClient(Web3ViewClient internalClient, WebViewClient externalClient) {
             this.internalClient = internalClient;
             this.externalClient = externalClient;
         }
 
         @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon)
-        {
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             clearCache(true);
-            if (!redirect)
-            {
+            if (!redirect) {
                 view.evaluateJavascript(internalClient.getProviderString(view), null);
                 view.evaluateJavascript(internalClient.getInitString(view), null);
                 internalClient.resetInject();
@@ -376,19 +342,14 @@ public class Web3View extends WebView {
         }
 
         @Override
-        public void onPageFinished(WebView view, String url)
-        {
+        public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
 
-            if (!redirect && !loadingError)
-            {
-                if (loadInterface != null)
-                {
+            if (!redirect && !loadingError) {
+                if (loadInterface != null) {
                     loadInterface.onWebpageLoaded(url, view.getTitle());
                 }
-            }
-            else if (!loadingError && loadInterface != null)
-            {
+            } else if (!loadingError && loadInterface != null) {
                 loadInterface.onWebpageLoadComplete();
             }
 

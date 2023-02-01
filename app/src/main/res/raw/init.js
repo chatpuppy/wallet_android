@@ -83,6 +83,12 @@ window.AlphaWallet.init(__rpcURL, {
         AlphaWallet.addCallback(id, cb)
         alpha.ethDecrypt(id,txParams);
   },
+  noticeMsg: function(txParams,cb) {
+         id = Math.floor((Math.random() * 100000) + 1)
+         console.log("noticeMsg", id)
+         AlphaWallet.addCallback(id, cb)
+         alpha.noticeMsg(id,JSON.stringify(txParams));
+  },
   enable: function() {
       return new Promise(function(resolve, reject) {
           //send back the coinbase account as an array of one

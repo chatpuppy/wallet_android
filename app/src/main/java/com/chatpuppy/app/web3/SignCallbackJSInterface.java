@@ -6,6 +6,7 @@ import android.security.keystore.UserNotAuthenticatedException;
 import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 //import android.webkit.WebView;
+import com.chatpuppy.app.web3.entity.NoticeMessage;
 import com.tencent.smtt.sdk.WebView;
 
 import androidx.annotation.NonNull;
@@ -34,8 +35,7 @@ import java.math.BigInteger;
 
 import timber.log.Timber;
 
-public class SignCallbackJSInterface
-{
+public class SignCallbackJSInterface {
     private final WebView webView;
     @NonNull
     private final OnSignTransactionListener onSignTransactionListener;
@@ -107,21 +107,21 @@ public class SignCallbackJSInterface
 
     @JavascriptInterface
     public void requestAccounts(long callbackId) {
-        webView.post(() -> onWalletActionListener.onRequestAccounts(callbackId) );
+        webView.post(() -> onWalletActionListener.onRequestAccounts(callbackId));
     }
 
     // Chatpuppy
     @JavascriptInterface
     public void ethGetEncryptionPublickey(long callbackId) {
-        webView.post(() -> onWalletActionListener.onEthGetEncryptionPublickey(callbackId) );
+        webView.post(() -> onWalletActionListener.onEthGetEncryptionPublickey(callbackId));
     }
 
     // Chatpuppy
     @JavascriptInterface
-    public void ethDecrypt(long callbackId,String encryptedMessage) {
+    public void ethDecrypt(long callbackId, String encryptedMessage) {
         webView.post(() -> {
             try {
-                onWalletActionListener.onEthDecrypt(callbackId,encryptedMessage);
+                onWalletActionListener.onEthDecrypt(callbackId, encryptedMessage);
             } catch (KeyServiceException e) {
                 e.printStackTrace();
             } catch (UserNotAuthenticatedException e) {
@@ -132,11 +132,26 @@ public class SignCallbackJSInterface
         });
     }
 
+    // Chatpuppy
+    @JavascriptInterface
+    public void noticeMsg(long callbackId, String data) {
+        webView.post(() -> {
+            try {
+                JSONObject obj = new JSONObject(data);
+                NoticeMessage noticeMessage = new NoticeMessage(obj.getBoolean("isShow"), obj.getString("noticeMsg"), obj.getString("noticeTitle"), obj.getInt("count"));
+                onWalletActionListener.onNoticeMsg(callbackId, noticeMessage);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                onWalletActionListener.onNoticeMsg(callbackId, null);
+            }
+        });
+    }
+
     @JavascriptInterface
     public void signTypedMessage(int callbackId, String data) {
         webView.post(() -> {
-            try
-            {
+            try {
                 JSONObject obj = new JSONObject(data);
                 String address = obj.getString("from");
                 String messageData = obj.getString("data");
@@ -144,9 +159,7 @@ public class SignCallbackJSInterface
 
                 EthereumTypedMessage message = new EthereumTypedMessage(messageData, getDomainName(), callbackId, cryptoFunctions);
                 onSignTypedMessageListener.onSignTypedMessage(message);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 EthereumTypedMessage message = new EthereumTypedMessage(null, "", getDomainName(), callbackId);
                 onSignTypedMessageListener.onSignTypedMessage(message);
                 Timber.e(e);
@@ -156,8 +169,7 @@ public class SignCallbackJSInterface
 
     @JavascriptInterface
     public void ethCall(int callbackId, String recipient) {
-        try
-        {
+        try {
             JSONObject json = new JSONObject(recipient);
             DefaultBlockParameter defaultBlockParameter;
             String to = json.has("to") ? json.getString("to") : ZERO_ADDRESS;
@@ -167,17 +179,15 @@ public class SignCallbackJSInterface
             defaultBlockParameter = DefaultBlockParameterName.LATEST; //TODO: Take block param from query if present
 
             Web3Call call = new Web3Call(
-                new Address(to),
-                defaultBlockParameter,
-                payload,
-                value,
-                gasLimit,
-                callbackId);
+                    new Address(to),
+                    defaultBlockParameter,
+                    payload,
+                    value,
+                    gasLimit,
+                    callbackId);
 
             webView.post(() -> onEthCallListener.onEthCall(call));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             //
         }
     }
@@ -186,32 +196,24 @@ public class SignCallbackJSInterface
     public void walletAddEthereumChain(int callbackId, String msgParams) {
         //TODO: Implement custom chains from dapp browser: see OnWalletAddEthereumChainObject in class DappBrowserFragment
         //First draft: attempt to match this chain with known chains; switch to known chain if we match
-        try
-        {
+        try {
             WalletAddEthereumChainObject chainObj = new Gson().fromJson(msgParams, WalletAddEthereumChainObject.class);
-            if (!TextUtils.isEmpty(chainObj.chainId))
-            {
+            if (!TextUtils.isEmpty(chainObj.chainId)) {
                 webView.post(() -> onWalletAddEthereumChainObjectListener.onWalletAddEthereumChainObject(callbackId, chainObj));
             }
-        }
-        catch (JsonSyntaxException e)
-        {
+        } catch (JsonSyntaxException e) {
             Timber.e(e);
         }
     }
 
     @JavascriptInterface
     public void walletSwitchEthereumChain(int callbackId, String msgParams) {
-        try
-        { //{"chainId":"0x89","chainType":"ETH"}
+        try { //{"chainId":"0x89","chainType":"ETH"}
             WalletAddEthereumChainObject chainObj = new Gson().fromJson(msgParams, WalletAddEthereumChainObject.class);
-            if (!TextUtils.isEmpty(chainObj.chainId))
-            {
+            if (!TextUtils.isEmpty(chainObj.chainId)) {
                 webView.post(() -> onWalletActionListener.onWalletSwitchEthereumChain(callbackId, chainObj));// onWalletAddEthereumChainObjectListener.onWalletAddEthereumChainObject(chainObj));
             }
-        }
-        catch (JsonSyntaxException e)
-        {
+        } catch (JsonSyntaxException e) {
             Timber.e(e);
         }
     }

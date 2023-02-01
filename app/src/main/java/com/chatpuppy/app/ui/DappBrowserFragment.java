@@ -8,11 +8,13 @@ import static com.chatpuppy.app.ui.MyAddressActivity.KEY_ADDRESS;
 import static com.chatpuppy.app.util.Utils.isValidUrl;
 import static com.chatpuppy.app.widget.AWalletAlertDialog.ERROR;
 import static com.chatpuppy.app.widget.AWalletAlertDialog.WARNING;
+import static com.tencent.smtt.sdk.stat.MttLoader.CHANNEL_ID;
 import static org.web3j.protocol.core.methods.request.Transaction.createFunctionCallTransaction;
 
 import android.Manifest;
 import android.animation.LayoutTransition;
 import android.app.Activity;
+import android.app.Notification;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -38,7 +40,10 @@ import android.view.View;
 import android.view.ViewGroup;
 //import android.webkit.ConsoleMessage;
 //import android.webkit.GeolocationPermissions;
+import com.chatpuppy.app.service.BadgeIntentService;
+import com.chatpuppy.app.web3.entity.NoticeMessage;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
+
 import android.webkit.PermissionRequest;
 //import android.webkit.ValueCallback;
 import com.tencent.smtt.export.external.interfaces.JsPromptResult;
@@ -74,6 +79,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -166,6 +172,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import me.leolin.shortcutbadger.ShortcutBadger;
 import timber.log.Timber;
 
 @AndroidEntryPoint
@@ -199,7 +206,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
      */
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ValueCallback<Uri> uploadMessage;
-//    ActivityResultLauncher<String> getContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+    //    ActivityResultLauncher<String> getContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
 //            new ActivityResultCallback<Uri>() {
 //                @Override
 //                public void onActivityResult(Uri uri) {
@@ -309,6 +316,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     public void onCreate(@Nullable Bundle savedInstanceState) {
         LocaleUtils.setActiveLocale(getContext());
         super.onCreate(savedInstanceState);
+
         getChildFragmentManager()
                 .setFragmentResultListener(DAPP_CLICK, this, (requestKey, bundle) -> {
                     DApp dapp = bundle.getParcelable(DAPP_CLICK);
@@ -880,15 +888,14 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             @Override
             public void openFileChooser(ValueCallback<Uri> valueCallback,
                                         String acceptType, String capture) {
-                if(acceptType.equals("image/*")){
+                if (acceptType.equals("image/*")) {
                     openImageChooserActivity(valueCallback);
-                }else{
+                } else {
                     openFileChooserActivity(valueCallback);
                 }
             }
 
         });
-
 
 
         web3.setWebViewClient(new WebViewClient() {
@@ -908,6 +915,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                         + ", description: " + description
                         + ", url: " + failingUrl);
             }
+
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView webView, WebResourceRequest webResourceRequest) {
                 if (webResourceRequest.getUrl().toString().contains("debugdebug")) {
@@ -997,7 +1005,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
             intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         }
         intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent,"选择图片"),CHOOSE_REQUEST_CODE);
+        startActivityForResult(Intent.createChooser(intent, "选择图片"), CHOOSE_REQUEST_CODE);
     }
 
     private void openFileChooserActivity(ValueCallback<Uri> valueCallback) {
@@ -1014,7 +1022,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                 processResult(resultCode, intent);
                 break;
             case FILE_CHOOSER_RESULT_CODE:
-                processResult(resultCode,intent);
+                processResult(resultCode, intent);
                 break;
         }
     }
@@ -1085,13 +1093,13 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     @Override
     public void onEthCall(Web3Call call) {
         Single.fromCallable(() -> {
-            //let's make the call
-            Web3j web3j = TokenRepository.getWeb3jService(activeNetwork.chainId);
-            //construct call
-            org.web3j.protocol.core.methods.request.Transaction transaction
-                    = createFunctionCallTransaction(wallet.address, null, null, call.gasLimit, call.to.toString(), call.value, call.payload);
-            return web3j.ethCall(transaction, call.blockParam).send();
-        }).map(EthCall::getValue)
+                    //let's make the call
+                    Web3j web3j = TokenRepository.getWeb3jService(activeNetwork.chainId);
+                    //construct call
+                    org.web3j.protocol.core.methods.request.Transaction transaction
+                            = createFunctionCallTransaction(wallet.address, null, null, call.gasLimit, call.to.toString(), call.value, call.payload);
+                    return web3j.ethCall(transaction, call.blockParam).send();
+                }).map(EthCall::getValue)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> web3.onCallFunctionSuccessful(call.leafPosition, result),
@@ -1175,7 +1183,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
         SignAuthenticationCallback cb = new SignAuthenticationCallback() {
             @Override
-            public void gotAuthorisation(boolean gotAuth){
+            public void gotAuthorisation(boolean gotAuth) {
                 if (gotAuth) {
                     String decryptedMessage = "";
                     try {
@@ -1200,7 +1208,26 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
         };
 
         viewModel.getAuthentication(wallet, this.getActivity(), cb);
+    }
 
+    // Chatpuppy
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onNoticeMsg(long callbackId, NoticeMessage noticeMessage) {
+        if (noticeMessage != null && noticeMessage.isShow) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Intent intent = new Intent(getContext(), BadgeIntentService.class);
+                intent.setAction("launcher.action.CHANGE_APPLICATION_NOTIFICATION_NUM");
+                //            intent.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
+                intent.putExtra("badgeCount", noticeMessage.count);
+                intent.putExtra("noticeMsg", noticeMessage.noticeMsg);
+                requireActivity().startService(intent);
+            }
+            ShortcutBadger.applyCount(getContext(), noticeMessage.count);
+        } else {
+            ShortcutBadger.removeCount(getContext());
+        }
+        web3.onWalletActionSuccessful(callbackId, "\"ok\"");
     }
 
     //EIP-3326
