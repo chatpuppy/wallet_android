@@ -871,11 +871,21 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         if (noticeMessage.isShow) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Intent intent = new Intent(getContext(), BadgeIntentService.class);
-                intent.setAction("launcher.action.CHANGE_APPLICATION_NOTIFICATION_NUM");
+//                intent.setAction("launcher.action.CHANGE_APPLICATION_NOTIFICATION_NUM");
                 //            intent.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
                 intent.putExtra("badgeCount", noticeMessage.count);
                 intent.putExtra("noticeMsg", noticeMessage.noticeMsg);
-                requireActivity().startService(intent);
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        requireActivity().startForegroundService(intent);
+                    } else {
+                        requireActivity().startService(intent);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    System.out.println(e);
+                }
+
             }
             ShortcutBadger.applyCount(getContext(), noticeMessage.count);
         } else {

@@ -57,28 +57,48 @@ public class BadgeIntentService extends IntentService {
             }
 //            notificationId++;
 
-            Notification.Builder builder = new Notification.Builder(getApplicationContext())
-                    .setContentTitle(noticeTitle != null && noticeTitle.equals("") ? "NewMessages" : noticeTitle)
-                    .setContentText(noticeMsg.equals("") ? "You've received " + badgeCount + " messages." : noticeMsg)
-                    .setSmallIcon(R.drawable.ic_logo);
+            setupNotificationChannel();
+            Notification.Builder builder =null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                setupNotificationChannel();
-
-                builder.setChannelId(NOTIFICATION_CHANNEL);
+                builder = new Notification.Builder(getApplicationContext(),NOTIFICATION_CHANNEL)
+                        .setContentTitle(noticeTitle != null && noticeTitle.equals("") ? "NewMessages" : noticeTitle)
+                        .setContentText(noticeMsg.equals("") ? "You've received " + badgeCount + " messages." : noticeMsg)
+                        .setSmallIcon(R.drawable.ic_logo);
+                builder.setContentIntent(pendingIntent);
+                Notification notification = builder.build();
+                startForeground(1, notification);
+                ShortcutBadger.applyNotification(getApplicationContext(), notification, badgeCount);
+                mNotificationManager.notify(notificationId, notification);
+            }else{
+                builder = new Notification.Builder(getApplicationContext())
+                        .setContentTitle(noticeTitle != null && noticeTitle.equals("") ? "NewMessages" : noticeTitle)
+                        .setContentText(noticeMsg.equals("") ? "You've received " + badgeCount + " messages." : noticeMsg)
+                        .setSmallIcon(R.drawable.ic_logo);
+                builder.setContentIntent(pendingIntent);
+                Notification notification = builder.build();
+                ShortcutBadger.applyNotification(getApplicationContext(), notification, badgeCount);
+                mNotificationManager.notify(notificationId, notification);
             }
-            builder.setContentIntent(pendingIntent);
 
-            Notification notification = builder.build();
-            ShortcutBadger.applyNotification(getApplicationContext(), notification, badgeCount);
-            mNotificationManager.notify(notificationId, notification);
+
+
+
+
+//                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                NotificationChannel channel = null;
+//                channel = new NotificationChannel(CHANNEL_ID_STRING, getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH);
+//                notificationManager.createNotificationChannel(channel);
+//                Notification notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID_STRING).build();
+
+
 
         }
     }
 
     @TargetApi(Build.VERSION_CODES.O)
     private void setupNotificationChannel() {
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL, "ShortcutBadger Sample",
-                NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL, getString(R.string.app_name),
+                NotificationManager.IMPORTANCE_HIGH);
 
         mNotificationManager.createNotificationChannel(channel);
     }
