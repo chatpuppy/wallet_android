@@ -625,7 +625,6 @@
     <string name="cancel_transaction">ပယ်ဖျက်သည်</string>
 
 
-
     <string name="day_single">၁ရက်</string>
     <string name="day_plural">%s ရက်</string>
     <string name="hour_single">၁နာရီ</string>
@@ -745,7 +744,6 @@
     <string name="ChatPuppy_never_ask">ChatPuppyသည်သင်၏Seed Phraseအားမည်သည့်အခါမှ(အထူးသဖြင့် Telegramတွင်) မေးမြန်းခြင်းမပြုပါ။.</string>
     <string name="your_seed_phrase">သင်၏Seed Phrase(တခြားသူအားမဝေမျှမိရန်သတိပြုပါ)</string>
     <string name="hide_seed_text">Seed Phraseကိုဖုန်းကွယ်မည်။</string>
-
 
 
     <string name="ens_not_match_wallet">ENS နာမည်သည် ဝေါလက်လိပ်စာနှင့်ကိုက်ညီမှုမရှိပါ</string>
@@ -879,7 +877,7 @@
     <string name="toast_qr_scanning_requires_api_24">QR စကင်န်ဖတ်ခြင်းတွင် Android 7.0 (API အဆင့် 24) နှင့်အထက် လိုအပ်သည်။</string>
     <string name="experimental_1559">Use 1559 Transactions</string>
     <string name="experimental_1559_tx_sub">Experimental 1559 Transactions</string>
-    <string name="action_reset_network" >ပြန်လည်သတ်မှတ်ပါ။</string>
+    <string name="action_reset_network">ပြန်လည်သတ်မှတ်ပါ။</string>
     <string name="wc_methods">နည်းလမ်းများ</string>
     <string name="wc_card_subtitle">ဘရောက်ဆာအခြေခံ Dapp သို့ ချိတ်ဆက်မှုများ</string>
     <string name="wc_disconnect">အသုံးပြုသူသည် စက်ရှင်ကို ချိတ်ဆက်မှုဖြုတ်သည်။.</string>
@@ -979,4 +977,15 @@
     <string name="error_message_watch_only_wallet">ဤ Watch-only ပိုက်ဆံအိတ်တွင် လုပ်ဆောင်ချက်ကို မလုပ်ဆောင်နိုင်ပါ။</string>
     <string name="select_image">Image</string>
     <string name="select_file">Dossier</string>
+    <string name="allow_background_activities_step_tips">不同机型或同一机型不同型号手机设置项名称或路径可能存在差异，具体设置方法请咨询手机厂商。</string>
+    <string name="label_btn_power_manager">去设置</string>
+    <string name="menu_brand_vivo">vivo</string>
+    <string name="menu_brand_oppo">oppo</string>
+    <string name="menu_brand_huawei">huawei</string>
+    <string name="menu_brand_xiaomi">xiaomi</string>
+    <string name="menu_brand_others">others</string>
+    <string name="label_allow_auto_start">允许自启动</string>
+    <string name="allow_auto_start_step">步骤：点击去设置-【手机设置】-【应用与权限】-【权限管理】-【自启动】-【ChatPuppy】，开启【自启动】。</string>
+    <string name="allow_auto_start_tips">在运行ChatPuppy异常退出后可自恢复</string>
+    <string name="menu_brand_honor">honor</string>
 </resources>

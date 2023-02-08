@@ -2,7 +2,7 @@
 <resources>
     <string name="send_multiple_tokens">Send Multiple Tokens</string>
     <string name="toast_qr_scanning_requires_api_24">QR scanning requires Android 7.0 (API level 24) or above.</string>
-    <string name="action_reset_network" >Reset</string>
+    <string name="action_reset_network">Reset</string>
     <string name="wc_card_subtitle">Active connections to browser-based Dapp</string>
     <string name="wc_disconnect">User disconnect the session.</string>
     <string name="wc_sign_dapp_name">Name</string>
@@ -10,4 +10,15 @@
     <string name="wc_wallet_not_match">Wallet not exist or it\'s watch only.</string>
     <string name="chain_not_support">Chain %s is not supported.</string>
     <string name="mode_test">Testnet mode</string>
+    <string name="allow_background_activities_step_tips">不同机型或同一机型不同型号手机设置项名称或路径可能存在差异，具体设置方法请咨询手机厂商。</string>
+    <string name="label_btn_power_manager">去设置</string>
+    <string name="menu_brand_vivo">vivo</string>
+    <string name="menu_brand_oppo">oppo</string>
+    <string name="menu_brand_huawei">huawei</string>
+    <string name="menu_brand_xiaomi">xiaomi</string>
+    <string name="menu_brand_others">others</string>
+    <string name="label_allow_auto_start">允许自启动</string>
+    <string name="allow_auto_start_step">步骤：点击去设置-【手机设置】-【应用与权限】-【权限管理】-【自启动】-【ChatPuppy】，开启【自启动】。</string>
+    <string name="allow_auto_start_tips">在运行ChatPuppy异常退出后可自恢复</string>
+    <string name="menu_brand_honor">honor</string>
 </resources>

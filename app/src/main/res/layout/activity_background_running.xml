@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/notice_settings_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <include layout="@layout/layout_simple_toolbar" />
+
+    <View style="@style/Aw.Component.Separator" />
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/layout_update"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/standard_16"
+                    android:elevation="0dp"
+                    android:theme="@style/AppTheme.DarkOverlay"
+                    app:cardBackgroundColor="@color/mine"
+                    app:contentPadding="@dimen/standard_16"
+                    app:strokeWidth="0dp">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:gravity="start"
+                        android:orientation="vertical">
+
+                    <TextView
+                            android:id="@+id/text_title"
+                            style="@style/Aw.Typography.Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/small_12"
+                            android:text="@string/label_bg_running_title" />
+
+                    <TextView
+                            android:id="@+id/text_detail_current"
+                            style="@style/Aw.Typography.Sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_bg_running_tips" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <RelativeLayout
+                    android:id="@+id/layout_device_brand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:paddingLeft="@dimen/standard_16"
+                    android:paddingRight="@dimen/standard_16">
+
+                <LinearLayout
+                        android:id="@+id/layout_device_brand_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/standard_16">
+
+                    <TextView
+                            style="@style/Aw.Typography.Sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/label_device_brand" />
+
+                    <TextView
+                            android:id="@+id/text_device_brand"
+                            style="@style/Aw.Typography.Sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:id="@+id/layout_device_brand_change"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="@dimen/standard_16">
+
+                    <TextView
+                            android:id="@+id/label_change_brand_tip"
+                            style="@style/Aw.Typography.Sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_change_brand_tip" />
+
+                    <TextView
+                            android:id="@+id/label_change_brand"
+                            style="@style/Aw.Component.Button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_change_brand" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?colorSurfaceSecondary"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="@dimen/standard_16"
+                        android:paddingTop="@dimen/dp8"
+                        android:paddingRight="@dimen/standard_16"
+                        android:text="@string/allow_background_activities"
+                        android:textSize="@dimen/dp20" />
+
+                <TextView
+                        style="@style/Aw.Typography.Sub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="@dimen/standard_16"
+                        android:paddingRight="@dimen/standard_16"
+                        android:text="@string/allow_background_activities_tips" />
+
+                <TextView
+                        android:id="@+id/allow_background_activities_step"
+                        style="@style/Aw.Typography.Sub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/allow_background_activities_step_others"
+                        android:paddingLeft="30dp"
+                        android:paddingTop="@dimen/dp8"
+                        android:paddingRight="30dp" />
+
+                <TextView
+                        style="@style/Aw.Typography.Sub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="@dimen/standard_16"
+                        android:paddingTop="@dimen/dp8"
+                        android:paddingRight="@dimen/standard_16"
+                        android:text="@string/allow_background_activities_step_tips"
+                        android:textSize="@dimen/dp8" />
+
+
+            </LinearLayout>
+
+            <Button
+                    android:id="@+id/btn_power_setting"
+                    android:layout_width="100dp"
+                    android:layout_height="@dimen/dp30"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/label_btn_power_manager"></Button>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?colorSurfaceSecondary"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="@dimen/standard_16"
+                        android:paddingTop="@dimen/dp8"
+                        android:paddingRight="@dimen/standard_16"
+                        android:text="@string/label_allow_auto_start"
+                        android:textSize="@dimen/dp20" />
+
+                <TextView
+                        style="@style/Aw.Typography.Sub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="@dimen/standard_16"
+                        android:paddingRight="@dimen/standard_16"
+                        android:text="@string/allow_auto_start_tips" />
+
+                <TextView
+                        style="@style/Aw.Typography.Sub"
+                        android:id="@+id/allow_auto_start_step"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="30dp"
+                        android:paddingTop="@dimen/dp8"
+                        android:text="@string/allow_auto_start_step_others"
+                        android:paddingRight="30dp" />
+
+                <TextView
+                        style="@style/Aw.Typography.Sub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="25dp"
+                        android:paddingTop="@dimen/dp8"
+                        android:paddingRight="25dp"
+                        android:text="@string/allow_background_activities_step_tips"
+                        android:textSize="@dimen/dp8" />
+
+
+            </LinearLayout>
+
+            <Button
+                    android:id="@+id/btn_auto_start_setting"
+                    android:layout_width="100dp"
+                    android:layout_height="@dimen/dp30"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/label_btn_power_manager"></Button>
+
+            <LinearLayout
+                    android:id="@+id/layout_settings_wallet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

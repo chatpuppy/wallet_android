@@ -1,5 +1,6 @@
 package com.chatpuppy.app.ui;
 
+import static android.content.Context.POWER_SERVICE;
 import static com.chatpuppy.app.C.RESET_TOOLBAR;
 import static com.chatpuppy.app.ui.HomeActivity.RESET_TOKEN_SERVICE;
 import static com.chatpuppy.app.ui.MyAddressActivity.KEY_ADDRESS;
@@ -22,7 +23,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.security.keystore.UserNotAuthenticatedException;
 import android.text.InputType;
 import android.util.Log;
@@ -157,6 +160,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     public static final int REQUEST_CAMERA_ACCESS = 111;
     private static final String TAG = ChatPuppyFragment.class.getSimpleName();
     private static final String DAPP_BROWSER = "DAPP_BROWSER";
+    private static final String PUPPY_CHAT = "PUPPY_CHAT";
     private static final String MY_DAPPS = "MY_DAPPS";
     private static final String DISCOVER_DAPPS = "DISCOVER_DAPPS";
     private static final String HISTORY = "HISTORY";
@@ -256,10 +260,11 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         LocaleUtils.setActiveLocale(getContext());
         super.onCreate(savedInstanceState);
 
+//        ignoreBatteryOptimization(requireActivity());
         getChildFragmentManager()
                 .setFragmentResultListener(DAPP_CLICK, this, (requestKey, bundle) -> {
                     DApp dapp = bundle.getParcelable(DAPP_CLICK);
-                    addToBackStack(DAPP_BROWSER);
+                    addToBackStack(PUPPY_CHAT);
                     if (dapp != null) {
                         loadUrl(dapp.getUrl());
                     }
@@ -270,7 +275,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     public void onResume() {
         super.onResume();
         homePressed = false;
-        if (currentFragment == null) currentFragment = DAPP_BROWSER;
+        if (currentFragment == null) currentFragment = PUPPY_CHAT;
         attachFragment(currentFragment);
         if ((web3 == null || viewModel == null)) //trigger reload
         {
@@ -296,7 +301,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         addressBar.setup(viewModel.getDappsMasterList(getContext()), new AddressBarListener() {
             @Override
             public boolean onLoad(String urlText) {
-                addToBackStack(DAPP_BROWSER);
+                addToBackStack(PUPPY_CHAT);
                 boolean handled = loadUrl(urlText);
                 detachFragments();
                 cancelSearchSession();
@@ -327,7 +332,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             }
         });
 
-        attachFragment(DAPP_BROWSER);
+        attachFragment(PUPPY_CHAT);
         return view;
     }
 
@@ -346,6 +351,9 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
                     break;
                 case DAPP_BROWSER: //special case - dapp browser is no fragments loaded
                     addToBackStack(DAPP_BROWSER);
+                    break;
+                case PUPPY_CHAT: //special case - dapp browser is no fragments loaded
+                    addToBackStack(PUPPY_CHAT);
                     break;
             }
 
@@ -371,7 +379,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     private void homePressed() {
         homePressed = true;
         detachFragments();
-        currentFragment = DAPP_BROWSER;
+        currentFragment = PUPPY_CHAT;
         addressBar.clear();
         if (web3 != null) {
             resetDappBrowser();
@@ -381,7 +389,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     @Override
     public void onDappHomeNavClick(int position) {
         detachFragments();
-        addToBackStack(DAPP_BROWSER);
+        addToBackStack(PUPPY_CHAT);
     }
 
     @Override
@@ -394,10 +402,10 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
 
     private void initView(@NotNull View view) {
         web3 = view.findViewById(R.id.web3view);
-        Bundle savedState = readBundleFromLocal();
-        if (savedState != null) {
-            web3.restoreState(savedState);
-        }
+//        Bundle savedState = readBundleFromLocal();
+//        if (savedState != null) {
+//            web3.restoreState(savedState);
+//        }
         loadOnInit = URL;
 
         addressBar = view.findViewById(R.id.address_bar_widget);
@@ -451,7 +459,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
      */
 
     private void addToBackStack(String nextFragment) {
-        if (currentFragment != null && !currentFragment.equals(DAPP_BROWSER)) {
+        if (currentFragment != null && !currentFragment.equals(PUPPY_CHAT)) {
             detachFragment(currentFragment);
         }
         currentFragment = nextFragment;
@@ -473,7 +481,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         }
 
         //fragments can only be 1 deep
-        currentFragment = DAPP_BROWSER;
+        currentFragment = PUPPY_CHAT;
     }
 
     private void initViewModel() {
@@ -662,7 +670,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
 
         if (loadOnInit != null) {
             web3.clearCache(false); //on restart with stored app, we usually need this
-            addToBackStack(DAPP_BROWSER);
+            addToBackStack(PUPPY_CHAT);
             web3.resetView();
             web3.loadUrl(Utils.formatUrl(loadOnInit));
             loadOnInit = null;
@@ -881,7 +889,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
                     } else {
                         requireActivity().startService(intent);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println(e);
                 }
@@ -1041,7 +1049,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
 
     @Override
     public void backPressed() {
-        if (!currentFragment.equals(DAPP_BROWSER)) {
+        if (!currentFragment.equals(PUPPY_CHAT)) {
             detachFragment(currentFragment);
         } else if (web3.canGoBack()) {
             web3.goBack();
@@ -1063,16 +1071,16 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         if (getContext() == null) return; //could be a late return from dead fragment
         if (homePressed) {
             homePressed = false;
-            if (currentFragment.equals(DAPP_BROWSER) && url.equals(getDefaultDappUrl())) {
+            if (currentFragment.equals(PUPPY_CHAT) && url.equals(getDefaultDappUrl())) {
                 web3.clearHistory();
             }
         }
 
-        if (isValidUrl(url)) {
-            DApp dapp = new DApp(title, url);
-            DappBrowserUtils.addToHistory(getContext(), dapp);
-            addressBar.addSuggestion(dapp);
-        }
+//        if (isValidUrl(url)) {
+//            DApp dapp = new DApp(title, url);
+//            DappBrowserUtils.addToHistory(getContext(), dapp);
+//            addressBar.addSuggestion(dapp);
+//        }
 
         onWebpageLoadComplete();
         addressBar.setUrl(url);
@@ -1099,7 +1107,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         viewModel.track(Analytics.Action.LOAD_URL, props);
 
         detachFragments();
-        addToBackStack(DAPP_BROWSER);
+        addToBackStack(PUPPY_CHAT);
         cancelSearchSession();
         if (checkForMagicLink(urlText)) return true;
         web3.resetView();
@@ -1118,7 +1126,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             // reset initial url, to avoid issues with initial load
             loadOnInit = null;
             cancelSearchSession();
-            addToBackStack(DAPP_BROWSER);
+            addToBackStack(PUPPY_CHAT);
             web3.resetView();
             web3.loadUrl(Utils.formatUrl(urlText));
             web3.requestFocus();
@@ -1130,7 +1138,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     }
 
     public void reloadPage() {
-        if (currentFragment.equals(DAPP_BROWSER)) {
+        if (currentFragment.equals(PUPPY_CHAT)) {
             if (refresh != null) {
                 refresh.setEnabled(false);
             }
@@ -1310,9 +1318,10 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        web3.saveState(outState);
+        ////baja
+//        web3.saveState(outState);
         //serialise the bundle and store locally
-        writeBundleToLocalStorage(outState);
+//        writeBundleToLocalStorage(outState);
 
         super.onSaveInstanceState(outState);
     }
@@ -1551,4 +1560,25 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             loadNewNetwork(newChainId);
         }
     }
+
+//    /**
+//     * 忽略电池优化
+//     */
+//    private void ignoreBatteryOptimization(Activity activity) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            PowerManager powerManager = (PowerManager) activity.getSystemService(POWER_SERVICE);
+//
+//            boolean hasIgnored = powerManager.isIgnoringBatteryOptimizations(activity.getPackageName());
+//            //  判断当前APP是否有加入电池优化的白名单，如果没有，弹出加入电池优化的白名单的设置对话框。
+//            if (!hasIgnored) {
+//                Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+//                intent.setData(Uri.parse("package:" + activity.getPackageName()));
+//                if (intent.resolveActivity(activity.getPackageManager()) != null) {
+//                    startActivity(intent);
+//                }
+//            } else {
+//                Log.d("ignoreBattery", "hasIgnored");
+//            }
+//        }
+//    }
 }

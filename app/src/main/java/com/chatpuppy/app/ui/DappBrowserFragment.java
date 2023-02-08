@@ -190,6 +190,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     public static final int REQUEST_CAMERA_ACCESS = 111;
     private static final String TAG = DappBrowserFragment.class.getSimpleName();
     private static final String DAPP_BROWSER = "DAPP_BROWSER";
+    private static final String PUPPY_CHAT = "PUPPY_CHAT";
     private static final String MY_DAPPS = "MY_DAPPS";
     private static final String DISCOVER_DAPPS = "DISCOVER_DAPPS";
     private static final String HISTORY = "HISTORY";
@@ -418,6 +419,9 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                     break;
                 case DAPP_BROWSER: //special case - dapp browser is no fragments loaded
                     addToBackStack(DAPP_BROWSER);
+                    break;
+                case PUPPY_CHAT: //special case - dapp browser is no fragments loaded
+                    addToBackStack(PUPPY_CHAT);
                     break;
             }
 

@@ -376,6 +376,10 @@ dependencies {
     implementation "io.github.instantwebp2p:tweetnacl-java:1.1.2"
     //Badger
     implementation "me.leolin:ShortcutBadger:1.1.22@aar"
+
+    implementation 'androidx.work:work-runtime:2.7.1'
+
+//    implementation 'com.afollestad.material-dialogs:core:3.3.0'
 }
 
 // WARNING WARNING WARNING

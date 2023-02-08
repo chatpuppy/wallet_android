@@ -47,7 +47,7 @@ public class BadgeIntentService extends IntentService {
             String noticeTitle = intent.getStringExtra("noticeTitle");
             Intent resultIntent = new Intent(this, HomeActivity.class);
 //            PendingIntent contentIntent = PendingIntent.getActivities(getApplicationContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? PendingIntent.FLAG_MUTABLE : PendingIntent.FLAG_UPDATE_CURRENT);
 
 
 //            mNotificationManager.cancel(notificationId);
@@ -58,9 +58,9 @@ public class BadgeIntentService extends IntentService {
 //            notificationId++;
 
             setupNotificationChannel();
-            Notification.Builder builder =null;
+            Notification.Builder builder = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder = new Notification.Builder(getApplicationContext(),NOTIFICATION_CHANNEL)
+                builder = new Notification.Builder(getApplicationContext(), NOTIFICATION_CHANNEL)
                         .setContentTitle(noticeTitle != null && noticeTitle.equals("") ? "NewMessages" : noticeTitle)
                         .setContentText(noticeMsg.equals("") ? "You've received " + badgeCount + " messages." : noticeMsg)
                         .setSmallIcon(R.drawable.ic_logo);
@@ -69,7 +69,7 @@ public class BadgeIntentService extends IntentService {
                 startForeground(1, notification);
                 ShortcutBadger.applyNotification(getApplicationContext(), notification, badgeCount);
                 mNotificationManager.notify(notificationId, notification);
-            }else{
+            } else {
                 builder = new Notification.Builder(getApplicationContext())
                         .setContentTitle(noticeTitle != null && noticeTitle.equals("") ? "NewMessages" : noticeTitle)
                         .setContentText(noticeMsg.equals("") ? "You've received " + badgeCount + " messages." : noticeMsg)
@@ -81,15 +81,11 @@ public class BadgeIntentService extends IntentService {
             }
 
 
-
-
-
 //                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //                NotificationChannel channel = null;
 //                channel = new NotificationChannel(CHANNEL_ID_STRING, getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH);
 //                notificationManager.createNotificationChannel(channel);
 //                Notification notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID_STRING).build();
-
 
 
         }

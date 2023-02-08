@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/item_menu_brand_vivo"
+            android:title="@string/menu_brand_vivo"/>
+    <item
+            android:id="@+id/item_menu_brand_oppo"
+            android:title="@string/menu_brand_oppo"/>
+    <item
+            android:id="@+id/item_menu_brand_huawei"
+            android:title="@string/menu_brand_huawei"/>
+    <item
+            android:id="@+id/item_menu_brand_xiaomi"
+            android:title="@string/menu_brand_xiaomi"/>
+    <item
+            android:id="@+id/item_menu_brand_honor"
+            android:title="@string/menu_brand_honor" />
+    <item
+            android:id="@+id/item_menu_brand_others"
+            android:title="@string/menu_brand_others"/>
+</menu>
