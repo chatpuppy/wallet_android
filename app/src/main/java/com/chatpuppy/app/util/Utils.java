@@ -68,8 +68,7 @@ import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
-public class Utils
-{
+public class Utils {
     private static final String ISOLATE_NUMERIC = "(0?x?[0-9a-fA-F]+)";
     private static final String ICON_REPO_ADDRESS_TOKEN = "[TOKEN]";
     private static final String CHAIN_REPO_ADDRESS_TOKEN = "[CHAIN]";
@@ -79,8 +78,7 @@ public class Utils
     private static final String TRUST_ICON_REPO = TRUST_ICON_REPO_BASE + CHAIN_REPO_ADDRESS_TOKEN + "/assets/" + ICON_REPO_ADDRESS_TOKEN + TOKEN_LOGO;
     private static final String ALPHAWALLET_ICON_REPO = ALPHAWALLET_REPO_NAME + ICON_REPO_ADDRESS_TOKEN + TOKEN_LOGO;
 
-    public static int dp2px(Context context, int dp)
-    {
+    public static int dp2px(Context context, int dp) {
         Resources r = context.getResources();
         return (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
@@ -89,44 +87,32 @@ public class Utils
         );
     }
 
-    public static String formatUrl(String url)
-    {
-        if (URLUtil.isHttpsUrl(url) || URLUtil.isHttpUrl(url))
-        {
+    public static String formatUrl(String url) {
+        if (URLUtil.isHttpsUrl(url) || URLUtil.isHttpUrl(url)) {
             return url;
-        }
-        else
-        {
-            if (isValidUrl(url))
-            {
+        } else {
+            if (isValidUrl(url)) {
                 return C.HTTPS_PREFIX + url;
-            }
-            else
-            {
+            } else {
                 return C.INTERNET_SEARCH_PREFIX + url;
             }
         }
     }
 
-    public static boolean isValidUrl(String url)
-    {
+    public static boolean isValidUrl(String url) {
         if (TextUtils.isEmpty(url)) return false;
         Pattern p = Patterns.WEB_URL;
         Matcher m = p.matcher(url.toLowerCase());
         return m.matches() || isIPFS(url);
     }
 
-    public static boolean isAlNum(String testStr)
-    {
+    public static boolean isAlNum(String testStr) {
         boolean result = false;
-        if (testStr != null && testStr.length() > 0)
-        {
+        if (testStr != null && testStr.length() > 0) {
             result = true;
-            for (int i = 0; i < testStr.length(); i++)
-            {
+            for (int i = 0; i < testStr.length(); i++) {
                 char c = testStr.charAt(i);
-                if (!Character.isIdeographic(c) && !Character.isLetterOrDigit(c) && !Character.isWhitespace(c) && (c < 32 || c > 126))
-                {
+                if (!Character.isIdeographic(c) && !Character.isLetterOrDigit(c) && !Character.isWhitespace(c) && (c < 32 || c > 126)) {
                     result = false;
                     break;
                 }
@@ -136,17 +122,13 @@ public class Utils
         return result;
     }
 
-    public static boolean isValidValue(String testStr)
-    {
+    public static boolean isValidValue(String testStr) {
         boolean result = false;
-        if (testStr != null && testStr.length() > 0)
-        {
+        if (testStr != null && testStr.length() > 0) {
             result = true;
-            for (int i = 0; i < testStr.length(); i++)
-            {
+            for (int i = 0; i < testStr.length(); i++) {
                 char c = testStr.charAt(i);
-                if (!Character.isDigit(c) && !(c == '.' || c == ','))
-                {
+                if (!Character.isDigit(c) && !(c == '.' || c == ',')) {
                     result = false;
                     break;
                 }
@@ -156,44 +138,34 @@ public class Utils
         return result;
     }
 
-    private static String getFirstWord(String text)
-    {
+    private static String getFirstWord(String text) {
         if (TextUtils.isEmpty(text)) return "";
         text = text.trim();
         int index;
-        for (index = 0; index < text.length(); index++)
-        {
+        for (index = 0; index < text.length(); index++) {
             if (!Character.isLetterOrDigit(text.charAt(index))) break;
         }
 
         return text.substring(0, index).trim();
     }
 
-    public static String getIconisedText(String text)
-    {
+    public static String getIconisedText(String text) {
         if (TextUtils.isEmpty(text)) return "";
         if (text.length() <= 4) return text;
         String firstWord = getFirstWord(text);
-        if (!TextUtils.isEmpty(firstWord))
-        {
+        if (!TextUtils.isEmpty(firstWord)) {
             return firstWord.substring(0, Math.min(firstWord.length(), 4)).toUpperCase();
-        }
-        else
-        {
+        } else {
             return "";
         }
     }
 
-    public static String getShortSymbol(String text)
-    {
+    public static String getShortSymbol(String text) {
         if (TextUtils.isEmpty(text)) return "";
         String firstWord = getFirstWord(text);
-        if (!TextUtils.isEmpty(firstWord))
-        {
+        if (!TextUtils.isEmpty(firstWord)) {
             return firstWord.substring(0, Math.min(firstWord.length(), 5)).toUpperCase();
-        }
-        else
-        {
+        } else {
             return "";
         }
     }
@@ -204,10 +176,8 @@ public class Utils
      * @param signable
      * @return
      */
-    public static int getSigningTitle(Signable signable)
-    {
-        switch (signable.getMessageType())
-        {
+    public static int getSigningTitle(Signable signable) {
+        switch (signable.getMessageType()) {
             default:
             case SIGN_MESSAGE:
                 return R.string.dialog_title_sign_message;
@@ -220,13 +190,11 @@ public class Utils
         }
     }
 
-    public static CharSequence formatTypedMessage(ProviderTypedData[] rawData)
-    {
+    public static CharSequence formatTypedMessage(ProviderTypedData[] rawData) {
         //produce readable text to display in the signing prompt
         StyledStringBuilder sb = new StyledStringBuilder();
         boolean firstVal = true;
-        for (ProviderTypedData data : rawData)
-        {
+        for (ProviderTypedData data : rawData) {
             if (!firstVal) sb.append("\n");
             sb.startStyleGroup().append(data.name).append(":");
             sb.setStyle(new StyleSpan(Typeface.BOLD));
@@ -239,28 +207,22 @@ public class Utils
         return sb;
     }
 
-    public static CharSequence formatEIP721Message(StructuredDataEncoder messageData)
-    {
+    public static CharSequence formatEIP721Message(StructuredDataEncoder messageData) {
         HashMap<String, Object> messageMap = (HashMap<String, Object>) messageData.jsonMessageObject.getMessage();
         StyledStringBuilder sb = new StyledStringBuilder();
-        for (String entry : messageMap.keySet())
-        {
+        for (String entry : messageMap.keySet()) {
             sb.startStyleGroup().append(entry).append(":").append("\n");
             sb.setStyle(new StyleSpan(Typeface.BOLD));
             Object v = messageMap.get(entry);
-            if (v instanceof LinkedHashMap)
-            {
+            if (v instanceof LinkedHashMap) {
                 HashMap<String, Object> valueMap = (HashMap<String, Object>) messageMap.get(entry);
-                for (String paramName : valueMap.keySet())
-                {
+                for (String paramName : valueMap.keySet()) {
                     String value = valueMap.get(paramName).toString();
                     sb.startStyleGroup().append(" ").append(paramName).append(": ");
                     sb.setStyle(new StyleSpan(Typeface.BOLD));
                     sb.append(value).append("\n");
                 }
-            }
-            else
-            {
+            } else {
                 sb.append(" ").append(v.toString()).append("\n");
             }
         }
@@ -270,20 +232,15 @@ public class Utils
         return sb;
     }
 
-    public static CharSequence createFormattedValue(Context ctx, String operationName, Token token)
-    {
+    public static CharSequence createFormattedValue(Context ctx, String operationName, Token token) {
         String symbol = token != null ? token.getShortSymbol() : "";
         boolean needsBreak = false;
 
-        if ((symbol.length() + operationName.length()) > 16 && symbol.length() > 0)
-        {
+        if ((symbol.length() + operationName.length()) > 16 && symbol.length() > 0) {
             int spaceIndex = operationName.lastIndexOf(' ');
-            if (spaceIndex > 0)
-            {
+            if (spaceIndex > 0) {
                 operationName = operationName.substring(0, spaceIndex) + '\n' + operationName.substring(spaceIndex + 1);
-            }
-            else
-            {
+            } else {
                 needsBreak = true;
             }
         }
@@ -292,12 +249,9 @@ public class Utils
         sb.startStyleGroup().append(operationName);
         sb.setStyle(new StyleSpan(Typeface.NORMAL));
 
-        if (needsBreak)
-        {
+        if (needsBreak) {
             sb.append("\n");
-        }
-        else
-        {
+        } else {
             sb.append(" ");
         }
 
@@ -309,53 +263,42 @@ public class Utils
         return sb;
     }
 
-    public static String loadJSONFromAsset(Context context, String fileName)
-    {
+    public static String loadJSONFromAsset(Context context, String fileName) {
         String json = null;
-        try
-        {
+        try {
             InputStream is = context.getAssets().open(fileName);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
             json = new String(buffer, StandardCharsets.UTF_8);
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             ex.printStackTrace();
             return null;
         }
         return json;
     }
 
-    public static boolean copyFile(String source, String dest)
-    {
-        try
-        {
+    public static boolean copyFile(String source, String dest) {
+        try {
             FileChannel s = new FileInputStream(source).getChannel();
             FileChannel d = new FileOutputStream(dest).getChannel();
             d.transferFrom(s, 0, s.size());
             return true;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             Timber.e(e);
         }
         return false;
     }
 
-    public static boolean isAddressValid(String address)
-    {
+    public static boolean isAddressValid(String address) {
         return address != null && address.length() > 0 && WalletUtils.isValidAddress(address);
     }
 
-    public static String longArrayToString(Long[] values)
-    {
+    public static String longArrayToString(Long[] values) {
         StringBuilder store = new StringBuilder();
         boolean firstValue = true;
-        for (long network : values)
-        {
+        for (long network : values) {
             if (!firstValue) store.append(",");
             store.append(network);
             firstValue = false;
@@ -364,21 +307,16 @@ public class Utils
         return store.toString();
     }
 
-    public static List<Long> longListToArray(String list)
-    {
+    public static List<Long> longListToArray(String list) {
         List<Long> idList = new ArrayList<>();
         //convert to array
         String[] split = list.split(",");
-        for (String s : split)
-        {
+        for (String s : split) {
             Long value;
-            try
-            {
+            try {
                 value = Long.valueOf(s);
                 idList.add(value);
-            }
-            catch (NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 //empty
             }
         }
@@ -386,23 +324,18 @@ public class Utils
         return idList;
     }
 
-    public static int[] bigIntegerListToIntList(List<BigInteger> ticketSendIndexList)
-    {
+    public static int[] bigIntegerListToIntList(List<BigInteger> ticketSendIndexList) {
         int[] indexList = new int[ticketSendIndexList.size()];
         for (int i = 0; i < ticketSendIndexList.size(); i++)
             indexList[i] = ticketSendIndexList.get(i).intValue();
         return indexList;
     }
 
-    public static BigInteger parseTokenId(String tokenIdStr)
-    {
+    public static BigInteger parseTokenId(String tokenIdStr) {
         BigInteger tokenId;
-        try
-        {
+        try {
             tokenId = new BigInteger(tokenIdStr);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             tokenId = BigInteger.ZERO;
         }
 
@@ -416,17 +349,14 @@ public class Utils
      * @param keepZeros
      * @return
      */
-    public static String bigIntListToString(List<BigInteger> idList, boolean keepZeros)
-    {
+    public static String bigIntListToString(List<BigInteger> idList, boolean keepZeros) {
         if (idList == null) return "";
         String displayIDs = "";
         boolean first = true;
         StringBuilder sb = new StringBuilder();
-        for (BigInteger id : idList)
-        {
+        for (BigInteger id : idList) {
             if (!keepZeros && id.compareTo(BigInteger.ZERO) == 0) continue;
-            if (!first)
-            {
+            if (!first) {
                 sb.append(",");
             }
             first = false;
@@ -438,37 +368,30 @@ public class Utils
         return displayIDs;
     }
 
-    public static List<Integer> stringIntsToIntegerList(String userList)
-    {
+    public static List<Integer> stringIntsToIntegerList(String userList) {
         List<Integer> idList = new ArrayList<>();
 
-        try
-        {
+        try {
             String[] ids = userList.split(",");
 
-            for (String id : ids)
-            {
+            for (String id : ids) {
                 //remove whitespace
                 String trim = id.trim();
                 Integer intId = Integer.parseInt(trim);
                 idList.add(intId);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             idList = new ArrayList<>();
         }
 
         return idList;
     }
 
-    public static String integerListToString(List<Integer> intList, boolean keepZeros)
-    {
+    public static String integerListToString(List<Integer> intList, boolean keepZeros) {
         if (intList == null) return "";
         boolean first = true;
         StringBuilder sb = new StringBuilder();
-        for (Integer id : intList)
-        {
+        for (Integer id : intList) {
             if (!keepZeros && id == 0) continue;
             if (!first) sb.append(",");
             sb.append(id);
@@ -478,25 +401,20 @@ public class Utils
         return sb.toString();
     }
 
-    public static Map<BigInteger, BigInteger> getIdMap(List<BigInteger> tokenIds)
-    {
+    public static Map<BigInteger, BigInteger> getIdMap(List<BigInteger> tokenIds) {
         Map<BigInteger, BigInteger> tokenMap = new HashMap<>();
-        for (BigInteger tokenId : tokenIds)
-        {
+        for (BigInteger tokenId : tokenIds) {
             tokenMap.put(tokenId, tokenMap.containsKey(tokenId) ? tokenMap.get(tokenId).add(BigInteger.ONE) : BigInteger.ONE);
         }
 
         return tokenMap;
     }
 
-    public static boolean isNumeric(String numString)
-    {
+    public static boolean isNumeric(String numString) {
         if (numString == null || numString.length() == 0) return false;
 
-        for (int i = 0; i < numString.length(); i++)
-        {
-            if (Character.digit(numString.charAt(i), 10) == -1)
-            {
+        for (int i = 0; i < numString.length(); i++) {
+            if (Character.digit(numString.charAt(i), 10) == -1) {
                 return false;
             }
         }
@@ -504,15 +422,12 @@ public class Utils
         return true;
     }
 
-    public static boolean isHex(String hexStr)
-    {
+    public static boolean isHex(String hexStr) {
         if (hexStr == null || hexStr.length() == 0) return false;
         hexStr = Numeric.cleanHexPrefix(hexStr);
 
-        for (int i = 0; i < hexStr.length(); i++)
-        {
-            if (Character.digit(hexStr.charAt(i), 16) == -1)
-            {
+        for (int i = 0; i < hexStr.length(); i++) {
+            if (Character.digit(hexStr.charAt(i), 16) == -1) {
                 return false;
             }
         }
@@ -520,39 +435,29 @@ public class Utils
         return true;
     }
 
-    public static String isolateNumeric(String valueFromInput)
-    {
-        try
-        {
+    public static String isolateNumeric(String valueFromInput) {
+        try {
             Matcher regexResult = Pattern.compile(ISOLATE_NUMERIC).matcher(valueFromInput);
-            if (regexResult.find())
-            {
-                if (regexResult.groupCount() >= 1)
-                {
+            if (regexResult.find()) {
+                if (regexResult.groupCount() >= 1) {
                     valueFromInput = regexResult.group(0);
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             // Silent fail - no action; just return input; this function is only to clean junk from a number
         }
 
         return valueFromInput;
     }
 
-    public static String formatAddress(String address)
-    {
-        if (isAddressValid(address))
-        {
+    public static String formatAddress(String address) {
+        if (isAddressValid(address)) {
             address = Keys.toChecksumAddress(address);
             String result = "";
             String firstSix = address.substring(0, 6);
             String lastSix = address.substring(address.length() - 4);
             return result + firstSix + "..." + lastSix;
-        }
-        else
-        {
+        } else {
             return "0x";
         }
     }
@@ -563,14 +468,11 @@ public class Utils
      * @param s String to be HTML escaped
      * @return escaped string
      */
-    public static String escapeHTML(String s)
-    {
+    public static String escapeHTML(String s) {
         StringBuilder out = new StringBuilder(Math.max(16, s.length()));
-        for (int i = 0; i < s.length(); i++)
-        {
+        for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            switch (c)
-            {
+            switch (c) {
                 case '"':
                     out.append("&quot;");
                     break;
@@ -590,8 +492,7 @@ public class Utils
         return out.toString();
     }
 
-    public static String convertTimePeriodInSeconds(long pendingTimeInSeconds, Context ctx)
-    {
+    public static String convertTimePeriodInSeconds(long pendingTimeInSeconds, Context ctx) {
         long days = pendingTimeInSeconds / (60 * 60 * 24);
         pendingTimeInSeconds -= (days * 60 * 60 * 24);
         long hours = pendingTimeInSeconds / (60 * 60);
@@ -602,69 +503,48 @@ public class Utils
         StringBuilder sb = new StringBuilder();
         int timePoints = 0;
 
-        if (days > 0)
-        {
+        if (days > 0) {
             timePoints = 2;
-            if (days == 1)
-            {
+            if (days == 1) {
                 sb.append(ctx.getString(R.string.day_single));
-            }
-            else
-            {
+            } else {
                 sb.append(ctx.getString(R.string.day_plural, String.valueOf(days)));
             }
         }
 
-        if (hours > 0)
-        {
-            if (timePoints == 0)
-            {
+        if (hours > 0) {
+            if (timePoints == 0) {
                 timePoints = 1;
-            }
-            else
-            {
+            } else {
                 sb.append(", ");
             }
 
-            if (hours == 1)
-            {
+            if (hours == 1) {
                 sb.append(ctx.getString(R.string.hour_single));
-            }
-            else
-            {
+            } else {
                 sb.append(ctx.getString(R.string.hour_plural, String.valueOf(hours)));
             }
         }
 
-        if (minutes > 0 && timePoints < 2)
-        {
-            if (timePoints != 0)
-            {
+        if (minutes > 0 && timePoints < 2) {
+            if (timePoints != 0) {
                 sb.append(", ");
             }
             timePoints++;
-            if (minutes == 1)
-            {
+            if (minutes == 1) {
                 sb.append(ctx.getString(R.string.minute_single));
-            }
-            else
-            {
+            } else {
                 sb.append(ctx.getString(R.string.minute_plural, String.valueOf(minutes)));
             }
         }
 
-        if (seconds > 0 && timePoints < 2)
-        {
-            if (timePoints != 0)
-            {
+        if (seconds > 0 && timePoints < 2) {
+            if (timePoints != 0) {
                 sb.append(", ");
             }
-            if (seconds == 1)
-            {
+            if (seconds == 1) {
                 sb.append(ctx.getString(R.string.second_single));
-            }
-            else
-            {
+            } else {
                 sb.append(ctx.getString(R.string.second_plural, String.valueOf(seconds)));
             }
         }
@@ -672,8 +552,7 @@ public class Utils
         return sb.toString();
     }
 
-    public static String shortConvertTimePeriodInSeconds(long pendingTimeInSeconds, Context ctx)
-    {
+    public static String shortConvertTimePeriodInSeconds(long pendingTimeInSeconds, Context ctx) {
         long days = pendingTimeInSeconds / (60 * 60 * 24);
         pendingTimeInSeconds -= (days * 60 * 60 * 24);
         long hours = pendingTimeInSeconds / (60 * 60);
@@ -683,48 +562,30 @@ public class Utils
 
         String timeStr;
 
-        if (pendingTimeInSeconds == -1)
-        {
+        if (pendingTimeInSeconds == -1) {
             timeStr = ctx.getString(R.string.never);
-        }
-        else if (days > 0)
-        {
+        } else if (days > 0) {
             timeStr = ctx.getString(R.string.day_single);
-        }
-        else if (hours > 0)
-        {
-            if (hours == 1 && minutes == 0)
-            {
+        } else if (hours > 0) {
+            if (hours == 1 && minutes == 0) {
                 timeStr = ctx.getString(R.string.hour_single);
-            }
-            else
-            {
+            } else {
                 BigDecimal hourStr = BigDecimal.valueOf(hours + (double) minutes / 60.0)
                         .setScale(1, RoundingMode.HALF_DOWN); //to 1 dp
                 timeStr = ctx.getString(R.string.hour_plural, hourStr.toString());
             }
-        }
-        else if (minutes > 0)
-        {
-            if (minutes == 1 && seconds == 0)
-            {
+        } else if (minutes > 0) {
+            if (minutes == 1 && seconds == 0) {
                 timeStr = ctx.getString(R.string.minute_single);
-            }
-            else
-            {
+            } else {
                 BigDecimal minsStr = BigDecimal.valueOf(minutes + (double) seconds / 60.0)
                         .setScale(1, RoundingMode.HALF_DOWN); //to 1 dp
                 timeStr = ctx.getString(R.string.minute_plural, minsStr.toString());
             }
-        }
-        else
-        {
-            if (seconds == 1)
-            {
+        } else {
+            if (seconds == 1) {
                 timeStr = ctx.getString(R.string.second_single);
-            }
-            else
-            {
+            } else {
                 timeStr = ctx.getString(R.string.second_plural, String.valueOf(seconds));
             }
         }
@@ -732,49 +593,39 @@ public class Utils
         return timeStr;
     }
 
-    public static String localiseUnixTime(Context ctx, long timeStampInSec)
-    {
+    public static String localiseUnixTime(Context ctx, long timeStampInSec) {
         Date date = new Date(timeStampInSec * DateUtils.SECOND_IN_MILLIS);
         DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, LocaleUtils.getDeviceLocale(ctx));
         return timeFormat.format(date);
     }
 
-    public static String localiseUnixDate(Context ctx, long timeStampInSec)
-    {
+    public static String localiseUnixDate(Context ctx, long timeStampInSec) {
         Date date = new Date(timeStampInSec * DateUtils.SECOND_IN_MILLIS);
         DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, LocaleUtils.getDeviceLocale(ctx));
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, LocaleUtils.getDeviceLocale(ctx));
         return timeFormat.format(date) + " | " + dateFormat.format(date);
     }
 
-    public static long randomId()
-    {
+    public static long randomId() {
         return new Date().getTime();
     }
 
-    public static String getDomainName(String url)
-    {
-        try
-        {
+    public static String getDomainName(String url) {
+        try {
             URI uri = new URI(url);
             String domain = uri.getHost();
             return domain.startsWith("www.") ? domain.substring(4) : domain;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return url != null ? url : "";
         }
     }
 
     @NotNull
-    public static String getTokenAddrFromUrl(String url)
-    {
-        if (!TextUtils.isEmpty(url) && url.startsWith(TRUST_ICON_REPO_BASE))
-        {
+    public static String getTokenAddrFromUrl(String url) {
+        if (!TextUtils.isEmpty(url) && url.startsWith(TRUST_ICON_REPO_BASE)) {
             int start = url.lastIndexOf("/assets/") + "/assets/".length();
             int end = url.lastIndexOf(TOKEN_LOGO);
-            if (start > 0 && end > 0)
-            {
+            if (start > 0 && end > 0) {
                 return url.substring(start, end);
             }
         }
@@ -783,14 +634,11 @@ public class Utils
     }
 
     @NotNull
-    public static String getTokenAddrFromAWUrl(String url)
-    {
-        if (!TextUtils.isEmpty(url) && url.startsWith(ALPHAWALLET_REPO_NAME))
-        {
+    public static String getTokenAddrFromAWUrl(String url) {
+        if (!TextUtils.isEmpty(url) && url.startsWith(ALPHAWALLET_REPO_NAME)) {
             int start = ALPHAWALLET_REPO_NAME.length();
             int end = url.lastIndexOf(TOKEN_LOGO);
-            if (end > 0 && end > start)
-            {
+            if (end > 0 && end > start) {
                 return url.substring(start, end);
             }
         }
@@ -798,8 +646,7 @@ public class Utils
         return "";
     }
 
-    private static final Map<Long, String> twChainNames = new HashMap<Long, String>()
-    {
+    private static final Map<Long, String> twChainNames = new HashMap<Long, String>() {
         {
             put(CLASSIC_ID, "classic");
             put(GNOSIS_ID, "xdai");
@@ -813,8 +660,7 @@ public class Utils
     };
 
     @NotNull
-    public static String getTWTokenImageUrl(long chainId, String address)
-    {
+    public static String getTWTokenImageUrl(long chainId, String address) {
         String tURL = TRUST_ICON_REPO;
         String repoChain = twChainNames.get(chainId);
         if (repoChain == null) repoChain = "ethereum";
@@ -823,45 +669,47 @@ public class Utils
     }
 
     @NotNull
-    public static String getTokenImageUrl(String address)
-    {
+    public static String getTokenImageUrl(String address) {
         return ALPHAWALLET_ICON_REPO.replace(ICON_REPO_ADDRESS_TOKEN, address.toLowerCase());
     }
 
-    public static boolean isContractCall(Context context, String operationName)
-    {
+    public static boolean isContractCall(Context context, String operationName) {
         return !TextUtils.isEmpty(operationName) && context.getString(R.string.contract_call).equals(operationName);
     }
 
     private static final String IPFS_PREFIX = "ipfs://";
     private static final String IPFS_DESIGNATOR = "/ipfs/";
     public static final String IPFS_INFURA_RESOLVER = "https://alphawallet.infura-ipfs.io";
+    public static final String IPFS_WEBSTORAGE_RESOLVER = "ipfs.w3s.link/";
     public static final String IPFS_IO_RESOLVER = "https://ipfs.io";
 
-    public static boolean isIPFS(String url)
-    {
+    public static boolean isIPFS(String url) {
         return url.contains(IPFS_DESIGNATOR) || url.startsWith(IPFS_PREFIX) || shouldBeIPFS(url);
     }
 
-    public static String parseIPFS(String URL)
-    {
-        return resolveIPFS(URL, IPFS_INFURA_RESOLVER);
+    public static String parseIPFS(String URL) {
+        return resolveIPFS(URL, IPFS_WEBSTORAGE_RESOLVER);
     }
 
-    public static String resolveIPFS(String URL, String resolver)
-    {
+    public static String resolveIPFS(String URL, String resolver) {
         if (TextUtils.isEmpty(URL)) return URL;
         String parsed = URL;
         int ipfsIndex = URL.lastIndexOf(IPFS_DESIGNATOR);
-        if (ipfsIndex >= 0)
-        {
+        if (ipfsIndex >= 0) {
             parsed = resolver + URL.substring(ipfsIndex);
-        }
-        else if (URL.startsWith(IPFS_PREFIX))
-        {
-            parsed = resolver + IPFS_DESIGNATOR + URL.substring(IPFS_PREFIX.length());
-        }
-        else if (shouldBeIPFS(URL)) //have seen some NFTs designating only the IPFS hash
+        } else if (URL.startsWith(IPFS_PREFIX)) {
+            if (resolver.equals(IPFS_WEBSTORAGE_RESOLVER)) {
+                URL = URL.substring(IPFS_PREFIX.length());
+                int sp = URL.indexOf("/");
+                if (sp > 0) {
+                    parsed="https://"+URL.substring(0, sp)+"."+IPFS_WEBSTORAGE_RESOLVER+URL.substring(sp+1);
+                } else {
+                    parsed = "";
+                }
+            } else {
+                parsed = resolver + IPFS_DESIGNATOR + URL.substring(IPFS_PREFIX.length());
+            }
+        } else if (shouldBeIPFS(URL)) //have seen some NFTs designating only the IPFS hash
         {
             parsed = resolver + IPFS_DESIGNATOR + URL;
         }
@@ -869,60 +717,45 @@ public class Utils
         return parsed;
     }
 
-    private static boolean shouldBeIPFS(String url)
-    {
+    private static boolean shouldBeIPFS(String url) {
         return url.startsWith("Qm") && url.length() == 46 && !url.contains(".") && !url.contains("/");
     }
 
-    public static String loadFile(Context context, @RawRes int rawRes)
-    {
+    public static String loadFile(Context context, @RawRes int rawRes) {
         byte[] buffer = new byte[0];
-        try
-        {
+        try {
             InputStream in = context.getResources().openRawResource(rawRes);
             buffer = new byte[in.available()];
             int len = in.read(buffer);
-            if (len < 1)
-            {
+            if (len < 1) {
                 throw new IOException("Nothing is read.");
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             Timber.tag("READ_JS_TAG").d(ex, "Ex");
         }
 
-        try
-        {
+        try {
             Timber.tag("READ_JS_TAG").d("HeapSize:%s", Runtime.getRuntime().freeMemory());
             return new String(buffer);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Timber.tag("READ_JS_TAG").d(e, "Ex");
         }
         return "";
     }
 
-    public static long timeUntil(long eventInMillis)
-    {
+    public static long timeUntil(long eventInMillis) {
         return eventInMillis - System.currentTimeMillis();
     }
 
     //TODO: detect various App Library installs and re-direct appropriately
-    public static boolean verifyInstallerId(Context context)
-    {
-        try
-        {
+    public static boolean verifyInstallerId(Context context) {
+        try {
             PackageManager packageManager = context.getPackageManager();
             String installingPackageName;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-            {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 final InstallSourceInfo installer = packageManager.getInstallSourceInfo(context.getPackageName());
                 installingPackageName = installer.getInstallingPackageName();
-            }
-            else
-            {
+            } else {
                 installingPackageName = packageManager.getInstallerPackageName(context.getPackageName());
             }
             // A list with valid installers package name
@@ -930,24 +763,18 @@ public class Utils
 
             // true if your app has been downloaded from Play Store
             return installingPackageName != null && validInstallers.contains(installingPackageName);
-        }
-        catch (PackageManager.NameNotFoundException e)
-        {
+        } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
     }
 
-    public static boolean isTransactionHash(String input)
-    {
+    public static boolean isTransactionHash(String input) {
         if (input == null || (input.length() != 66 && input.length() != 64)) return false;
         String cleanInput = Numeric.cleanHexPrefix(input);
 
-        try
-        {
+        try {
             Numeric.toBigIntNoPrefix(cleanInput);
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             return false;
         }
 
@@ -955,16 +782,14 @@ public class Utils
     }
 
     public static @ColorInt
-    int getColorFromAttr(Context context, int resId)
-    {
+    int getColorFromAttr(Context context, int resId) {
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(resId, typedValue, true);
         return typedValue.data;
     }
 
-    public static String calculateContractAddress(String account, long nonce)
-    {
+    public static String calculateContractAddress(String account, long nonce) {
         byte[] addressAsBytes = Numeric.hexStringToByteArray(account);
         byte[] calculatedAddressAsBytes =
                 Hash.sha3(RlpEncoder.encode(
@@ -977,66 +802,44 @@ public class Utils
         return Keys.toChecksumAddress(Numeric.toHexString(calculatedAddressAsBytes));
     }
 
-    public static boolean isJson(String value)
-    {
-        try
-        {
+    public static boolean isJson(String value) {
+        try {
             JSONObject stateData = new JSONObject(value);
             return true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public static BigInteger stringToBigInteger(String value)
-    {
+    public static BigInteger stringToBigInteger(String value) {
         if (TextUtils.isEmpty(value)) return BigInteger.ZERO;
-        try
-        {
-            if (Numeric.containsHexPrefix(value))
-            {
+        try {
+            if (Numeric.containsHexPrefix(value)) {
                 return Numeric.toBigInt(value);
-            }
-            else
-            {
+            } else {
                 return new BigInteger(value);
             }
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             Timber.e(e);
             return BigInteger.ZERO;
         }
     }
 
-    public static boolean stillAvailable(Context context)
-    {
-        if (context == null)
-        {
+    public static boolean stillAvailable(Context context) {
+        if (context == null) {
             return false;
-        }
-        else if (context instanceof FragmentActivity)
-        {
+        } else if (context instanceof FragmentActivity) {
             return !((FragmentActivity) context).isDestroyed();
-        }
-        else if (context instanceof Activity)
-        {
+        } else if (context instanceof Activity) {
             return !((Activity) context).isDestroyed();
-        }
-        else if (context instanceof ContextWrapper)
-        {
+        } else if (context instanceof ContextWrapper) {
             return stillAvailable(((ContextWrapper) context).getBaseContext());
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    public static String removeDoubleQuotes(String string)
-    {
+    public static String removeDoubleQuotes(String string) {
         return string != null ? string.replace("\"", "") : null;
     }
 }

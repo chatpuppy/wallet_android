@@ -81,7 +81,7 @@ public class App extends Application
         }
 
         int defaultTheme = PreferenceManager.getDefaultSharedPreferences(this)
-                .getInt("theme", C.THEME_AUTO);
+                .getInt("theme", C.THEME_DARK);
 
         if (defaultTheme == C.THEME_LIGHT)
         {

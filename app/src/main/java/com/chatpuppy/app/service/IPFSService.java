@@ -79,7 +79,7 @@ public class IPFSService implements IPFSServiceType
         if (isTestCode(url)) return loadTestCode();
 
         //try Infura first
-        String tryIPFS = Utils.resolveIPFS(url, Utils.IPFS_IO_RESOLVER);
+        String tryIPFS = Utils.resolveIPFS(url, Utils.IPFS_WEBSTORAGE_RESOLVER);
         //attempt to load content
         QueryResponse r;
         try
@@ -89,7 +89,7 @@ public class IPFSService implements IPFSServiceType
         catch (SocketTimeoutException e)
         {
             //timeout, try second node. Any other failure simply throw back to calling function
-            tryIPFS = Utils.resolveIPFS(url, Utils.IPFS_INFURA_RESOLVER);
+            tryIPFS = Utils.resolveIPFS(url, Utils.IPFS_IO_RESOLVER);
             r = get(tryIPFS, null); //if this throws it will be picked up by calling function
         }
 
