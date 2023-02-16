@@ -956,4 +956,5 @@
     <string name="allow_auto_start_step">步骤：点击去设置-【手机设置】-【应用与权限】-【权限管理】-【自启动】-【ChatPuppy】，开启【自启动】。</string>
     <string name="allow_auto_start_tips">在运行ChatPuppy异常退出后可自恢复</string>
     <string name="menu_brand_honor">honor</string>
+    <string name="title_copyright">Copyright</string>
 </resources>

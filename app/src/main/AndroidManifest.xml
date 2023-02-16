@@ -251,6 +251,9 @@
         <activity
                 android:name=".ui.SupportSettingsActivity"
                 android:label="Support Settings" />
+        <activity
+                android:name=".ui.SettingCopyrightActivity"
+                android:label="Copyright" />
 
         <activity
                 android:name=".ui.AdvancedSettingsActivity"

@@ -640,9 +640,6 @@ public class NewSettingsFragment extends BaseFragment {
 
     private void onBackgroundRunningClicked() {
         Intent intent = new Intent(getActivity(), SetBackgroundRunningActivity.class);
-        String selectedLocale = viewModel.getActiveLocale();
-        intent.putExtra(EXTRA_LOCALE, selectedLocale);
-        intent.putParcelableArrayListExtra(EXTRA_STATE, viewModel.getLocaleList(getContext()));
         updateLocale.launch(intent);
     }
 

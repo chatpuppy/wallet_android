@@ -33,6 +33,7 @@ public class SupportSettingsActivity extends BaseActivity
     private SettingsItemView blog;
     private SettingsItemView faq;
     private SettingsItemView github;
+    private SettingsItemView copyrights;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -118,6 +119,11 @@ public class SupportSettingsActivity extends BaseActivity
                 .withTitle(R.string.title_faq)
                 .withListener(this::onFaqClicked)
                 .build();
+        copyrights = new SettingsItemView.Builder(this)
+                .withIcon(R.drawable.ic_setting_copyright)
+                .withTitle(R.string.title_copyright)
+                .withListener(this::onCopyrightClicked)
+                .build();
     }
 
     private void addSettingsToLayout()
@@ -160,6 +166,7 @@ public class SupportSettingsActivity extends BaseActivity
             supportSettingsLayout.addView(blog);
         }
         supportSettingsLayout.addView(faq);
+        supportSettingsLayout.addView(copyrights);
     }
 
     private void onTelegramClicked()
@@ -173,6 +180,19 @@ public class SupportSettingsActivity extends BaseActivity
         try
         {
             viewModel.track(Analytics.Action.SUPPORT_TELEGRAM);
+            startActivity(intent);
+        }
+        catch (Exception e)
+        {
+            Timber.e(e);
+        }
+    }
+    private void onCopyrightClicked()
+    {
+        Intent intent = new Intent(this, SettingCopyrightActivity.class);
+        try
+        {
+            viewModel.track(Analytics.Action.SUPPORT_COPYRIGHT);
             startActivity(intent);
         }
         catch (Exception e)

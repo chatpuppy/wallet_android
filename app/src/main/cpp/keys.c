@@ -2,6 +2,7 @@
 #include <string.h>
 #include <alloca.h>
 #include <jni.h>
+
 #if __has_include ("../../../../../keys.secret")
 #   define HAS_KEYS 1
 #   include "../../../../../keys.secret"
@@ -34,8 +35,7 @@
 #endif
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getInfuraKey( JNIEnv* env, jobject thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getInfuraKey(JNIEnv *env, jobject thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, infuraKey);
 #elif (HAS_INFURA == 1)
@@ -47,8 +47,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getInfuraKey( JNIEnv* env, 
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getAnalyticsKey( JNIEnv* env, jobject thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getAnalyticsKey(JNIEnv *env, jobject thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, mixpanelKey);
 #else
@@ -58,8 +57,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getAnalyticsKey( JNIEnv* en
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getRampKey( JNIEnv* env, jobject thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getRampKey(JNIEnv *env, jobject thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, rampKey);
 #else
@@ -69,8 +67,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getRampKey( JNIEnv* env, jo
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getCoinbasePayAppId( JNIEnv* env, jobject thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getCoinbasePayAppId(JNIEnv *env, jobject thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, coinbasePayAppId);
 #else
@@ -80,8 +77,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getCoinbasePayAppId( JNIEnv
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getSecondaryInfuraKey( JNIEnv* env, jobject thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getSecondaryInfuraKey(JNIEnv *env, jobject thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, secondaryInfuraKey);
 #elif (HAS_INFURA == 1)
@@ -93,8 +89,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getSecondaryInfuraKey( JNIE
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getKlaytnKey( JNIEnv* env, jobject thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getKlaytnKey(JNIEnv *env, jobject thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, klaytnKey);
 #else
@@ -103,8 +98,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getKlaytnKey( JNIEnv* env, 
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getBSCExplorerKey( JNIEnv* env, jobject thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getBSCExplorerKey(JNIEnv *env, jobject thiz) {
 #if (HAS_KEYS == 1)
     return getBSCExplorerKey(env);
 #else
@@ -113,8 +107,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getBSCExplorerKey( JNIEnv* 
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getEtherscanKey( JNIEnv* env, jclass thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getEtherscanKey(JNIEnv *env, jclass thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, etherscanKey);
 #else
@@ -124,8 +117,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getEtherscanKey( JNIEnv* en
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getMailchimpKey(JNIEnv *env, jclass clazz)
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getMailchimpKey(JNIEnv *env, jclass clazz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, mailchimpKey);
 #else
@@ -147,8 +139,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getPolygonScanKey(JNIEnv *e
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getCovalentKey( JNIEnv* env, jclass thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getCovalentKey(JNIEnv *env, jclass thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedCKey(env, 4, '_', covalentKey);
 #else
@@ -158,8 +149,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getCovalentKey( JNIEnv* env
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getAuroraScanKey( JNIEnv* env, jclass thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getAuroraScanKey(JNIEnv *env, jclass thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, auroraKey);
 #elif (HAS_AURORA == 1)
@@ -171,8 +161,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getAuroraScanKey( JNIEnv* e
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getOpenSeaKey( JNIEnv* env, jclass thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getOpenSeaKey(JNIEnv *env, jclass thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, openSeaKey);
 #elif (HAS_OS == 1)
@@ -184,8 +173,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getOpenSeaKey( JNIEnv* env,
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getWalletConnectProjectId( JNIEnv* env, jclass thiz )
-{
+Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getWalletConnectProjectId(JNIEnv *env, jclass thiz) {
 #if (HAS_KEYS == 1)
     return getDecryptedKey(env, walletConnectProjectId);
 #else

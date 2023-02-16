@@ -60,8 +60,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @SpringBootApplication
 @RequestMapping("/")
-public class AppSiteController implements AttributeInterface
-{
+public class AppSiteController implements AttributeInterface {
     private static CryptoFunctions cryptoFunctions = new CryptoFunctions();
     private static Map<Long, Map<String, File>> addresses;
     private static Map<Long, Map<String, Map<BigInteger, CachedResult>>> transactionResults = new ConcurrentHashMap<>();  //optimisation results
@@ -93,7 +92,8 @@ public class AppSiteController implements AttributeInterface
             "]";
 
     private final MagicLinkData magicLinkData = new MagicLinkData();
-    private final TokenscriptFunction tokenscriptFunction = new TokenscriptFunction() { };
+    private final TokenscriptFunction tokenscriptFunction = new TokenscriptFunction() {
+    };
     private static Path repoDir;
     private static String infuraKey = "9e81d78e941b440fbb2560184ab55cad";
 
@@ -103,27 +103,26 @@ public class AppSiteController implements AttributeInterface
         return appleAssociationConfig;
     }
 
-    @GetMapping(value = { "/.well-known/assetlinks.json", "/assetlinks.json" }, produces = "application/json")
+    @GetMapping(value = {"/.well-known/assetlinks.json", "/assetlinks.json"}, produces = "application/json")
     @ResponseBody
     public String getAndroidDeepLinkConfigure() {
         return androidAssociationConfig;
     }
 
     @GetMapping("/")
-    public RedirectView home(RedirectAttributes attributes){
+    public RedirectView home(RedirectAttributes attributes) {
         return new RedirectView("http://alphawallet.com");
     }
 
     @GetMapping(value = "/{UniversalLink}")
-    public @ResponseBody String handleUniversalLink(
+    public @ResponseBody
+    String handleUniversalLink(
             @PathVariable("UniversalLink") String universalLink,
             Model model,
             HttpServletRequest request
     )
-            throws IOException, SAXException, NoHandlerFoundException
-    {
-        if (universalLink.equals("wc"))
-        {
+            throws IOException, SAXException, NoHandlerFoundException {
+        if (universalLink.equals("wc")) {
             return "If you are using AlphaWallet with WalletConnect, please launch the AlphaWallet app";
         }
         String domain = request.getServerName();
@@ -131,14 +130,11 @@ public class AppSiteController implements AttributeInterface
         MagicLinkData data;
         model.addAttribute("base64", universalLink);
 
-        try
-        {
+        try {
             data = parser.parseUniversalLink(universalLink);
             data.chainId = MagicLinkInfo.getNetworkIdFromDomain(domain);
             model.addAttribute("domain", MagicLinkInfo.getMagicLinkDomainFromNetworkId(data.chainId));
-        }
-        catch (SalesOrderMalformed e)
-        {
+        } catch (SalesOrderMalformed e) {
             return "error: " + e;
         }
         parser.getOwnerKey(data);
@@ -146,28 +142,20 @@ public class AppSiteController implements AttributeInterface
     }
 
     private String handleTokenLink(MagicLinkData data, String universalLink
-    ) throws IOException, SAXException, NoHandlerFoundException
-    {
+    ) throws IOException, SAXException, NoHandlerFoundException {
         TokenDefinition definition = getTokenDefinition(data.chainId, data.contractAddress);
 
-        if (definition == null)
-        {
+        if (definition == null) {
             return renderTokenWithoutTokenScript(data, universalLink);
         }
         String available = "available";
-        try
-        {
-            if(data.contractType == normal)
-            {
+        try {
+            if (data.contractType == normal) {
                 checkTokensOwnedByMagicLinkCreator(data, definition);
-            }
-            else
-            {
+            } else {
                 checkTokensClaimableSpawnable(data);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             //if the tokens are not available, an exception will be thrown and therefore the tokens are not available
             available = "unavailable";
         }
@@ -175,8 +163,7 @@ public class AppSiteController implements AttributeInterface
         //get attributes
         BigInteger firstTokenId = BigInteger.ZERO;
 
-        if (data.tokenIds != null && data.tokenIds.size() > 0)
-        {
+        if (data.tokenIds != null && data.tokenIds.size() > 0) {
             firstTokenId = data.tokenIds.get(0);
         }
         System.out.println(firstTokenId.toString(16));
@@ -187,14 +174,11 @@ public class AppSiteController implements AttributeInterface
         String tokenName = txHandler.getNameOnly(data.contractAddress);
         String symbol = txHandler.getSymbolOnly(data.contractAddress);
 
-        try
-        {
+        try {
             TokenScriptResult.addPair(tokenData, "name", tokenName);
             TokenScriptResult.addPair(tokenData, "symbol", symbol);
             TokenScriptResult.addPair(tokenData, "_count", String.valueOf(data.ticketCount));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -202,8 +186,7 @@ public class AppSiteController implements AttributeInterface
                 .forEach(attr -> TokenScriptResult.addPair(tokenData, attr.id, attr.text))
                 .isDisposed();
 
-        if (Calendar.getInstance().getTime().after(new Date(data.expiry*1000)))
-        {
+        if (Calendar.getInstance().getTime().after(new Date(data.expiry * 1000))) {
             available = "expired";
         }
 
@@ -216,28 +199,20 @@ public class AppSiteController implements AttributeInterface
         return formWebPage(txHandler, data, universalLink, available, style, tokenView);
     }
 
-    private String renderTokenWithoutTokenScript(MagicLinkData data, String universalLink)
-    {
+    private String renderTokenWithoutTokenScript(MagicLinkData data, String universalLink) {
         TransactionHandler txHandler = new TransactionHandler(data.chainId);
         String available = "available";
 
-        if (Calendar.getInstance().getTime().after(new Date(data.expiry*1000)))
-        {
+        if (Calendar.getInstance().getTime().after(new Date(data.expiry * 1000))) {
             available = "expired";
         }
-        try
-        {
-            if(data.contractType == normal)
-            {
+        try {
+            if (data.contractType == normal) {
                 checkTokensOwnedByMagicLinkCreator(data);
-            }
-            else
-            {
+            } else {
                 checkTokensClaimableSpawnable(data);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             //if exception is thrown, we assume it is not available due to balance call failing to match
             available = "unavailable";
         }
@@ -252,8 +227,7 @@ public class AppSiteController implements AttributeInterface
             String available,
             String style,
             String tokenView
-    )
-    {
+    ) {
         String tokenName = txHandler.getName(data.contractAddress);
         String symbol = txHandler.getSymbolOnly(data.contractAddress);
         String nameWithSymbol = tokenName + "(" + symbol + ")";
@@ -295,18 +269,16 @@ public class AppSiteController implements AttributeInterface
         );
     }
 
-    private TokenDefinition getTokenDefinition(long chainId, String contractAddress) throws IOException, SAXException, NoHandlerFoundException
-    {
+    private TokenDefinition getTokenDefinition(long chainId, String contractAddress) throws IOException, SAXException, NoHandlerFoundException {
         File xml = null;
         TokenDefinition definition = null;
-        if (addresses.containsKey(chainId) && addresses.get(chainId).containsKey(contractAddress))
-        {
+        if (addresses.containsKey(chainId) && addresses.get(chainId).containsKey(contractAddress)) {
             xml = addresses.get(chainId).get(contractAddress);
             if (xml == null) {
                 /* this is impossible to happen, because at least 1 xml should present or main() bails out */
                 throw new NoHandlerFoundException("GET", "/" + contractAddress, new HttpHeaders());
             }
-            try(FileInputStream in = new FileInputStream(xml)) {
+            try (FileInputStream in = new FileInputStream(xml)) {
                 // TODO: give more detail in the error
                 // TODO: reflect on this: should the page bail out for contracts with completely no matching XML?
                 definition = new TokenDefinition(in, new Locale("en"), null);
@@ -318,23 +290,17 @@ public class AppSiteController implements AttributeInterface
     private void checkTokensClaimableSpawnable(MagicLinkData data) throws Exception {
         TransactionHandler txHandler = new TransactionHandler(data.chainId);
         //TODO replace with real admin(s) addresses in production
-        if(data.ownerAddress.equalsIgnoreCase("0xEdd6D7ba0FF9f4bC501a12529cb736CA76A4fe7e") ||
-                data.ownerAddress.equalsIgnoreCase("0x453aABe984b62eE28382c99A6d20447f7776b1fa"))
-        {
+        if (data.ownerAddress.equalsIgnoreCase("0xEdd6D7ba0FF9f4bC501a12529cb736CA76A4fe7e") ||
+                data.ownerAddress.equalsIgnoreCase("0x453aABe984b62eE28382c99A6d20447f7776b1fa")) {
             //check that token ids are not owned by someone
-            for(BigInteger token: data.tokenIds)
-            {
-                if(!txHandler.getOwnerOf721(data.contractAddress, token).equals(""))
-                {
+            for (BigInteger token : data.tokenIds) {
+                if (!txHandler.getOwnerOf721(data.contractAddress, token).equals("")) {
                     throw new Exception("Token(s) already owned");
                 }
             }
-        }
-        else
-        {
+        } else {
             List<BigInteger> balance = txHandler.getBalanceArray721Tickets(data.ownerAddress, data.contractAddress);
-            if(!balance.containsAll(data.tokenIds))
-            {
+            if (!balance.containsAll(data.tokenIds)) {
                 throw new Exception("Token(s) not owned by magic link creator");
             }
         }
@@ -342,11 +308,11 @@ public class AppSiteController implements AttributeInterface
 
     /**
      * Check ownership of tokens: Ensure that all tokens are still owned by the party selling the tokens
+     *
      * @param data
      * @throws Exception
      */
-    private void checkTokensOwnedByMagicLinkCreator(MagicLinkData data, TokenDefinition definition) throws Exception
-    {
+    private void checkTokensOwnedByMagicLinkCreator(MagicLinkData data, TokenDefinition definition) throws Exception {
         TransactionHandler txHandler = new TransactionHandler(data.chainId);
         List<BigInteger> balanceArray = txHandler.getBalanceArray(data.ownerAddress, data.contractAddress);
         data.tokenIds = new ArrayList<>();
@@ -360,15 +326,13 @@ public class AppSiteController implements AttributeInterface
                 })
                 .collect(Collectors.toList());
 
-        if (selection.size() != data.indices.length)
-        {
+        if (selection.size() != data.indices.length) {
             throw new Exception("Some or all non-fungible tokens are not owned by the claimed owner");
         }
     }
 
     //For if there is no TokenScript
-    private void checkTokensOwnedByMagicLinkCreator(MagicLinkData data) throws Exception
-    {
+    private void checkTokensOwnedByMagicLinkCreator(MagicLinkData data) throws Exception {
         TransactionHandler txHandler = new TransactionHandler(data.chainId);
         List<BigInteger> balanceArray = txHandler.getBalanceArray(data.ownerAddress, data.contractAddress);
         data.tokenIds = new ArrayList<>();
@@ -378,8 +342,7 @@ public class AppSiteController implements AttributeInterface
                 .filter(tokenId -> !tokenId.equals(BigInteger.ZERO))
                 .collect(Collectors.toList());
 
-        if (selection.size() != data.indices.length)
-        {
+        if (selection.size() != data.indices.length) {
             throw new Exception("Some or all non-fungible tokens are not owned by the claimed owner");
         }
     }
@@ -421,11 +384,10 @@ public class AppSiteController implements AttributeInterface
         }
 
         loadInfuraKey();
-	}
+    }
 
     private static void addContractAddresses(Path path) {
-        try (InputStream input = Files.newInputStream(path))
-        {
+        try (InputStream input = Files.newInputStream(path)) {
             TokenDefinition token = new TokenDefinition(input, new Locale("en"), null);
             ContractInfo holdingContracts = token.contracts.get(token.holdingToken);
             if (holdingContracts != null)
@@ -437,22 +399,20 @@ public class AppSiteController implements AttributeInterface
         }
     }
 
-    private static void addContractsToNetwork(Long network, Map<String, File> newTokenDescriptionAddresses)
-    {
+    private static void addContractsToNetwork(Long network, Map<String, File> newTokenDescriptionAddresses) {
         Map<String, File> existingDefinitions = addresses.get(network);
         if (existingDefinitions == null) existingDefinitions = new HashMap<>();
 
         addresses.put(network, Stream.concat(existingDefinitions.entrySet().stream(), newTokenDescriptionAddresses.entrySet().stream())
                 .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (value1, value2) -> new File(value2.getAbsolutePath())
-                         )
+                                Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (value1, value2) -> new File(value2.getAbsolutePath())
+                        )
                 ));
     }
 
-    private static Map<String, File> networkAddresses(List<String> strings, String path)
-    {
+    private static Map<String, File> networkAddresses(List<String> strings, String path) {
         Map<String, File> addrMap = new HashMap<>();
         strings.forEach(address -> addrMap.put(address, new File(path)));
         return addrMap;
@@ -480,16 +440,13 @@ public class AppSiteController implements AttributeInterface
     //      once events are available we can selectively update entries.
 
     @Override
-    public TransactionResult getFunctionResult(ContractAddress contract, Attribute attr, BigInteger tokenId)
-    {
+    public TransactionResult getFunctionResult(ContractAddress contract, Attribute attr, BigInteger tokenId) {
         String addressFunctionKey = contract.address + "-" + attr.name;
         TransactionResult tr = new TransactionResult(contract.chainId, contract.address, tokenId, attr);
         //existing entry in map?
-        if (transactionResults.containsKey(contract.chainId))
-        {
+        if (transactionResults.containsKey(contract.chainId)) {
             Map<BigInteger, CachedResult> contractResult = transactionResults.get(contract.chainId).get(addressFunctionKey);
-            if (contractResult != null && contractResult.containsKey(tokenId))
-            {
+            if (contractResult != null && contractResult.containsKey(tokenId)) {
                 tr.resultTime = contractResult.get(tokenId).resultTime;
                 tr.result = contractResult.get(tokenId).result;
             }
@@ -499,8 +456,7 @@ public class AppSiteController implements AttributeInterface
     }
 
     @Override
-    public TransactionResult storeAuxData(String wAddress, TransactionResult tResult)
-    {
+    public TransactionResult storeAuxData(String wAddress, TransactionResult tResult) {
         String addressFunctionKey = tResult.contractAddress + "-" + tResult.attrId;
         if (!transactionResults.containsKey(tResult.contractChainId)) transactionResults.put(tResult.contractChainId, new HashMap<>());
         if (!transactionResults.get(tResult.contractChainId).containsKey(addressFunctionKey)) transactionResults.get(tResult.contractChainId).put(addressFunctionKey, new HashMap<>());
@@ -513,34 +469,29 @@ public class AppSiteController implements AttributeInterface
 
     //Not relevant for website - this function is to access wallet internal balance for tokens
     @Override
-    public boolean resolveOptimisedAttr(ContractAddress contract, Attribute attr, TransactionResult transactionResult)
-    {
+    public boolean resolveOptimisedAttr(ContractAddress contract, Attribute attr, TransactionResult transactionResult) {
         return false;
     }
 
     @Override
-    public String getWalletAddr()
-    {
+    public String getWalletAddr() {
         return ZERO_ADDRESS;
     }
 
     /**
      * Can ditch this class once we have the transaction optimisation working as detailed in the "TO-DO" above
      */
-    private class CachedResult
-    {
+    private class CachedResult {
         long resultTime;
         String result;
 
-        CachedResult(long time, String r)
-        {
+        CachedResult(long time, String r) {
             resultTime = time;
             result = r;
         }
     }
 
-    private static void loadInfuraKey()
-    {
+    private static void loadInfuraKey() {
         try (InputStream input = new FileInputStream("../gradle.properties")) {
 
             Properties prop = new Properties();
@@ -561,8 +512,7 @@ public class AppSiteController implements AttributeInterface
         }
     }
 
-    public static String getInfuraKey()
-    {
+    public static String getInfuraKey() {
         return infuraKey;
     }
 }

@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <include layout="@layout/layout_simple_toolbar" />
+
+    <View style="@style/Aw.Component.Separator" />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:text="@string/chatpuppy_copyright_title"
+            android:textSize="24dp"></TextView>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Original work Copyright\u00a9 2022 "
+                android:textSize="14dp"></TextView>
+
+        <TextView
+                android:id="@+id/text_alphawallet_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AlphaWallet "
+                android:textColor="#8570e7"
+                android:clickable="true"
+                android:textSize="14dp"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modified work Copyright\u00a9 2022 "
+                android:textSize="14dp"></TextView>
+
+        <TextView
+                android:id="@+id/text_chatpuppy_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chatpuppy "
+                android:textColor="#8570e7"
+                android:clickable="true"
+                android:textSize="14dp"></TextView>
+
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:text="@string/chatpuppy_rights"
+            android:textSize="10dp"></TextView>
+
+</LinearLayout>

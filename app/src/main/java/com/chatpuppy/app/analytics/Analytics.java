@@ -1,7 +1,6 @@
 package com.chatpuppy.app.analytics;
 
-public class Analytics
-{
+public class Analytics {
     // Properties
     public static final String PROPS_IMPORT_WALLET_TYPE = "import_wallet_type";
     public static final String PROPS_WALLET_TYPE = "wallet_type";
@@ -20,8 +19,7 @@ public class Analytics
     public static final String PROPS_CUSTOM_NETWORK_SYMBOL = "symbol";
     public static final String PROPS_CUSTOM_NETWORK_IS_TESTNET = "is_testnet";
 
-    public enum Navigation
-    {
+    public enum Navigation {
         WALLET("Wallet"),
         ACTIVITY("Activity"),
         CHATPUPPY("Chat"),
@@ -73,19 +71,16 @@ public class Analytics
 
         private final String screenName;
 
-        Navigation(String screenName)
-        {
+        Navigation(String screenName) {
             this.screenName = screenName;
         }
 
-        public String getValue()
-        {
+        public String getValue() {
             return "Screen: " + screenName;
         }
     }
 
-    public enum Action
-    {
+    public enum Action {
         FIRST_WALLET_ACTION("First Wallet Action"),
         IMPORT_WALLET("Import Wallet"),
         USE_GAS_WIDGET("Use Gas Widget"),
@@ -121,6 +116,7 @@ public class Analytics
         SUPPORT_TWITTER("Clicked Twitter Link"),
         SUPPORT_GITHUB("Clicked Github Link"),
         SUPPORT_FAQ("Clicked FAQ Link"),
+        SUPPORT_COPYRIGHT("Clicked Copyright Link"),
         DEEP_LINK("Deep Link Opened"),
         DEEP_LINK_API_V1("Deep Link (API V1) Opened");
 
@@ -140,32 +136,27 @@ public class Analytics
 
         private final String actionName;
 
-        Action(String actionName)
-        {
+        Action(String actionName) {
             this.actionName = actionName;
         }
 
-        public String getValue()
-        {
+        public String getValue() {
             return actionName;
         }
     }
 
-    public enum Error
-    {
+    public enum Error {
         TOKEN_SWAP("Token Swap"),
         TOKEN_SCRIPT("TokenScript"),
         WALLET_CONNECT("WalletConnect");
 
         private final String source;
 
-        Error(String source)
-        {
+        Error(String source) {
             this.source = source;
         }
 
-        public String getValue()
-        {
+        public String getValue() {
             return "Error: " + source;
         }
     }

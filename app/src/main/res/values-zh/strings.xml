@@ -977,4 +977,7 @@
     <string name="allow_auto_start_step_others">步骤：点击去设置-【手机设置】-【常规管理】-【电池】-【后台使用限制】-【自动运行应用程序】-【ChatPuppy】- 开启【允许后台活动】。</string>
     <string name="allow_auto_start_tips">在运行ChatPuppy异常退出后可自恢复</string>
     <string name="menu_brand_honor">honor</string>
+    <string name="chatpuppy_rights">\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</string>
+    <string name="chatpuppy_copyright_title">Copyright notice</string>
+    <string name="title_copyright">Copyright</string>
 </resources>
