@@ -204,6 +204,7 @@ public class ImportWalletViewModel extends BaseViewModel implements OnSetWatchWa
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    // Chatpuppy
     public boolean storePubKey(byte[] pk, String address) {
         byte[] publicKey = keyService.createEncryptionPublicKey(pk);
         return keyService.storeEncryptionPublicKey(publicKey, address);

@@ -847,7 +847,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
                 if (gotAuth) {
                     String decryptedMessage = "";
                     try {
-                        decryptedMessage = keyService.decrypt(getContext(), encryptedMessage, viewModel.defaultWallet().getValue().address);
+                        decryptedMessage = keyService.decrypt(getContext(), viewModel.defaultWallet().getValue(), encryptedMessage);
                     } catch (KeyServiceException e) {
                         e.printStackTrace();
                     } catch (UserNotAuthenticatedException e) {

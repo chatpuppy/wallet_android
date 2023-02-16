@@ -213,7 +213,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 //                public void onActivityResult(Uri uri) {
 //                    try {
 //                        if (uri != null) {
-//                            uploadMessage.onReceiveValue(uri); // ######
+//                            uploadMessage.onReceiveValue(uri);
 //                            uploadMessage=null;
 //                            fileChooserParams=null;
 //                        } else {
@@ -1191,7 +1191,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
                 if (gotAuth) {
                     String decryptedMessage = "";
                     try {
-                        decryptedMessage = keyService.decrypt(getContext(), encryptedMessage, viewModel.defaultWallet().getValue().address);
+                        decryptedMessage = keyService.decrypt(getContext(), viewModel.defaultWallet().getValue(), encryptedMessage);
                     } catch (KeyServiceException e) {
                         e.printStackTrace();
                     } catch (UserNotAuthenticatedException e) {

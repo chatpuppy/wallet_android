@@ -397,7 +397,7 @@ public class ImportWalletActivity extends BaseActivity implements OnImportSeedLi
                 throw new Exception(getString(R.string.invalid_private_key));
             ECKeyPair keypair = ECKeyPair.create(key);
             String address = Numeric.prependHexPrefix(Keys.getAddress(keypair));
-            viewModel.storePubKey(keypair.getPrivateKey().toByteArray(), address);
+            viewModel.storePubKey(keypair.getPrivateKey().toByteArray(), address); // Chatpuppy
 
             if (viewModel.keystoreExists(address))
             {
@@ -438,14 +438,17 @@ public class ImportWalletActivity extends BaseActivity implements OnImportSeedLi
                 case SEED_PHRASE_KEY:
                     viewModel.onSeed(data, level);
                     break;
-                case KEYSTORE_KEY:
+                case KEYSTORE_KEY: // for importing keystore
                     ImportKeystoreFragment importKeystoreFragment = (ImportKeystoreFragment) pages.get(ImportType.KEYSTORE_FORM_INDEX.ordinal()).second;
                     viewModel.onKeystore(importKeystoreFragment.getKeystore(), importKeystoreFragment.getPassword(), data, level);
                     break;
-                case RAW_HEX_KEY:
+                case RAW_HEX_KEY: // for importing private key
                     ImportPrivateKeyFragment importPrivateKeyFragment = (ImportPrivateKeyFragment) pages.get(ImportType.PRIVATE_KEY_FORM_INDEX.ordinal()).second;
+                    String pk = importPrivateKeyFragment.getPrivateKey();
                     viewModel.onPrivateKey(importPrivateKeyFragment.getPrivateKey(), data, level);
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + type);
             }
         }
     }

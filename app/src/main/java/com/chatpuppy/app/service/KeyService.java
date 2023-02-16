@@ -44,6 +44,7 @@ import com.chatpuppy.app.entity.cryptokeys.KeyEncodingType;
 import com.chatpuppy.app.entity.cryptokeys.KeyServiceException;
 import com.chatpuppy.app.entity.cryptokeys.SignatureFromKey;
 import com.chatpuppy.app.entity.cryptokeys.SignatureReturnType;
+import com.chatpuppy.app.util.Hex;
 import com.chatpuppy.app.widget.AWalletAlertDialog;
 import com.chatpuppy.app.widget.SignTransactionDialog;
 import com.google.gson.Gson;
@@ -643,17 +644,26 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
         String ciphertext;
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public synchronized String decrypt(Context context, String encryptedMessage, String address) throws KeyServiceException, UserNotAuthenticatedException, JSONException {
-        currentWallet = new Wallet(address);
-        HDWallet wallet = new HDWallet(unpackMnemonic(), "");
-        PrivateKey pk = wallet.getKeyForCoin(CoinType.ETHEREUM);
+    public synchronized String decrypt(Context context, Wallet wallet, String encryptedMessage) throws KeyServiceException, UserNotAuthenticatedException, JSONException {
+        byte[] pk;
+        currentWallet = wallet;
+        switch (currentWallet.type) {
+            case KEYSTORE:
+            case KEYSTORE_LEGACY:
+                pk = getPrivateKeyFromKeystore();
+                break;
+            case HDKEY:
+            default:
+                pk = new HDWallet(unpackMnemonic(), "").getKeyForCoin(CoinType.ETHEREUM).data();
+                break;
+        }
 
         byte[] encryptedMessageByteArray = hexStringToByteArray(encryptedMessage.substring(2)); // cancel header: 0x
         Gson g = new Gson();
         EncryptedMessage encryptedMessageObject = g.fromJson(new String(encryptedMessageByteArray), EncryptedMessage.class);
 
         if(encryptedMessageObject.version.equals("x25519-xsalsa20-poly1305")) {
-            byte[] recieverEncryptionPrivateKey = TweetNacl.Box.keyPair_fromSecretKey(pk.data()).getSecretKey();
+            byte[] recieverEncryptionPrivateKey = TweetNacl.Box.keyPair_fromSecretKey(pk).getSecretKey();
             byte[] nonce = Base64.getDecoder().decode(encryptedMessageObject.nonce);
             byte[] ephemPublicKey = Base64.getDecoder().decode(encryptedMessageObject.ephemPublicKey);
             byte[] ciphertext = Base64.getDecoder().decode(encryptedMessageObject.ciphertext);
@@ -1059,6 +1069,35 @@ public class KeyService implements AuthenticationCallback, PinAuthenticationCall
                     importCallback.walletValidated(new String(newPassword), KeyEncodingType.RAW_HEX_KEY, authLevel);
                     break;
             }
+        }
+    }
+
+    // Chatpuppy
+    private byte[] getPrivateKeyFromKeystore() {
+        // ######
+        try {
+            String password = "";
+            switch (currentWallet.type) {
+                default:
+                case KEYSTORE:
+                    password = unpackMnemonic();
+                    break;
+                case KEYSTORE_LEGACY:
+                    password = new String(getLegacyPassword(context, currentWallet.address));
+                    break;
+            }
+            File keyFolder = new File(context.getFilesDir(), KEYSTORE_FOLDER);
+            Credentials credentials = KeystoreAccountService.getCredentials(keyFolder, currentWallet.address, password);
+            return credentials.getEcKeyPair().getPrivateKey().toByteArray();
+        } catch (UserNotAuthenticatedException e) {
+            e.printStackTrace();
+            return null;
+        } catch (KeyServiceException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ServiceErrorException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
