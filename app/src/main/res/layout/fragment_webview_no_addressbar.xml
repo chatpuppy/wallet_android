@@ -43,7 +43,7 @@
                 android:layout_height="match_parent">
 
             <com.chatpuppy.app.web3.Web3View
-                    android:id="@+id/web3view"
+                    android:id="@+id/web3view_no_addressbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

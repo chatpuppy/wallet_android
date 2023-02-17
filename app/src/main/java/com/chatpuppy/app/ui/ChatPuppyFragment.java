@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chatpuppy.app.service.BadgeIntentService;
+import com.chatpuppy.app.viewmodel.ChatViewModel;
 import com.chatpuppy.app.web3.entity.NoticeMessage;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
 
@@ -184,7 +185,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     private ActionSheet confirmationDialog;
     ActivityResultLauncher<Intent> getGasSettings = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> confirmationDialog.setCurrentGasIndex(result));
-    private DappBrowserViewModel viewModel;
+    private ChatViewModel viewModel;
     private DappBrowserSwipeLayout swipeRefreshLayout;
     private Web3View web3;
     private ProgressBar progressBar;
@@ -261,14 +262,14 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         super.onCreate(savedInstanceState);
 
 //        ignoreBatteryOptimization(requireActivity());
-        getChildFragmentManager()
-                .setFragmentResultListener(DAPP_CLICK, this, (requestKey, bundle) -> {
-                    DApp dapp = bundle.getParcelable(DAPP_CLICK);
-                    addToBackStack(PUPPY_CHAT);
-                    if (dapp != null) {
-                        loadUrl(dapp.getUrl());
-                    }
-                });
+//        getChildFragmentManager()
+//                .setFragmentResultListener(DAPP_CLICK, this, (requestKey, bundle) -> {
+//                    DApp dapp = bundle.getParcelable(DAPP_CLICK);
+//                    addToBackStack(PUPPY_CHAT);
+//                    if (dapp != null) {
+//                        loadUrl(dapp.getUrl());
+//                    }
+//                });
     }
 
     @Override
@@ -282,7 +283,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             //reboot
             requireActivity().recreate();
         } else {
-            viewModel.track(Analytics.Navigation.BROWSER);
+            viewModel.track(Analytics.Navigation.CHATPUPPY);
             web3.setWebLoadCallback(this);
         }
     }
@@ -298,39 +299,39 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         initViewModel();
         initView(view);
 
-        addressBar.setup(viewModel.getDappsMasterList(getContext()), new AddressBarListener() {
-            @Override
-            public boolean onLoad(String urlText) {
-                addToBackStack(PUPPY_CHAT);
-                boolean handled = loadUrl(urlText);
-                detachFragments();
-                cancelSearchSession();
-                return handled;
-            }
-
-            @Override
-            public void onClear() {
-                cancelSearchSession();
-            }
-
-            @Override
-            public com.tencent.smtt.sdk.WebBackForwardList loadNext() {
-                goToNextPage();
-                return web3.copyBackForwardList();
-            }
-
-            @Override
-            public com.tencent.smtt.sdk.WebBackForwardList loadPrevious() {
-                backPressed();
-                return web3.copyBackForwardList();
-            }
-
-            @Override
-            public com.tencent.smtt.sdk.WebBackForwardList onHomePagePressed() {
-                homePressed();
-                return web3.copyBackForwardList();
-            }
-        });
+//        addressBar.setup(viewModel.getDappsMasterList(getContext()), new AddressBarListener() {
+//            @Override
+//            public boolean onLoad(String urlText) {
+//                addToBackStack(PUPPY_CHAT);
+//                boolean handled = loadUrl(urlText);
+//                detachFragments();
+//                cancelSearchSession();
+//                return handled;
+//            }
+//
+//            @Override
+//            public void onClear() {
+//                cancelSearchSession();
+//            }
+//
+//            @Override
+//            public com.tencent.smtt.sdk.WebBackForwardList loadNext() {
+//                goToNextPage();
+//                return web3.copyBackForwardList();
+//            }
+//
+//            @Override
+//            public com.tencent.smtt.sdk.WebBackForwardList loadPrevious() {
+//                backPressed();
+//                return web3.copyBackForwardList();
+//            }
+//
+//            @Override
+//            public com.tencent.smtt.sdk.WebBackForwardList onHomePagePressed() {
+//                homePressed();
+//                return web3.copyBackForwardList();
+//            }
+//        });
 
         attachFragment(PUPPY_CHAT);
         return view;
@@ -401,7 +402,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     }
 
     private void initView(@NotNull View view) {
-        web3 = view.findViewById(R.id.web3view);
+        web3 = view.findViewById(R.id.web3view_no_addressbar);
 //        Bundle savedState = readBundleFromLocal();
 //        if (savedState != null) {
 //            web3.restoreState(savedState);
@@ -486,7 +487,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
 
     private void initViewModel() {
         viewModel = new ViewModelProvider(this)
-                .get(DappBrowserViewModel.class);
+                .get(ChatViewModel.class);
         viewModel.activeNetwork().observe(getViewLifecycleOwner(), this::onNetworkChanged);
         viewModel.defaultWallet().observe(getViewLifecycleOwner(), this::onDefaultWallet);
         activeNetwork = viewModel.getActiveNetwork();
@@ -512,20 +513,20 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     }
 
     private void onNetworkChanged(NetworkInfo networkInfo) {
-        boolean networkChanged = networkInfo != null && (activeNetwork == null || activeNetwork.chainId != networkInfo.chainId);
-        this.activeNetwork = networkInfo;
-        if (networkInfo != null) {
-            if (networkChanged) {
-                viewModel.findWallet();
-            }
-            if (networkChanged && addressBar.isOnHomePage())
-                resetDappBrowser(); //trigger a reset if on homepage
-
-            updateFilters(networkInfo);
-        } else {
-            openNetworkSelection();
-            resetDappBrowser();
-        }
+//        boolean networkChanged = networkInfo != null && (activeNetwork == null || activeNetwork.chainId != networkInfo.chainId);
+//        this.activeNetwork = networkInfo;
+//        if (networkInfo != null) {
+//            if (networkChanged) {
+//                viewModel.findWallet();
+//            }
+//            if (networkChanged && addressBar.isOnHomePage())
+//                resetDappBrowser(); //trigger a reset if on homepage
+//
+//            updateFilters(networkInfo);
+//        } else {
+//            openNetworkSelection();
+//            resetDappBrowser();
+//        }
     }
 
     private void updateFilters(NetworkInfo networkInfo) {
@@ -723,13 +724,13 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     }
 
     private void loadNewNetwork(long newNetworkId) {
-        if (activeNetwork == null || activeNetwork.chainId != newNetworkId) {
-            viewModel.setNetwork(newNetworkId);
-            onNetworkChanged(viewModel.getNetworkInfo(newNetworkId));
-            viewModel.updateGasPrice(newNetworkId);
-        }
-        //refresh URL page
-        reloadPage();
+//        if (activeNetwork == null || activeNetwork.chainId != newNetworkId) {
+//            viewModel.setNetwork(newNetworkId);
+//            onNetworkChanged(viewModel.getNetworkInfo(newNetworkId));
+//            viewModel.updateGasPrice(newNetworkId);
+//        }
+//        //refresh URL page
+//        reloadPage();
     }
 
     @Override
@@ -1541,8 +1542,9 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     }
 
     private String getDefaultDappUrl() {
-        String customHome = viewModel.getHomePage(getContext());
-        return customHome != null ? customHome : DappBrowserUtils.defaultDapp(activeNetwork != null ? activeNetwork.chainId : 0);
+        return URL;
+//        String customHome = viewModel.getHomePage(getContext());
+//        return customHome != null ? customHome : DappBrowserUtils.defaultDapp(activeNetwork != null ? activeNetwork.chainId : 0);
     }
 
     @Override
