@@ -95,7 +95,7 @@ public class AppSiteController implements AttributeInterface {
     private final TokenscriptFunction tokenscriptFunction = new TokenscriptFunction() {
     };
     private static Path repoDir;
-    private static String infuraKey = "9e81d78e941b440fbb2560184ab55cad";
+    private static String infuraKey = "3446259cb0e74d68b614f9a10328a368";
 
     @GetMapping(value = "/apple-app-site-association", produces = "application/json")
     @ResponseBody

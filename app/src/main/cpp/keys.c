@@ -41,7 +41,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getInfuraKey(JNIEnv *env, j
 #elif (HAS_INFURA == 1)
     return (*env)->NewStringUTF(env, IFKEY);
 #else
-    const jstring key = "9e81d78e941b440fbb2560184ab55cad";
+    const jstring key = "3446259cb0e74d68b614f9a10328a368";
     return (*env)->NewStringUTF(env, key);
 #endif
 }
@@ -83,7 +83,7 @@ Java_com_chatpuppy_app_repository_KeyProviderJNIImpl_getSecondaryInfuraKey(JNIEn
 #elif (HAS_INFURA == 1)
     return (*env)->NewStringUTF(env, IFKEY);
 #else
-    const jstring key = "9e81d78e941b440fbb2560184ab55cad";
+    const jstring key = "3446259cb0e74d68b614f9a10328a368";
     return (*env)->NewStringUTF(env, key);
 #endif
 }

@@ -11,10 +11,6 @@ public abstract class EthereumNetworkBase { // implements EthereumNetworkReposit
     public static final long MAINNET_ID = 1;
     public static final long CLASSIC_ID = 61;
     public static final long POA_ID = 99;
-    //    public static final long KOVAN_ID = 42;
-//    public static final long ROPSTEN_ID = 3;
-//    public static final long SOKOL_ID = 77;
-//    public static final long RINKEBY_ID = 4;
     public static final long GNOSIS_ID = 100;
     public static final long GOERLI_ID = 5;
     public static final long ARTIS_SIGMA1_ID = 246529;
@@ -30,13 +26,9 @@ public abstract class EthereumNetworkBase { // implements EthereumNetworkReposit
     public static final long POLYGON_ID = 137;
     public static final long POLYGON_TEST_ID = 80001;
     public static final long OPTIMISTIC_MAIN_ID = 10;
-    //    public static final long OPTIMISTIC_TEST_ID = 69;
     public static final long CRONOS_MAIN_ID = 25;
     public static final long CRONOS_TEST_ID = 338;
     public static final long ARBITRUM_MAIN_ID = 42161;
-    //    public static final long ARBITRUM_TEST_ID = 421611;
-//    public static final long PALM_ID = 0x2a15c308dL; //11297108109
-//    public static final long PALM_TEST_ID = 0x2a15c3083L; //11297108099
     public static final long KLAYTN_ID = 8217;
     public static final long KLAYTN_BAOBAB_ID = 1001;
     public static final long IOTEX_MAINNET_ID = 4689;
@@ -48,17 +40,15 @@ public abstract class EthereumNetworkBase { // implements EthereumNetworkReposit
     public static final long SEPOLIA_TESTNET_ID = 11155111;
     public static final long OPTIMISM_GOERLI_TEST_ID = 420;
     public static final long ARBITRUM_GOERLI_TEST_ID = 421613;
-
-
-    public static final String MAINNET_RPC_URL = "https://mainnet.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
+    
+    private static final String INFURA_KEY = "3446259cb0e74d68b614f9a10328a368";
+    
+    public static final String MAINNET_RPC_URL = "https://mainnet.infura.io/v3/" + INFURA_KEY;
     public static final String CLASSIC_RPC_URL = "https://www.ethercluster.com/etc";
     public static final String XDAI_RPC_URL = "https://rpc.ankr.com/gnosis";
     public static final String POA_RPC_URL = "https://core.poa.network/";
-    //    public static final String ROPSTEN_RPC_URL = "https://ropsten.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
-    public static final String RINKEBY_RPC_URL = "https://rinkeby.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
-    //    public static final String KOVAN_RPC_URL = "https://kovan.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
-//    public static final String SOKOL_RPC_URL = "https://sokol.poa.network";
-    public static final String GOERLI_RPC_URL = "https://goerli.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
+    public static final String RINKEBY_RPC_URL = "https://rinkeby.infura.io/v3/" + INFURA_KEY;
+    public static final String GOERLI_RPC_URL = "https://goerli.infura.io/v3/" + INFURA_KEY;
     public static final String ARTIS_SIGMA1_RPC_URL = "https://rpc.sigma1.artis.network";
     public static final String ARTIS_TAU1_RPC_URL = "https://rpc.tau1.artis.network";
     public static final String BINANCE_TEST_RPC_URL = "https://data-seed-prebsc-1-s3.binance.org:8545";
@@ -72,13 +62,9 @@ public abstract class EthereumNetworkBase { // implements EthereumNetworkReposit
     public static final String MATIC_RPC_URL = "https://matic-mainnet.chainstacklabs.com";
     public static final String MUMBAI_TEST_RPC_URL = "https://matic-mumbai.chainstacklabs.com";
     public static final String OPTIMISTIC_MAIN_FALLBACK_URL = "https://mainnet.optimism.io";
-    //    public static final String OPTIMISTIC_TEST_FALLBACK_URL = "https://kovan.optimism.io";
     public static final String CRONOS_MAIN_RPC_URL = "https://evm.cronos.org";
     public static final String CRONOS_TEST_URL = "https://evm-t3.cronos.org";
-    public static final String ARBITRUM_RPC_URL = "https://arbitrum-mainnet.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
-    //    public static final String ARBITRUM_TEST_RPC_URL = "https://arbitrum-rinkeby.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
-//    public static final String PALM_RPC_URL = "https://palm-mainnet.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
-//    public static final String PALM_TEST_RPC_URL = "https://palm-testnet.infura.io/v3/9e81d78e941b440fbb2560184ab55cad";
+    public static final String ARBITRUM_RPC_URL = "https://arbitrum-mainnet.infura.io/v3/" + INFURA_KEY;
     public static final String KLAYTN_RPC = "https://public-node-api.klaytnapi.com/v1/cypress";
     public static final String KLAYTN_BAOBAB_RPC = "https://api.baobab.klaytn.net:8651";
     public static final String AURORA_MAINNET_RPC_URL = "https://mainnet.aurora.dev";
@@ -103,14 +89,6 @@ public abstract class EthereumNetworkBase { // implements EthereumNetworkReposit
                     POA_ID, false));
             put(ARTIS_SIGMA1_ID, new NetworkInfo("ARTIS sigma1", "ATS", ARTIS_SIGMA1_RPC_URL, "https://explorer.sigma1.artis.network/tx/",
                     ARTIS_SIGMA1_ID, false));
-//            put(KOVAN_ID, new NetworkInfo("Kovan (Test)", "ETH", KOVAN_RPC_URL, "https://kovan.etherscan.io/tx/",
-//                    KOVAN_ID, false));
-//            put(ROPSTEN_ID, new NetworkInfo("Ropsten (Test)", "ETH", ROPSTEN_RPC_URL, "https://ropsten.etherscan.io/tx/",
-//                    ROPSTEN_ID, false));
-//            put(SOKOL_ID, new NetworkInfo("Sokol (Test)", "POA", SOKOL_RPC_URL, "https://blockscout.com/poa/sokol/tx/",
-//                    SOKOL_ID, false));
-//            put(RINKEBY_ID, new NetworkInfo("Rinkeby (Test)", "ETH", RINKEBY_RPC_URL, "https://rinkeby.etherscan.io/tx/",
-//                    RINKEBY_ID, false));
             put(GOERLI_ID, new NetworkInfo("Görli (Test)", "GÖETH", GOERLI_RPC_URL, "https://goerli.etherscan.io/tx/",
                     GOERLI_ID, false));
             put(ARTIS_TAU1_ID, new NetworkInfo("ARTIS tau1 (Test)", "ATS", ARTIS_TAU1_RPC_URL, "https://explorer.tau1.artis.network/tx/",
@@ -141,20 +119,10 @@ public abstract class EthereumNetworkBase { // implements EthereumNetworkReposit
 
             put(OPTIMISTIC_MAIN_ID, new NetworkInfo("Optimistic", "ETH", OPTIMISTIC_MAIN_FALLBACK_URL, "https://optimistic.etherscan.io/tx/",
                     OPTIMISTIC_MAIN_ID, false));
-//            put(OPTIMISTIC_TEST_ID, new NetworkInfo("Optimistic (Test)", "ETH", OPTIMISTIC_TEST_FALLBACK_URL, "https://kovan-optimistic.etherscan.io/tx/",
-//                    OPTIMISTIC_TEST_ID, false));
             put(CRONOS_MAIN_ID, new NetworkInfo("Cronos (Beta)", "CRO", CRONOS_MAIN_RPC_URL, "https://cronoscan.com/tx", CRONOS_MAIN_ID, false));
             put(CRONOS_TEST_ID, new NetworkInfo("Cronos (Test)", "tCRO", CRONOS_TEST_URL, "https://testnet.cronoscan.com/tx/", CRONOS_TEST_ID, false));
             put(ARBITRUM_MAIN_ID, new NetworkInfo("Arbitrum One", "AETH", ARBITRUM_RPC_URL, "https://arbiscan.io/tx/",
                     ARBITRUM_MAIN_ID, false));
-//            put(ARBITRUM_TEST_ID, new NetworkInfo("Arbitrum Test", "ARETH", ARBITRUM_TEST_RPC_URL, "https://rinkeby-explorer.arbitrum.io/tx/",
-//                    ARBITRUM_TEST_ID, false));
-
-//            put(PALM_ID, new NetworkInfo("PALM","PALM", PALM_RPC_URL, "https://explorer.palm.io/tx/",
-//                    PALM_ID, false));
-//            put(PALM_TEST_ID, new NetworkInfo("PALM (Test)", "PALM", PALM_TEST_RPC_URL, "https://explorer.palm-uat.xyz/tx/",
-//                    PALM_TEST_ID, false));
-
             put(KLAYTN_ID, new NetworkInfo("Klaytn Cypress", "KLAY", KLAYTN_RPC, "https://scope.klaytn.com/tx/",
                     KLAYTN_ID, false));
             put(KLAYTN_BAOBAB_ID, new NetworkInfo("Klaytn Baobab (Test)", "KLAY", KLAYTN_BAOBAB_RPC, "https://baobab.scope.klaytn.com/tx/",
