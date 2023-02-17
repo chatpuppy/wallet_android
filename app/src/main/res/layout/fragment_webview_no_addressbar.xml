@@ -4,23 +4,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.chatpuppy.app.widget.AddressBar
-            android:id="@+id/address_bar_widget"
-            android:visibility="invisible"
-            android:layout_width="match_parent"
-            android:layout_height="0dp" />
+<!--    <com.chatpuppy.app.widget.AddressBar-->
+<!--            android:id="@+id/address_bar_widget"-->
+<!--            android:visibility="invisible"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp" />-->
 
-    <View
-            android:id="@+id/separator"
-            style="@style/Aw.Component.Separator"
-            android:layout_below="@id/address_bar_widget" />
+<!--    <View-->
+<!--            android:id="@+id/separator"-->
+<!--            style="@style/Aw.Component.Separator"-->
+<!--            android:layout_below="@id/address_bar_widget" />-->
 
     <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/horizontal_toolbar_progress_height"
-            android:layout_below="@id/separator"
             android:indeterminate="false" />
 
     <View

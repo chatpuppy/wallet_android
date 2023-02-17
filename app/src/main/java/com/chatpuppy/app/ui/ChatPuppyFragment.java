@@ -198,7 +198,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     private AddEthereumChainPrompt addCustomChainDialog;
     private ImageView refresh;
     private FrameLayout webFrame;
-    private AddressBar addressBar;
+//    private AddressBar addressBar;
 
     // Handle resizing the browser view when the soft keyboard pops up and goes.
     // The issue this fixes is where you need to enter data at the bottom of the webpage,
@@ -367,7 +367,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         getChildFragmentManager().beginTransaction()
                 .add(R.id.frame, fragment, tag)
                 .commit();
-        addressBar.updateNavigationButtons(web3.copyBackForwardList());
+//        addressBar.updateNavigationButtons(web3.copyBackForwardList());
     }
 
     private void detachFragments() {
@@ -381,7 +381,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         homePressed = true;
         detachFragments();
         currentFragment = PUPPY_CHAT;
-        addressBar.clear();
+//        addressBar.clear();
         if (web3 != null) {
             resetDappBrowser();
         }
@@ -398,7 +398,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         super.onDestroy();
         viewModel.onDestroy();
         stopBalanceListener();
-        addressBar.destroy();
+//        addressBar.destroy();
     }
 
     private void initView(@NotNull View view) {
@@ -409,7 +409,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
 //        }
         loadOnInit = URL;
 
-        addressBar = view.findViewById(R.id.address_bar_widget);
+//        addressBar = view.findViewById(R.id.address_bar_widget);
         progressBar = view.findViewById(R.id.progressBar);
         webFrame = view.findViewById(R.id.frame);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
@@ -418,11 +418,11 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         refresh = view.findViewById(R.id.refresh);
 
         RelativeLayout layout = view.findViewById(R.id.address_bar_layout);
-        layout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+//        layout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
 
-        if (refresh != null) {
-            refresh.setOnClickListener(v -> reloadPage());
-        }
+//        if (refresh != null) {
+//            refresh.setOnClickListener(v -> reloadPage());
+//        }
         web3.setWebLoadCallback(this);
         webFrame.setOnApplyWindowInsetsListener(resizeListener);
     }
@@ -444,13 +444,13 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
                 viewModel.updateGasPrice(activeNetwork.chainId);
             }
         }
-        addressBar.leaveEditMode();
+//        addressBar.leaveEditMode();
     }
 
     @Override
     public void leaveFocus() {
         if (web3 != null) web3.requestFocus();
-        addressBar.leaveFocus();
+//        addressBar.leaveFocus();
         if (viewModel != null) viewModel.stopBalanceUpdate();
         stopBalanceListener();
     }
@@ -468,7 +468,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
 
     private void cancelSearchSession() {
         detachFragment(SEARCH);
-        addressBar.updateNavigationButtons(web3.copyBackForwardList());
+//        addressBar.updateNavigationButtons(web3.copyBackForwardList());
     }
 
     private void detachFragment(String tag) {
@@ -1057,7 +1057,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             detachFragments();
         } else if (!web3.getUrl().equalsIgnoreCase(getDefaultDappUrl())) {
             homePressed();
-            addressBar.updateNavigationButtons(web3.copyBackForwardList());
+//            addressBar.updateNavigationButtons(web3.copyBackForwardList());
         }
     }
 
@@ -1084,13 +1084,13 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
 //        }
 
         onWebpageLoadComplete();
-        addressBar.setUrl(url);
+//        addressBar.setUrl(url);
     }
 
     @Override
     public void onWebpageLoadComplete() {
         handler.post(() -> {
-            addressBar.updateNavigationButtons(web3.copyBackForwardList());
+//            addressBar.updateNavigationButtons(web3.copyBackForwardList());
             if (loadUrlAfterReload != null) {
                 loadUrl(loadUrlAfterReload);
                 loadUrlAfterReload = null;
@@ -1113,7 +1113,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
         if (checkForMagicLink(urlText)) return true;
         web3.resetView();
         web3.loadUrl(Utils.formatUrl(urlText));
-        addressBar.leaveEditMode();
+//        addressBar.leaveEditMode();
         web3.requestFocus();
         getParentFragmentManager().setFragmentResult(RESET_TOOLBAR, new Bundle());
         return true;
@@ -1355,7 +1355,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
             oos.writeObject(CURRENT_FRAGMENT);
             oos.writeObject(currentFragment);
             oos.writeObject(CURRENT_URL);
-            oos.writeObject(addressBar.getUrl());
+//            oos.writeObject(addressBar.getUrl());
         }
         return bos;
     }
