@@ -11,7 +11,7 @@ public class MediaLinks {
     public static final String AWALLET_BLOG_URL = null;
     public static final String AWALLET_FAQ_URL = "https://chatpuppy.com/faq/";
     public static final String AWALLET_GITHUB = "https://github.com/chatpuppy";
-    public static final String AWALLET_CHATPUPPY = "https://www.chatpuppy.com";
+    public static final String AWALLET_CHATPUPPY = "https://apps.chatpuppy.com";
     public static final String AWALLET_ALPHAWALLET = "https://alphawallet.com/";
 
     public static final String AWALLET_EMAIL1 = "support";
