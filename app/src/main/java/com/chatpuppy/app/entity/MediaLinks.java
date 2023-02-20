@@ -3,7 +3,7 @@ package com.chatpuppy.app.entity;
 public class MediaLinks {
     public static final String AWALLET_TELEGRAM_URL = "https://t.me/chatpuppy";
     public static final String AWALLET_DISCORD_URL = "https://discord.gg/QN658sJWkk";
-    public static final String AWALLET_TWITTER_URL = "https://twitter.com/chatpuppy";
+    public static final String AWALLET_TWITTER_URL = "https://twitter.com/chatpuppynft";
     public static final String AWALLET_FACEBOOK_URL = null;
     public static final String AWALLET_LINKEDIN_URL = null;
     public static final String AWALLET_REDDIT_URL = null;

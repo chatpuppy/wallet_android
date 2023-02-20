@@ -259,7 +259,7 @@ public class DappBrowserUtils {
 
     public static String defaultDapp(long chainId)
     {
-        return (chainId == POLYGON_ID || chainId == POLYGON_TEST_ID) ? POLYGON_HOMEPAGE : DEFAULT_HOMEPAGE;
+        return DEFAULT_HOMEPAGE;
     }
 
     public static boolean isWithinHomePage(String url)
