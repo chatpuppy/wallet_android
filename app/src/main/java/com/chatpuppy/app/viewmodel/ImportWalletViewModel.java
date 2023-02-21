@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.chatpuppy.app.C;
 import com.chatpuppy.app.entity.ErrorEnvelope;
 import com.chatpuppy.app.entity.ImportWalletCallback;
+import com.chatpuppy.app.entity.SignAuthenticationCallback;
 import com.chatpuppy.app.entity.analytics.ImportWalletType;
 import com.chatpuppy.app.entity.Operation;
 import com.chatpuppy.app.entity.Wallet;
@@ -144,14 +145,16 @@ public class ImportWalletViewModel extends BaseViewModel implements OnSetWatchWa
         error.postValue(new ErrorEnvelope(C.ErrorCode.UNKNOWN, throwable.getMessage()));
     }
 
-//    public void getAuthorisation(String walletAddress, Activity activity, SignAuthenticationCallback callback)
-//    {
-//        keyService.getAuthenticationForSignature(walletAddress, activity, callback);
-//    }
+    public void getAuthorisation(Wallet wallet, Activity activity, SignAuthenticationCallback callback)
+    {
+        keyService.getAuthenticationForSignature(wallet, activity, callback);
+    }
 
     public void importHDWallet(String seedPhrase, Activity activity, ImportWalletCallback callback)
     {
-        keyService.importHDKey(seedPhrase, activity, callback);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            keyService.importHDKey(seedPhrase, activity, callback);
+        }
     }
 
     public void importKeystoreWallet(String address, Activity activity, ImportWalletCallback callback)

@@ -958,7 +958,6 @@
     <string name="error_message_watch_only_wallet">Không thể thực hiện hành động trên ví Chỉ xem này.</string>
     <string name="select_image">hình ảnh</string>
     <string name="select_file">tập tin</string>
-    <string name="allow_background_activities_step_tips">不同机型或同一机型不同型号手机设置项名称或路径可能存在差异，具体设置方法请咨询手机厂商。</string>
     <string name="label_btn_power_manager">去设置</string>
     <string name="menu_brand_vivo">vivo</string>
     <string name="menu_brand_oppo">oppo</string>
@@ -967,7 +966,6 @@
     <string name="menu_brand_others">others</string>
     <string name="label_allow_auto_start">允许自启动</string>
     <string name="allow_auto_start_step">步骤：点击去设置-【手机设置】-【应用与权限】-【权限管理】-【自启动】-【ChatPuppy】，开启【自启动】。</string>
-    <string name="allow_auto_start_tips">在运行ChatPuppy异常退出后可自恢复</string>
     <string name="menu_brand_honor">honor</string>
     <string name="title_copyright">Copyright</string>
 </resources>

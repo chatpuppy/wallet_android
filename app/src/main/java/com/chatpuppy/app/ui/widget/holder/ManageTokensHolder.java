@@ -27,6 +27,6 @@ public class ManageTokensHolder extends BinderViewHolder<ManageTokensData> {
     }
 
     public void setOnTokenClickListener(TokensAdapterCallback tokensAdapterCallback) {
-        button.setOnClickListener(v -> tokensAdapterCallback.onBuyToken());
+//        button.setOnClickListener(v -> tokensAdapterCallback.onBuyToken());
     }
 }

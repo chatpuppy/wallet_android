@@ -10,15 +10,14 @@
     <string name="wc_wallet_not_match">Wallet not exist or it\'s watch only.</string>
     <string name="chain_not_support">Chain %s is not supported.</string>
     <string name="mode_test">Testnet mode</string>
-    <string name="allow_background_activities_step_tips">不同机型或同一机型不同型号手机设置项名称或路径可能存在差异，具体设置方法请咨询手机厂商。</string>
-    <string name="label_btn_power_manager">去设置</string>
-    <string name="menu_brand_vivo">vivo</string>
-    <string name="menu_brand_oppo">oppo</string>
+    <string name="label_btn_power_manager">44/5000</string>
+    <string name="menu_brand_vivo">翻译</string>
+    <string name="menu_brand_oppo">The item name or path may vary depending on the phone model or the phone model. For details about how to set the item, contact the phone manufacturer.</string>
     <string name="menu_brand_huawei">huawei</string>
     <string name="menu_brand_xiaomi">xiaomi</string>
     <string name="menu_brand_others">others</string>
     <string name="label_allow_auto_start">允许自启动</string>
-    <string name="allow_auto_start_step">步骤：点击去设置-【手机设置】-【应用与权限】-【权限管理】-【自启动】-【ChatPuppy】，开启【自启动】。</string>
-    <string name="allow_auto_start_tips">在运行ChatPuppy异常退出后可自恢复</string>
+    <string name="allow_auto_start_step">Step: Click to Set - [Settings] - [Apps and Permissions] - [Rights Management] - [Self-start] - [ChatPuppy], enable the Self-start.</string>
+    <string name="allow_auto_start_tips">You can recover after running ChatPuppy and exiting unexpectedly</string>
     <string name="menu_brand_honor">honor</string>
 </resources>

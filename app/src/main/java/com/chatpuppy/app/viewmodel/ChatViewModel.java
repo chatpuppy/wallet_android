@@ -418,7 +418,7 @@ public class ChatViewModel extends BaseViewModel {
 
     // Chatpuppy
     public void getAuthentication(Wallet wallet, Activity activity, SignAuthenticationCallback callback) {
-//        keyService.setRequireAuthentication(); // require authentication for any action involving the keystore
+        keyService.setRequireAuthentication(); // require authentication for any action involving the keystore
         keyService.getAuthenticationForSignature(wallet, activity, callback);
     }
 }
