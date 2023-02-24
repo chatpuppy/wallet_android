@@ -977,13 +977,12 @@
     <string name="error_message_watch_only_wallet">ဤ Watch-only ပိုက်ဆံအိတ်တွင် လုပ်ဆောင်ချက်ကို မလုပ်ဆောင်နိုင်ပါ။</string>
     <string name="select_image">Image</string>
     <string name="select_file">Dossier</string>
-    <string name="label_btn_power_manager">去设置</string>
     <string name="menu_brand_vivo">vivo</string>
     <string name="menu_brand_oppo">oppo</string>
     <string name="menu_brand_huawei">huawei</string>
     <string name="menu_brand_xiaomi">xiaomi</string>
     <string name="menu_brand_others">others</string>
-    <string name="label_allow_auto_start">允许自启动</string>
     <string name="menu_brand_honor">honor</string>
     <string name="title_copyright">Copyright</string>
+    <string name="btn_update">အဆင့်အသစ်</string>
 </resources>

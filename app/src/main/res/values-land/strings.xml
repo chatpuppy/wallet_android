@@ -10,13 +10,13 @@
     <string name="wc_wallet_not_match">Wallet not exist or it\'s watch only.</string>
     <string name="chain_not_support">Chain %s is not supported.</string>
     <string name="mode_test">Testnet mode</string>
-    <string name="label_btn_power_manager">44/5000</string>
-    <string name="menu_brand_vivo">翻译</string>
+    <string name="label_btn_power_manager">Setting</string>
+    <string name="menu_brand_vivo">vivo</string>
     <string name="menu_brand_oppo">The item name or path may vary depending on the phone model or the phone model. For details about how to set the item, contact the phone manufacturer.</string>
     <string name="menu_brand_huawei">huawei</string>
     <string name="menu_brand_xiaomi">xiaomi</string>
     <string name="menu_brand_others">others</string>
-    <string name="label_allow_auto_start">允许自启动</string>
+    <string name="label_allow_auto_start">Allow self-start</string>
     <string name="allow_auto_start_step">Step: Click to Set - [Settings] - [Apps and Permissions] - [Rights Management] - [Self-start] - [ChatPuppy], enable the Self-start.</string>
     <string name="allow_auto_start_tips">You can recover after running ChatPuppy and exiting unexpectedly</string>
     <string name="menu_brand_honor">honor</string>

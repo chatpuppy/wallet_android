@@ -945,14 +945,12 @@
     <string name="error_message_watch_only_wallet">No se pudo realizar la acción en esta billetera de solo reloj.</string>
     <string name="select_image">Imagen</string>
     <string name="select_file">Archivo</string>
-    <string name="label_btn_power_manager">去设置</string>
     <string name="menu_brand_vivo">vivo</string>
     <string name="menu_brand_oppo">oppo</string>
     <string name="menu_brand_huawei">huawei</string>
     <string name="menu_brand_xiaomi">xiaomi</string>
     <string name="menu_brand_others">others</string>
-    <string name="label_allow_auto_start">允许自启动</string>
-    <string name="allow_auto_start_step">步骤：点击去设置-【手机设置】-【应用与权限】-【权限管理】-【自启动】-【ChatPuppy】，开启【自启动】。</string>
     <string name="menu_brand_honor">honor</string>
     <string name="title_copyright">Copyright</string>
+    <string name="btn_update">actualización</string>
 </resources>

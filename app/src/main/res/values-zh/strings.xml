@@ -981,4 +981,8 @@
     <string name="chatpuppy_copyright_title">Copyright notice</string>
     <string name="title_copyright">Copyright</string>
     <string name="allow_auto_start_step">步骤：点击去设置-【手机设置】-【应用与权限】-【权限管理】-【自启动】-【ChatPuppy】，开启【自启动】。</string>
+    <string name="label_x5_init_rebooting">初始化完成，App正在自动重启。</string>
+    <string name="label_x5_please_reboot">请重启应用</string>
+    <string name="btn_x5_reboot">重启应用</string>
+    <string name="btn_update">升级</string>
 </resources>

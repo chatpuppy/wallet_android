@@ -31,10 +31,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -60,6 +63,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.chatpuppy.app.BuildConfig;
 import com.chatpuppy.app.C;
 import com.chatpuppy.app.R;
 import com.chatpuppy.app.analytics.Analytics;
@@ -79,7 +83,9 @@ import com.chatpuppy.app.repository.EthereumNetworkRepository;
 import com.chatpuppy.app.router.ImportTokenRouter;
 import com.chatpuppy.app.service.NotificationService;
 import com.chatpuppy.app.service.PriceAlertsService;
+import com.chatpuppy.app.service.TickerService;
 import com.chatpuppy.app.ui.widget.entity.ActionSheetCallback;
+import com.chatpuppy.app.ui.widget.entity.HistoryChart;
 import com.chatpuppy.app.ui.widget.entity.PagerCallback;
 import com.chatpuppy.app.util.FileUtils;
 import com.chatpuppy.app.util.LocaleUtils;
@@ -98,21 +104,38 @@ import com.chatpuppy.token.entity.Signable;
 import com.chatpuppy.token.tools.Numeric;
 import com.chatpuppy.token.tools.ParseMagicLink;
 import com.github.florent37.tutoshowcase.TutoShowcase;
+import com.king.app.dialog.AppDialog;
+import com.king.app.dialog.AppDialogConfig;
+import com.king.app.updater.AppUpdater;
+import com.king.app.updater.callback.AppUpdateCallback;
+import com.king.app.updater.http.OkHttpManager;
 import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.QbSdk;
 import com.tencent.smtt.sdk.TbsListener;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.leolin.shortcutbadger.ShortcutBadger;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import timber.log.Timber;
 
 @AndroidEntryPoint
@@ -128,6 +151,7 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
     public static final String RESET_TOKEN_SERVICE = "HOME_reset_ts";
     public static final String AW_MAGICLINK = "aw.app/";
     public static final String AW_MAGICLINK_DIRECT = "openurl?url=";
+    public static final String UPDATE_URL = "https://apps.chatpuppy.com/update.json";
     private static boolean updatePrompt = false;
     private final FragmentStateAdapter pager2Adapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -149,6 +173,16 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
 
     private static final int REQUEST_CODE_CONTACT = 101;
     private static final String TAG = "X5Webview";
+
+    private AppUpdater mAppUpdater;
+
+
+    static OkHttpClient httpClient = new OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(false)
+            .build();
 
     public HomeActivity() {
         // fragment creation is shifted to adapter
@@ -209,7 +243,7 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
 
         LocaleUtils.setDeviceLocale(getBaseContext());
         super.onCreate(savedInstanceState);
-        initTBS();
+
 
         LocaleUtils.setActiveLocale(this);
         getLifecycle().addObserver(this);
@@ -297,6 +331,8 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
         if (intent.hasExtra(C.FROM_HOME_ROUTER) && intent.getStringExtra(C.FROM_HOME_ROUTER).equals(C.FROM_HOME_ROUTER)) {
             viewModel.storeCurrentFragmentId(-1);
         }
+        checkUpdates();
+        initTBS();
 
         if (data != null) {
             String importData = data.toString();
@@ -636,7 +672,7 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
         enableDisplayHomeAsHome(enableDisplayAsHome);
         switchAdapterToPage(page);
         invalidateOptionsMenu();
-        checkWarnings();
+//        checkWarnings();
 
         signalPageVisibilityChange(oldPage, page);
     }
@@ -665,7 +701,7 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
                 AWalletConfirmationDialog cDialog = new AWalletConfirmationDialog(this);
                 cDialog.setTitle(R.string.alphawallet_update);
                 cDialog.setCancelable(true);
-                cDialog.setSmallText("Using an old version of Alphawallet. Please update from the Play Store or Alphawallet website.");
+                cDialog.setSmallText("Using an old version of ChatPuppy. Please update from the Play Store or ChatPuppy website.");
                 cDialog.setPrimaryButtonText(R.string.ok);
                 cDialog.setPrimaryButtonListener(v ->
                 {
@@ -1100,10 +1136,70 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
         }
     }
 
+    private void checkUpdates() {
+
+        fetchUpdateInfo().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(updateInfo -> {
+                    if(updateInfo==null) return;
+                    String currentLocale = Locale.getDefault().getLanguage();
+                    String title = currentLocale.equalsIgnoreCase("zh") ? updateInfo.getString("title_zh") : updateInfo.getString("title");
+                    String content = currentLocale.equalsIgnoreCase("zh") ? updateInfo.getString("content_zh") : updateInfo.getString("content");
+
+                    String mUrl = updateInfo.getString("url");
+                    String md5 = updateInfo.getString("md5");
+                    boolean forceUpdate = updateInfo.getBoolean("forceUpdate");
+
+                    if (mUrl != null && title != null && !"".equals(title) && !"".equals(content) && !"".equals(mUrl)) {
+
+                        AppDialogConfig config = new AppDialogConfig(this);
+                        String finalMUrl = mUrl;
+                        String finalMd = md5;
+                        config.setTitle(title)
+                                .setConfirm(getText(R.string.btn_update))
+                                .setContent(content).setHideCancel(forceUpdate)
+                                .setOnClickConfirm(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        mAppUpdater = new AppUpdater.Builder(getBaseContext()).setUrl(finalMUrl).setApkMD5(finalMd).setVersionCode(BuildConfig.VERSION_CODE).setVibrate(true).setInstallApk(true).setReDownload(true).build();
+                                        mAppUpdater.setHttpManager(OkHttpManager.getInstance()).start();
+                                        AppDialog.INSTANCE.dismissDialog();
+                                    }
+                                });
+                        AppDialog.INSTANCE.showDialog(config, false);
+                    }
+
+                })
+                .isDisposed();
+
+
+    }
+
+    private Single<JSONObject> fetchUpdateInfo() {
+        return Single.fromCallable(() ->
+        {
+            try {
+                Request request = new Request.Builder()
+                        .url(UPDATE_URL)
+                        .get()
+                        .build();
+                okhttp3.Response response = httpClient.newCall(request)
+                        .execute();
+                if (response.code() / 200 == 1) {
+                    return new JSONObject(response.body().string());
+                }
+            } catch (Exception e) {
+                Timber.e(e);
+                return null;
+            }
+
+            return null;
+        });
+    }
+
 
     public void initTBS() {
         if (!QbSdk.isX5Core() && QbSdk.getTbsVersion(getApplicationContext()) == 0) {
-            Log.d("X5", "开始初始化X5");
+            Log.d("X5", "init X5");
             String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
             //验证是否许可权限
@@ -1115,7 +1211,6 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
 //                    return;
 //                }
 //            }
-//            Toast.makeText(getApplicationContext(),"正在进行首次初始化，初始化完成app会自动重启!", Toast.LENGTH_LONG).show();
             FileUtils.copyAssets(getApplicationContext(), "x5.tbs.org.apk", FileUtils.getTBSFileDir(getApplicationContext()).getPath() + "/046141.x5.tbs.apk");
             HashMap<String, Object> map = new HashMap<>(2);
             map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
@@ -1138,7 +1233,7 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
                     Log.e(TAG, "onInstallFinish: " + i);
                     int tbsVersion = QbSdk.getTbsVersion(getApplicationContext());
                     Log.e(TAG, "tbsVersion: " + tbsVersion);
-                    Toast.makeText(getApplicationContext(), "初始化完成，App正在自动重启。", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getText(R.string.label_x5_init_rebooting), Toast.LENGTH_LONG).show();
 
 //                    ActivityManager manager = （ActivityManager）this.getSystemService（Context.ACTIVITY_SERVICE）;
 //                    manager.restartPackage("com.example.test");
@@ -1149,12 +1244,11 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
 
 
                     new AlertDialog.Builder(getApplicationContext())
-                            .setTitle("请重启应用")
-                            .setMessage("初始化完成，App正在自动重启。")
-                            .setPositiveButton("确定关闭", new DialogInterface.OnClickListener() {
+                            .setTitle(getText(R.string.label_x5_please_reboot))
+                            .setMessage(getText(R.string.label_x5_init_rebooting))
+                            .setPositiveButton(getText(R.string.btn_x5_reboot), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface arg0, int arg1) {
                                     Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-                                    //与正常页面跳转一样可传递序列化数据,在Launch页面内获得
                                     intent.putExtra("REBOOT", "reboot");
                                     Log.e(TAG, "tbsVersion: " + tbsVersion);
                                     PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
