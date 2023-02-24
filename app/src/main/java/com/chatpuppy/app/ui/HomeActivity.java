@@ -1140,27 +1140,28 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
 
         fetchUpdateInfo().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(updateInfo -> {
-                    if(updateInfo==null) return;
+                    if (updateInfo == null) return;
                     String currentLocale = Locale.getDefault().getLanguage();
                     String title = currentLocale.equalsIgnoreCase("zh") ? updateInfo.getString("title_zh") : updateInfo.getString("title");
                     String content = currentLocale.equalsIgnoreCase("zh") ? updateInfo.getString("content_zh") : updateInfo.getString("content");
 
                     String mUrl = updateInfo.getString("url");
                     String md5 = updateInfo.getString("md5");
+                    int versionCode = updateInfo.getInt("versionCode");
                     boolean forceUpdate = updateInfo.getBoolean("forceUpdate");
+
+                    if (versionCode <= BuildConfig.VERSION_CODE) return;
 
                     if (mUrl != null && title != null && !"".equals(title) && !"".equals(content) && !"".equals(mUrl)) {
 
                         AppDialogConfig config = new AppDialogConfig(this);
-                        String finalMUrl = mUrl;
-                        String finalMd = md5;
                         config.setTitle(title)
                                 .setConfirm(getText(R.string.btn_update))
                                 .setContent(content).setHideCancel(forceUpdate)
                                 .setOnClickConfirm(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        mAppUpdater = new AppUpdater.Builder(getBaseContext()).setUrl(finalMUrl).setApkMD5(finalMd).setVersionCode(BuildConfig.VERSION_CODE).setVibrate(true).setInstallApk(true).setReDownload(true).build();
+                                        mAppUpdater = new AppUpdater.Builder(getBaseContext()).setUrl(mUrl).setApkMD5(md5).setVersionCode(BuildConfig.VERSION_CODE).setVibrate(true).setInstallApk(true).setReDownload(true).build();
                                         mAppUpdater.setHttpManager(OkHttpManager.getInstance()).start();
                                         AppDialog.INSTANCE.dismissDialog();
                                     }
