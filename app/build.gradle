@@ -88,6 +88,7 @@ android {
         versionCode 106
         versionName "1.0.6"
 
+
         applicationId "com.chatpuppy.app"
         minSdkVersion 24
         targetSdkVersion 32
