@@ -1138,6 +1138,8 @@ public class HomeActivity extends BaseNavigationActivity implements View.OnClick
 
     private void checkUpdates() {
 
+        if("debug".equalsIgnoreCase(BuildConfig.BUILD_TYPE)) return;
+
         fetchUpdateInfo().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(updateInfo -> {
                     if (updateInfo == null) return;
