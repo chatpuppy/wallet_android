@@ -74,7 +74,7 @@ public class NotificationService
                                                                 openAppIntent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_alpha_notification)
+                .setSmallIcon(R.drawable.ic_logo)
                 .setColor(color)
                 .setContentTitle(title)
                 .setContentText(content)
@@ -103,11 +103,11 @@ public class NotificationService
                 openAppIntent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_alpha_notification)
+                .setSmallIcon(R.drawable.ic_logo)
                 .setColor(color)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSound(notification, 1)
+                .setSound(notification, AudioManager.STREAM_SYSTEM)
                 .setAutoCancel(true)
                 .setOngoing(true)
                 .setCategory(NotificationCompat.CATEGORY_EVENT)
