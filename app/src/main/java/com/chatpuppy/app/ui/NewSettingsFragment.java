@@ -646,8 +646,8 @@ public class NewSettingsFragment extends BaseFragment {
     private void onChangeCurrencyClicked() {
         Intent intent = new Intent(getActivity(), SelectCurrencyActivity.class);
         String currentLocale = viewModel.getDefaultCurrency();
-        intent.putExtra(EXTRA_CURRENCY, currentLocale);
         intent.putParcelableArrayListExtra(EXTRA_STATE, viewModel.getCurrencyList());
+        intent.putExtra(EXTRA_CURRENCY, currentLocale);
         updateCurrency.launch(intent);
     }
 

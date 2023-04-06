@@ -354,6 +354,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LocaleUtils.setActiveLocale(getContext());
+
         loadOnInit = null;
         int webViewID = CustomViewSettings.minimiseBrowserURLBar() ? R.layout.fragment_webview_compact : R.layout.fragment_webview;
         View view = inflater.inflate(webViewID, container, false);
@@ -940,6 +941,7 @@ public class DappBrowserFragment extends BaseFragment implements OnSignTransacti
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
                 String[] prefixCheck = url.split(":");
                 if (prefixCheck.length > 1) {
                     Intent intent;

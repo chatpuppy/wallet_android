@@ -2,11 +2,13 @@ package com.chatpuppy.app.web3;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.security.keystore.UserNotAuthenticatedException;
 import android.util.AttributeSet;
 //import android.webkit.WebChromeClient;
+import com.chatpuppy.app.util.LocaleUtils;
 import com.chatpuppy.app.web3.entity.NoticeMessage;
 import com.tencent.smtt.sdk.WebChromeClient;
 
@@ -193,8 +195,10 @@ public class Web3View extends WebView {
         getSettings().setLoadWithOverviewMode(true);
         getSettings().setDomStorageEnabled(true);
         getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        Resources res = this.getResources();
+        android.content.res.Configuration conf = res.getConfiguration();
         getSettings().setUserAgentString(getSettings().getUserAgentString()
-                + "ChatpuppyWallet(Platform=Android&AppVersion=" + BuildConfig.VERSION_NAME + ")");
+                + "ChatpuppyWallet(Platform=Android&AppVersion=" + BuildConfig.VERSION_NAME  + ")"+ "lang=" + conf.getLocales());
         WebView.setWebContentsDebuggingEnabled(true); //so devs can debug their scripts/pages
         // X5 webview settings
         getSettings().setAllowFileAccess(true);

@@ -259,6 +259,7 @@ public class ChatPuppyFragment extends BaseFragment implements OnSignTransaction
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         LocaleUtils.setActiveLocale(getContext());
+
         super.onCreate(savedInstanceState);
 
 //        ignoreBatteryOptimization(requireActivity());
